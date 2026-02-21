@@ -1,0 +1,285 @@
+💸 FinRadar
+Hayalet Gider & Abonelik Takipçisi
+"Görmediğin para, kaybettiğin paradır."
+Platform
+Android (API 26+)
+Dil & UI
+Kotlin + Jetpack Compose
+Tahmini Süre
+10 Hafta (MVP)
+Veri Depolama
+Yalnızca cihazda (offline-first)
+1. Proje Özeti
+FinRadar, kullanıcıların banka SMS'lerini ve bildirimlerini yerel olarak (cihaz içinde) tarayarak tüm sabit abonelik giderlerini otomatik tespit eden, kategorize eden ve zam uyarısı veren bir Android uygulamasıdır.
+Problem
+Enflasyonist ortamda bireyler çok sayıda aboneliğe sahip olmakta ancak bunları aktif olarak takip edememektedir. Netflix, Spotify, YouTube Premium, Adobe, AWS gibi hizmetlerin ücretleri sessizce artmakta; kullanıcılar farkında bile olmadan fazla ödeme yapmaya devam etmektedir.
+Çözüm
+FinRadar üç temel katmandan oluşur:
+SMS & Bildirim Okuma: İzin alınarak banka mesajları cihaz içinde analiz edilir.
+Akıllı Kategorizasyon: Tekrar eden ödemeler otomatik olarak abonelik olarak etiketlenir.
+Zam Uyarıları: Önceki ay aynı işyerinden gelen tutar karşılaştırılır; %5'ten fazla artış varsa kullanıcı bilgilendirilir.
+2. Teknik Mimari
+Kullanılan Teknolojiler
+Katman / Konu
+Seçilen Teknoloji
+Dil
+Kotlin (JVM 17+)
+UI Framework
+Jetpack Compose (Material 3)
+Mimari Desen
+MVVM + Clean Architecture
+Bağımlılık Enjeksiyonu
+Hilt (Dagger tabanlı)
+Veritabanı
+Room (SQLite üzeri ORM)
+Asenkron İşlemler
+Kotlin Coroutines + Flow
+Navigasyon
+Jetpack Navigation Component
+SMS/Bildirim
+NotificationListenerService + SmsManager
+Güvenlik
+SQLCipher (Room şifrelemesi) + BiometricPrompt API
+Test
+JUnit5 + MockK + Compose Testing
+Crash Raporlama
+Firebase Crashlytics (tek Firebase servisi)
+Klasör Yapısı
+finradar/
+├── data/
+│   ├── local/
+│   │   ├── dao/          # Room DAO arayüzleri
+│   │   ├── entity/       # Room Entity sınıfları
+│   │   └── AppDatabase.kt
+│   ├── repository/       # Repository implementasyonları
+│   └── parser/           # SMS & bildirim parse motoru
+├── domain/
+│   ├── model/            # İş mantığı veri modelleri
+│   └── usecase/          # Use case sınıfları
+├── presentation/
+│   ├── dashboard/        # Ana ekran
+│   ├── subscriptions/    # Abonelikler listesi
+│   ├── alerts/           # Zam uyarıları
+│   └── onboarding/       # İzin akışı
+└── service/
+    └── NotificationListenerService.kt
+Room Veritabanı Şeması
+Uygulama üç ana tabloya sahiptir:
+transactions: Ham işlem kayıtları (tarih, tutar, kaynak SMS/bildirim, işyeri adı, kategori)
+subscriptions: Tespit edilmiş abonelikler (isim, ortalama tutar, son ödeme tarihi, kategori, aktif mi)
+alerts: Zam uyarıları (abonelik ID, eski tutar, yeni tutar, yüzde değişim, okundu mu)
+SMS Parser Motoru
+Türkiye'deki başlıca bankalar için ayrı regex pattern'ları tanımlanır. Yeni bankalar kolayca eklenebilmesi için pattern listesi SmsPatternRegistry sınıfında merkezi olarak yönetilir.
+object SmsPatternRegistry {
+    val patterns = listOf(
+        // Garanti BBVA
+        Regex("""(\d+[\.,]\d+)\s?TL.*?(\w+)'(?:den|dan|ten|tan)"""),
+        // İş Bankası
+        Regex("""Harcama:\s*(\d+[\.,]\d+)\s?TL\s+(\w[\w\s]+)"""),
+        // Yapı Kredi
+        Regex("""(\d+[\.,]\d+)TL tutarinda.*?(\w+)'(?:a|e|ye|ya)"""),
+        // Akbank
+        Regex("""(\d+[\.,]\d+) TL.*?\.(\w[\w\s]+)\.""")
+    )
+}
+3. Özellik Listesi (MVP Kapsamı)
+Çekirdek Özellikler
+Banka SMS'lerini izin dahilinde yerel okuma
+Otomatik işlem ayrıştırma ve kategorizasyon
+Tekrar eden ödemelerin abonelik olarak tespiti
+Zam tespiti: önceki aya göre %5+ artış uyarısı
+Dashboard: aylık toplam abonelik gideri özeti
+En pahalı 3 abonelik listesi
+Bildirim sistemi: zam uyarısı push notification
+Biyometrik kilit (parmak izi / yüz tanıma)
+Offline-first: sıfır sunucu bağlantısı
+MVP Sonrası (v2) Özellikler
+Aylık trend grafiği (Compose Canvas ile)
+Kategori bazlı pasta grafik (Eğlence, Yazılım, Bulut vb.)
+"Hayalet Gider" raporu: kullanılmayan abonelikler
+Ana ekran widget (4x2, bu ayki abonelik özeti)
+Dark mode
+Abonelik iptal hatırlatıcısı
+4. Proje Yönetim Planı
+Zaman Çizelgesi
+Faz
+Süre
+Ana Çıktı
+Durum
+Faz 0 — Keşif & Planlama
+1 hafta
+PRD belgesi + Wireframe (Figma)
+⬜ Bekliyor
+Faz 1 — Proje İskeleti & Mimari
+1 hafta
+Çalışan boş uygulama + CI/CD
+⬜ Bekliyor
+Faz 2.1 — SMS Parser
+1 hafta
+Parse motoru + Room entegrasyonu
+⬜ Bekliyor
+Faz 2.2 — Abonelik Tespiti
+1 hafta
+Abonelik tespit algoritması
+⬜ Bekliyor
+Faz 2.3 — Dashboard & Bildirimler
+1 hafta
+Ana ekran + uyarı sistemi
+⬜ Bekliyor
+Faz 3 — UX & Görselleştirme
+2 hafta
+Grafikler + polished UI
+⬜ Bekliyor
+Faz 4 — Güvenlik Katmanı
+1 hafta
+SQLCipher + biyometrik kilit
+⬜ Bekliyor
+Faz 5 — Test & QA
+1 hafta
+Unit/UI test + %80 kod kapsamı
+⬜ Bekliyor
+Faz 6 — Play Store Lansmanı
+1 hafta
+Kapalı beta + yayın
+⬜ Bekliyor
+TOPLAM
+~10 hafta
+Play Store'da canlı uygulama
+🎯 Hedef
+Faz 0 — Keşif & Planlama (Hafta 1)
+Bu fazın amacı teknik borç oluşturmadan sağlam bir temel atmaktır.
+Hedef kullanıcı profilini tanımla: 25-45 yaş, çoklu abonelik sahibi, Android kullanıcısı.
+Rakip analizi yap: Toshl, Spendee, MoneyLover uygulamalarının eksiklerini listele.
+MVP kapsamını netleştir ve PRD (Product Requirements Document) hazırla.
+Figma'da temel ekran akışını wireframe olarak çiz (onboarding, dashboard, abonelikler, uyarılar).
+Teknik stack kararlarını belgele ve onaya sun.
+Çıktı
+PRD belgesi + Figma wireframe + onaylı teknik stack
+Faz 1 — Proje İskeleti & Mimari (Hafta 2)
+Android Studio'da yeni Kotlin projesi oluştur.
+MVVM + Clean Architecture katmanlarını (data / domain / presentation) yapılandır.
+Hilt ile dependency injection kurulumu yap.
+Room veritabanı şemasını (3 tablo) oluştur ve DAO'ları yaz.
+GitHub Actions ile CI/CD pipeline kur (build + lint + unit test).
+Boş ekranlarla temel navigasyon akışını doğrula.
+Çıktı
+Çalışan boş uygulama + CI/CD pipeline aktif
+Faz 2.1 — SMS Parser Motoru (Hafta 3)
+NotificationListenerService kur ve gerekli Android izin akışını (onboarding) yaz.
+SmsPatternRegistry ile Türk bankalarının regex pattern'larını tanımla: Garanti, İş Bankası, Yapı Kredi, Akbank, Ziraat.
+SmsParser sınıfını yaz: SMS gövdesini alır, eşleşen pattern'ı uygular, Transaction nesnesini döner.
+Parse edilen işlemleri Room'daki transactions tablosuna kaydet.
+Her banka için gerçek SMS örnekleriyle birim testi yaz.
+Çıktı
+5 banka destekli parse motoru + Room entegrasyonu + unit testler
+Faz 2.2 — Abonelik Tespit Algoritması (Hafta 4)
+Bilinen abonelik isimlerinin whitelist'ini oluştur: Netflix, Spotify, YouTube Premium, AWS, Adobe, Apple, Microsoft 365, Exxen, BluTV vb.
+Tekrar eden ödeme tespiti algoritmasını yaz: aynı işyerinden ±%2 toleransla aynı tutar, aylık periyot eşleşmesi = abonelik.
+Kullanıcıya belirsiz durumlarda soru sor: "Bu ödeme abonelik mi?" akışı.
+Zam tespit motorunu yaz: subscription tablosunda önceki ay tutarıyla karşılaştır, fark >%5 ise alerts tablosuna kaydet.
+Çıktı
+Abonelik tespit + zam uyarı motoru aktif
+Faz 2.3 — Dashboard & Bildirim Sistemi (Hafta 5)
+Dashboard ekranını Jetpack Compose ile geliştir.
+Bu ay toplam abonelik gideri (büyük kart)
+En pahalı 3 abonelik listesi
+"Dikkat: Zam tespit edildi" uyarı kartları
+Push notification sistemini kur: zam tespit edildiğinde kullanıcıya bildirim gönder.
+Abonelikler listesi ekranını yaz (filtreleme, arama).
+Uyarılar ekranını yaz (geçmiş zam bildirimleri).
+Çıktı
+Tam çalışan MVP — dashboard + bildirimler + ekran akışı
+Faz 3 — UX Geliştirme & Görselleştirme (Hafta 6-7)
+Aylık trend grafiği: Compose Canvas kullanarak abonelik harcamasının aylık değişimini çiz.
+Kategori pasta grafiği: Eğlence, Yazılım, Bulut, Üyelik kategorileri.
+Onboarding akışını polish et: izin isteme ekranı net ve güven verici olmalı.
+Home screen widget geliştir: 4x2, bu ayki abonelik özeti.
+Tüm ekranlarda dark mode desteği ekle.
+Animasyonlar ve geçişler ekle (Compose animasyon API'si).
+Çıktı
+Polished UI + grafikler + widget + dark mode
+Faz 4 — Güvenlik Katmanı (Hafta 8)
+Finansal veri işleyen bir uygulama olduğu için bu faz kritik öneme sahiptir.
+SQLCipher entegrasyonu ile Room veritabanını şifrele.
+BiometricPrompt API ile biyometrik kilit ekle (parmak izi / yüz tanıma).
+Uygulama arka plana geçtiğinde otomatik kilitleme mekanizması.
+Onboarding ekranına "Tüm veriler yalnızca cihazınızda işlenir, hiçbir yere gönderilmez" ifadesini açıkça ekle.
+Privacy Policy sayfası oluştur (Play Store için zorunlu).
+Çıktı
+Şifreli veritabanı + biyometrik kilit + gizlilik politikası
+Faz 5 — Test & QA (Hafta 9)
+Unit Test: SmsParser, zam tespit algoritması, tüm use case'ler. Araç: JUnit5 + MockK.
+Integration Test: Room DAO testleri gerçek in-memory veritabanıyla.
+UI Test: Onboarding akışı, dashboard render, bildirim görünümü. Araç: Compose Testing.
+Manuel Test: 5 farklı Türk bankasından gerçek SMS örnekleriyle tam akış testi.
+Hedef kod kapsamı: %80.
+Firebase Crashlytics entegre et ve test cihazlarında crash olmayana kadar düzelt.
+Çıktı
+Test raporu + %80 kod kapsamı + sıfır kritik hata
+Faz 6 — Play Store Lansmanı (Hafta 10)
+Play Store'da finansal uygulama politikalarını incele ve uyumluluk belgesini hazırla.
+Store listing hazırla: uygulama açıklaması (TR/EN), ekran görüntüleri, feature graphic.
+Kapalı beta ile 20-30 test kullanıcısına dağıt; geri bildirimleri topla.
+Beta geri bildirimlerinden gelen kritik hataları düzelt.
+Production release için imzalı APK/AAB hazırla.
+Play Store'a gönder, inceleme sürecini takip et.
+Çıktı
+Kapalı beta + Play Store başvurusu
+5. Güvenlik & Gizlilik Politikası
+⚠️ Kritik Kural
+Kullanıcının finansal verileri hiçbir koşulda sunucuya gönderilmez. Tüm işleme cihaz içinde (on-device) gerçekleşir. Bu prensip uygulamanın her kararında öncelikli kriter olmalıdır.
+Uygulanması gereken güvenlik önlemleri:
+Room veritabanı SQLCipher ile şifrelenir.
+Şifreleme anahtarı Android Keystore'da saklanır, asla plaintext olarak tutulmaz.
+Uygulama arka plana geçtiğinde otomatik kilit devreye girer (yapılandırılabilir süre: 30sn / 1dk / 5dk).
+BiometricPrompt API ile biyometrik doğrulama zorunlu tutulur (şifreli cihazlarda).
+NotificationListenerService yalnızca kullanıcı açıkça izin verdiğinde aktif olur.
+Firebase Crashlytics tek kullanılan Firebase servisidir; Analytics, Remote Config gibi servisler kullanılmaz.
+6. Desteklenen Bankalar (MVP)
+Aşağıdaki bankalar için regex pattern'ları MVP kapsamındadır. Yeni bankalar SmsPatternRegistry dosyasına pattern eklenerek kolayca entegre edilebilir.
+Banka
+SMS Format Örneği
+Durum
+Garanti BBVA
+450,00 TL Netflix'ten harcama
+✅ MVP
+İş Bankası
+Harcama: 89,99 TL Spotify
+✅ MVP
+Yapı Kredi
+199,00TL tutarinda Adobe'ye
+✅ MVP
+Akbank
+249.00 TL. AWS TR.
+✅ MVP
+Ziraat Bankası
+Harcamaniz: 59,90 TL
+✅ MVP
+Halkbank
+Yeni pattern — test gerekli
+🔄 v2
+QNB Finansbank
+Yeni pattern — test gerekli
+🔄 v2
+7. Kritik Başarı Faktörleri
+Gizlilik Önce Gelir
+Kullanıcılar finansal veri konusunda haklı olarak hassastır. "Tüm veriler cihazınızda" mesajını uygulamanın her ekranında vurgula. Bu, rakiplerden farklılaşmanın en güçlü noktasıdır.
+İlk Çalıştırma Deneyimi (Onboarding)
+İzin almak için net, sade ve güven veren bir dil kullan. Kullanıcı "Bu uygulama banka bilgilerimi çalıyor mu?" diye düşünmeden önce sen ona neden güvenli olduğunu anlat. Karmaşık teknik jargondan kaçın.
+SMS Parser Kalitesi
+Türk bankası SMS formatları çok çeşitlidir ve zaman zaman değişir. Parser motorunu esnek ve genişletilebilir yap. Yeni bir banka eklemek tek bir regex satırı eklemeye indirgenmeli. Hatalı parse, kullanıcı güvenini kalıcı olarak zedeler.
+Sıfır Yanlış Pozitif
+Abonelik olmayan bir ödemeyi abonelik olarak etiketlemek, kullanıcının uygulamaya olan güvenini anında bitirir. Belirsiz durumlarda kullanıcıya sor; tahmin etme.
+8. Play Store Hazırlıkları
+İzin Bildirimleri
+Uygulama aşağıdaki Android izinlerini kullanır; her birinin Store listing'de açıklanması zorunludur:
+BIND_NOTIFICATION_LISTENER_SERVICE: Banka bildirimlerini okumak için.
+RECEIVE_SMS / READ_SMS: Banka SMS'lerini okumak için.
+USE_BIOMETRIC: Biyometrik kilit için.
+POST_NOTIFICATIONS: Zam uyarısı bildirimi göndermek için.
+Store Listing İçeriği
+Uygulama adı: FinRadar — Abonelik Takipçisi
+Kısa açıklama: Aboneliklerini takip et, zam uyarılarını kaçırma. Tüm veriler cihazında.
+Ekran görüntüleri: Dashboard, abonelikler listesi, zam uyarısı, biyometrik kilit (minimum 4 görsel).
+Feature graphic: 1024x500px, marka renkleri kullanılarak tasarlanmış.
+FinRadar — Proje Dokümantasyonu v1.0
