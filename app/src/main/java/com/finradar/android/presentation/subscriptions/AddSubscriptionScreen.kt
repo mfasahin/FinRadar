@@ -27,18 +27,40 @@ private val subscriptionCategories = listOf(
     "Oyun", "Fitness", "Eğitim", "Haberler", "Genel"
 )
 
+/**
+ * Hem yeni abonelik ekleme hem de mevcut abonelik düzenleme için tek ekran.
+ * @param subscriptionId null ise "Ekle" modunda, değer verilirse "Düzenle" modunda çalışır.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddSubscriptionScreen(
+    subscriptionId: Long?,
     onNavigateBack: () -> Unit,
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
+    val isEditMode = subscriptionId != null
+    val editTarget by viewModel.editTarget.collectAsState()
+
+    // Load existing subscription when editing
+    LaunchedEffect(subscriptionId) {
+        if (isEditMode) viewModel.loadForEdit(subscriptionId!!)
+    }
+
     var name by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("Genel") }
     var categoryMenuExpanded by remember { mutableStateOf(false) }
     var nameError by remember { mutableStateOf(false) }
     var amountError by remember { mutableStateOf(false) }
+
+    // Pre-fill form fields when edit data arrives
+    LaunchedEffect(editTarget) {
+        editTarget?.let { sub ->
+            name = sub.name
+            amountText = sub.averageAmount.toString()
+            selectedCategory = sub.category ?: "Genel"
+        }
+    }
 
     val fieldColors = OutlinedTextFieldDefaults.colors(
         focusedContainerColor   = BgCard,
@@ -58,8 +80,13 @@ fun AddSubscriptionScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Abonelik Ekle", color = TextHigh, fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp, letterSpacing = (-0.5).sp)
+                    Text(
+                        if (isEditMode) "Aboneliği Düzenle" else "Abonelik Ekle",
+                        color = TextHigh,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        letterSpacing = (-0.5).sp
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
@@ -83,9 +110,7 @@ fun AddSubscriptionScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(24.dp))
-                    .background(
-                        Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo))
-                    )
+                    .background(Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo)))
                     .padding(28.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -93,9 +118,18 @@ fun AddSubscriptionScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text("➕", fontSize = 36.sp)
-                    Text("Yeni Abonelik Ekle", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text("Bilgileri doldurun ve kaydedin", color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
+                    Text(if (isEditMode) "✏️" else "➕", fontSize = 36.sp)
+                    Text(
+                        if (isEditMode) "Aboneliği Düzenle" else "Yeni Abonelik Ekle",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        "Bilgileri doldurun ve kaydedin",
+                        color = Color.White.copy(alpha = 0.7f),
+                        fontSize = 13.sp
+                    )
                 }
             }
 
@@ -151,7 +185,7 @@ fun AddSubscriptionScreen(
                     ExposedDropdownMenu(
                         expanded = categoryMenuExpanded,
                         onDismissRequest = { categoryMenuExpanded = false },
-                        modifier = Modifier.background(BgCardAlt)
+                        modifier = Modifier.background(Color.White)
                     ) {
                         subscriptionCategories.forEach { category ->
                             DropdownMenuItem(
@@ -165,14 +199,18 @@ fun AddSubscriptionScreen(
 
             Spacer(Modifier.height(4.dp))
 
-            // Save button
+            // Save / Update button
             Button(
                 onClick = {
                     val amt = amountText.toDoubleOrNull()
                     nameError = name.trim().isEmpty()
                     amountError = amt == null || amt <= 0.0
                     if (!nameError && !amountError) {
-                        viewModel.addSubscription(name.trim(), amt!!, selectedCategory)
+                        if (isEditMode) {
+                            viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCategory)
+                        } else {
+                            viewModel.addSubscription(name.trim(), amt!!, selectedCategory)
+                        }
                         onNavigateBack()
                     }
                 },
@@ -180,7 +218,12 @@ fun AddSubscriptionScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = BrandFrom)
             ) {
-                Text("Kaydet", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                Text(
+                    if (isEditMode) "Güncelle" else "Kaydet",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.White
+                )
             }
 
             Spacer(Modifier.height(20.dp))

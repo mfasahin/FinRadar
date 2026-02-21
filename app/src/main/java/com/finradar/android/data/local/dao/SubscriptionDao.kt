@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.finradar.android.data.local.entity.SubscriptionEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -12,8 +13,17 @@ interface SubscriptionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSubscription(subscription: SubscriptionEntity): Long
 
+    @Update
+    suspend fun updateSubscription(subscription: SubscriptionEntity)
+
+    @Query("UPDATE subscriptions SET isActive = 0 WHERE id = :id")
+    suspend fun softDeleteSubscription(id: Long)
+
     @Query("SELECT * FROM subscriptions WHERE isActive = 1 ORDER BY averageAmount DESC")
     fun getActiveSubscriptions(): Flow<List<SubscriptionEntity>>
+
+    @Query("SELECT * FROM subscriptions WHERE id = :id LIMIT 1")
+    suspend fun getSubscriptionById(id: Long): SubscriptionEntity?
 
     @Query("SELECT * FROM subscriptions WHERE name = :name LIMIT 1")
     suspend fun getSubscriptionByName(name: String): SubscriptionEntity?

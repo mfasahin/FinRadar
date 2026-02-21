@@ -25,9 +25,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.finradar.android.presentation.alerts.AlertsScreen
 import com.finradar.android.presentation.dashboard.DashboardScreen
 import com.finradar.android.presentation.onboarding.OnboardingScreen
@@ -43,9 +45,9 @@ data class BottomNavItem(
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem(Screen.Dashboard, "Ana Sayfa", Icons.Outlined.Home, Icons.Filled.Home),
-    BottomNavItem(Screen.Subscriptions, "Abonelikler", Icons.Outlined.List, Icons.Filled.List),
-    BottomNavItem(Screen.Alerts, "Uyarılar", Icons.Outlined.Notifications, Icons.Filled.Notifications)
+    BottomNavItem(Screen.Dashboard,     "Ana Sayfa",   Icons.Outlined.Home,          Icons.Filled.Home),
+    BottomNavItem(Screen.Subscriptions, "Abonelikler", Icons.Outlined.List,          Icons.Filled.List),
+    BottomNavItem(Screen.Alerts,        "Uyarılar",    Icons.Outlined.Notifications, Icons.Filled.Notifications)
 )
 
 @Composable
@@ -95,11 +97,11 @@ fun FinRadarNavGraph(navController: NavHostController) {
                                 )
                             },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = BrandFrom,
-                                selectedTextColor = BrandFrom,
+                                selectedIconColor   = BrandFrom,
+                                selectedTextColor   = BrandFrom,
                                 unselectedIconColor = TextMed,
                                 unselectedTextColor = TextMed,
-                                indicatorColor = BrandFrom.copy(alpha = 0.15f)
+                                indicatorColor      = BrandFrom.copy(alpha = 0.12f)
                             )
                         )
                     }
@@ -122,17 +124,38 @@ fun FinRadarNavGraph(navController: NavHostController) {
                     }
                 )
             }
+
             composable(Screen.Dashboard.route) {
                 DashboardScreen(onNavigateToAlerts = { navController.navigate(Screen.Alerts.route) })
             }
+
             composable(Screen.Subscriptions.route) {
-                SubscriptionsScreen(onNavigateToAdd = { navController.navigate(Screen.AddSubscription.route) })
+                SubscriptionsScreen(
+                    onNavigateToAdd  = { navController.navigate(Screen.AddSubscription.route) },
+                    onNavigateToEdit = { id -> navController.navigate(Screen.EditSubscription.createRoute(id)) }
+                )
             }
-            composable(Screen.Alerts.route) {
-                AlertsScreen()
-            }
+
+            composable(Screen.Alerts.route) { AlertsScreen() }
+
+            // ── Add new subscription ───────────────────────────────────────
             composable(Screen.AddSubscription.route) {
-                AddSubscriptionScreen(onNavigateBack = { navController.popBackStack() })
+                AddSubscriptionScreen(
+                    subscriptionId  = null,
+                    onNavigateBack  = { navController.popBackStack() }
+                )
+            }
+
+            // ── Edit existing subscription ─────────────────────────────────
+            composable(
+                route = Screen.EditSubscription.route,
+                arguments = listOf(navArgument("subscriptionId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getLong("subscriptionId")
+                AddSubscriptionScreen(
+                    subscriptionId = id,
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
         }
     }

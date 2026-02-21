@@ -63,7 +63,7 @@ public final class AlertDao_Impl implements AlertDao {
   }
 
   @Override
-  public Object insertAlert(final AlertEntity alert, final Continuation<? super Long> $completion) {
+  public Object insertAlert(final AlertEntity alert, final Continuation<? super Long> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -77,7 +77,7 @@ public final class AlertDao_Impl implements AlertDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override

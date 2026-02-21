@@ -13,42 +13,45 @@ class SubscriptionRepositoryImpl @Inject constructor(
 ) : SubscriptionRepository {
 
     override suspend fun saveSubscription(subscription: Subscription): Long {
-        val entity = SubscriptionEntity(
-            id = subscription.id,
-            name = subscription.name,
-            averageAmount = subscription.averageAmount,
-            lastPaymentDate = subscription.lastPaymentDate,
-            category = subscription.category,
-            isActive = subscription.isActive
-        )
-        return dao.insertSubscription(entity)
+        return dao.insertSubscription(subscription.toEntity())
+    }
+
+    override suspend fun updateSubscription(subscription: Subscription) {
+        dao.updateSubscription(subscription.toEntity())
+    }
+
+    override suspend fun deleteSubscription(id: Long) {
+        dao.softDeleteSubscription(id)
+    }
+
+    override suspend fun getSubscriptionById(id: Long): Subscription? {
+        return dao.getSubscriptionById(id)?.toDomain()
     }
 
     override fun getActiveSubscriptions(): Flow<List<Subscription>> {
-        return dao.getActiveSubscriptions().map { entities ->
-            entities.map { entity ->
-                Subscription(
-                    id = entity.id,
-                    name = entity.name,
-                    averageAmount = entity.averageAmount,
-                    lastPaymentDate = entity.lastPaymentDate,
-                    category = entity.category,
-                    isActive = entity.isActive
-                )
-            }
-        }
+        return dao.getActiveSubscriptions().map { list -> list.map { it.toDomain() } }
     }
 
     override suspend fun getSubscriptionByName(name: String): Subscription? {
-        return dao.getSubscriptionByName(name)?.let { entity ->
-            Subscription(
-                id = entity.id,
-                name = entity.name,
-                averageAmount = entity.averageAmount,
-                lastPaymentDate = entity.lastPaymentDate,
-                category = entity.category,
-                isActive = entity.isActive
-            )
-        }
+        return dao.getSubscriptionByName(name)?.toDomain()
     }
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    private fun Subscription.toEntity() = SubscriptionEntity(
+        id = id,
+        name = name,
+        averageAmount = averageAmount,
+        lastPaymentDate = lastPaymentDate,
+        category = category,
+        isActive = isActive
+    )
+
+    private fun SubscriptionEntity.toDomain() = Subscription(
+        id = id,
+        name = name,
+        averageAmount = averageAmount,
+        lastPaymentDate = lastPaymentDate,
+        category = category,
+        isActive = isActive
+    )
 }
