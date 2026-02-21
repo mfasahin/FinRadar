@@ -67,7 +67,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   @Override
   public Object insertSubscription(final SubscriptionEntity subscription,
-      final Continuation<? super Long> $completion) {
+      final Continuation<? super Long> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -81,7 +81,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
@@ -143,7 +143,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   @Override
   public Object getSubscriptionByName(final String name,
-      final Continuation<? super SubscriptionEntity> $completion) {
+      final Continuation<? super SubscriptionEntity> arg1) {
     final String _sql = "SELECT * FROM subscriptions WHERE name = ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -199,7 +199,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @NonNull

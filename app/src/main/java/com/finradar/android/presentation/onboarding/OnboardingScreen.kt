@@ -17,16 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.finradar.android.ui.theme.*
 
-data class OnboardingFeature(
-    val emoji: String,
-    val title: String,
-    val description: String
-)
+private data class Feature(val emoji: String, val title: String, val desc: String)
 
 private val features = listOf(
-    OnboardingFeature("🔔", "Otomatik Tespit", "Banka bildirimlerini okuyarak aboneliklerinizi otomatik tarar."),
-    OnboardingFeature("📈", "Zam Uyarıları", "Aboneliğinize zam geldiğinde anında bildirim alın."),
-    OnboardingFeature("🔒", "Tamamen Gizli", "Hiçbir veri sunucuya gönderilmez. Her şey cihazınızda.")
+    Feature("🔔", "Otomatik Tespit", "Banka bildirimlerini okuyarak aboneliklerinizi otomatik tarar."),
+    Feature("📈", "Zam Uyarıları", "Aboneliğinize zam geldiğinde anında bildirim alın."),
+    Feature("🔒", "Tamamen Gizli", "Hiçbir veri sunucuya gönderilmez. Her şey cihazınızda.")
 )
 
 @Composable
@@ -34,7 +30,7 @@ fun OnboardingScreen(onPermissionsGranted: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background)
+            .background(BgDeep)
     ) {
         Column(
             modifier = Modifier
@@ -42,96 +38,84 @@ fun OnboardingScreen(onPermissionsGranted: () -> Unit) {
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(60.dp))
+            Spacer(Modifier.height(72.dp))
 
-            // Logo / Brand area
+            // Logo
             Box(
                 modifier = Modifier
-                    .size(90.dp)
+                    .size(88.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(GradientStart, GradientEnd)
-                        )
-                    ),
+                    .background(Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo))),
                 contentAlignment = Alignment.Center
             ) {
-                Text("📡", fontSize = 40.sp)
+                Text("📡", fontSize = 38.sp)
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
 
             Text(
-                text = "FinRadar",
-                color = TextPrimary,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 34.sp
+                "FinRadar",
+                color = TextHigh,
+                fontWeight = FontWeight.Black,
+                fontSize = 36.sp,
+                letterSpacing = (-1.5).sp
             )
-
             Text(
-                text = "Aboneliklerinizin Radarı",
-                color = TextSecondary,
-                fontSize = 16.sp,
+                "Aboneliklerinizin Radarı",
+                color = TextMed,
+                fontSize = 15.sp,
                 modifier = Modifier.padding(top = 4.dp)
             )
 
             Spacer(Modifier.height(48.dp))
 
-            // Feature cards
-            features.forEach { feature ->
-                FeatureRow(feature)
-                Spacer(Modifier.height(16.dp))
+            features.forEach { f ->
+                FeatureCard(f)
+                Spacer(Modifier.height(12.dp))
             }
 
             Spacer(Modifier.weight(1f))
 
-            // Privacy note
+            // Privacy disclaimer
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(SurfaceVariant)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(BgCard)
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "🔐  Uygulamayı kullanmak için bildirim erişimi gereklidir. Verileriniz asla paylaşılmaz.",
-                    color = TextSecondary,
+                    "🔐  Bildirim erişimi gereklidir. Verileriniz cihazınızda güvenle saklanır, hiçbir sunucuya gönderilmez.",
+                    color = TextMed,
                     fontSize = 12.sp,
                     lineHeight = 18.sp,
                     textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(16.dp))
 
             Button(
                 onClick = onPermissionsGranted,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                colors = ButtonDefaults.buttonColors(containerColor = BrandFrom)
             ) {
-                Text(
-                    "Bildirim İzni Ver & Başla",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.White
-                )
+                Text("Bildirim İzni Ver & Başla", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
             }
 
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(36.dp))
         }
     }
 }
 
 @Composable
-private fun FeatureRow(feature: OnboardingFeature) {
+private fun FeatureCard(feature: Feature) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(CardBackground)
+            .clip(RoundedCornerShape(18.dp))
+            .background(BgCard)
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -140,25 +124,14 @@ private fun FeatureRow(feature: OnboardingFeature) {
             modifier = Modifier
                 .size(48.dp)
                 .clip(CircleShape)
-                .background(SurfaceVariant),
+                .background(BgCardAlt),
             contentAlignment = Alignment.Center
         ) {
             Text(feature.emoji, fontSize = 22.sp)
         }
-
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                feature.title,
-                color = TextPrimary,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 15.sp
-            )
-            Text(
-                feature.description,
-                color = TextSecondary,
-                fontSize = 13.sp,
-                lineHeight = 18.sp
-            )
+            Text(feature.title, color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+            Text(feature.desc, color = TextMed, fontSize = 13.sp, lineHeight = 18.sp)
         }
     }
 }

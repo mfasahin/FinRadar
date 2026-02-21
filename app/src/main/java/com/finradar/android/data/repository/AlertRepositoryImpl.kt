@@ -15,6 +15,7 @@ class AlertRepositoryImpl @Inject constructor(
     override suspend fun saveAlert(alert: Alert): Long {
         val entity = AlertEntity(
             subscriptionId = alert.subscriptionId,
+            subscriptionName = alert.subscriptionName,
             oldAmount = alert.oldAmount,
             newAmount = alert.newAmount,
             percentageChange = alert.percentageChange,
@@ -30,6 +31,7 @@ class AlertRepositoryImpl @Inject constructor(
                 Alert(
                     id = entity.id,
                     subscriptionId = entity.subscriptionId,
+                    subscriptionName = entity.subscriptionName,
                     oldAmount = entity.oldAmount,
                     newAmount = entity.newAmount,
                     percentageChange = entity.percentageChange,

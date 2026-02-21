@@ -36,66 +36,54 @@ fun SubscriptionsScreen(
     val subscriptions by viewModel.subscriptions.collectAsState(initial = emptyList())
 
     Scaffold(
+        containerColor = BgDeep,
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        "Aboneliklerim",
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold
+                        "Abonelikler",
+                        color = TextHigh,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        letterSpacing = (-0.5).sp
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToAdd,
-                containerColor = Primary,
-                contentColor = Color.White,
-                shape = CircleShape
+                containerColor = BrandFrom,
+                contentColor = TextHigh,
+                shape = CircleShape,
+                modifier = Modifier.size(58.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Abonelik Ekle")
+                Icon(Icons.Default.Add, contentDescription = "Abonelik Ekle", modifier = Modifier.size(24.dp))
             }
-        },
-        containerColor = Background
+        }
     ) { padding ->
         if (subscriptions.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text("📋", fontSize = 48.sp)
+                    Text("Abonelik Yok", color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(
-                        "Henüz abonelik yok",
-                        color = TextPrimary,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Text(
-                        "Banka bildirimleri veya + butonu ile\nabonelik ekleyebilirsiniz.",
-                        color = TextSecondary,
-                        fontSize = 14.sp,
-                        lineHeight = 20.sp
+                        "SMS bildirimleri veya + butonu ile\nmanuel olarak ekleyebilirsiniz.",
+                        color = TextMed, fontSize = 14.sp, lineHeight = 22.sp
                     )
                 }
             }
         } else {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(horizontal = 20.dp),
+                modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
-                items(subscriptions) { sub ->
-                    SubscriptionDetailCard(sub)
-                }
+                items(subscriptions) { sub -> SubscriptionDetailCard(sub) }
             }
         }
     }
@@ -105,79 +93,92 @@ fun SubscriptionsScreen(
 fun SubscriptionDetailCard(subscription: Subscription) {
     val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("tr"))
     val amountFormat = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
+    val colorIdx = (subscription.name.hashCode() % CategoryColors.size)
+        .let { if (it < 0) it + CategoryColors.size else it }
+    val accent = CategoryColors[colorIdx]
 
-    val gradients = listOf(
-        listOf(Color(0xFF4F8EFF), Color(0xFF9747FF)),
-        listOf(Color(0xFF00D4FF), Color(0xFF4F8EFF)),
-        listOf(Color(0xFF9747FF), Color(0xFFFF4D6D)),
-        listOf(Color(0xFF00E5A0), Color(0xFF00D4FF)),
-        listOf(Color(0xFFFFB020), Color(0xFFFF4D6D))
-    )
-    val idx = (subscription.name.hashCode() % gradients.size).let { if (it < 0) it + gradients.size else it }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = CardBackground),
-        elevation = CardDefaults.cardElevation(0.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(BgDeep)        // white card
+            .then(
+                Modifier.padding(0.dp) // no extra padding here
+            ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
+        // ── Left accent bar ────────────────────────────────────────────────
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .width(4.dp)
+                .height(76.dp)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(accent, accent.copy(alpha = 0.4f))
+                    ),
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
+                )
+        )
+
+        Spacer(Modifier.width(14.dp))
+
+        // ── Avatar ─────────────────────────────────────────────────────────
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .clip(RoundedCornerShape(13.dp))
+                .background(accent.copy(alpha = 0.12f)),
+            contentAlignment = Alignment.Center
         ) {
-            // Gradient avatar
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(Brush.linearGradient(gradients[idx])),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = subscription.name.take(1).uppercase(),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
+            Text(
+                subscription.name.take(1).uppercase(),
+                color = accent,
+                fontWeight = FontWeight.Black,
+                fontSize = 18.sp
+            )
+        }
 
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(
-                    text = subscription.name,
-                    color = TextPrimary,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 15.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = subscription.category ?: "Genel",
-                    color = TextSecondary,
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "Son ödeme: ${dateFormat.format(Date(subscription.lastPaymentDate))}",
-                    color = TextDisabled,
-                    fontSize = 11.sp
-                )
-            }
+        Spacer(Modifier.width(12.dp))
 
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    text = amountFormat.format(subscription.averageAmount),
-                    color = Primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = "/ ay",
-                    color = TextSecondary,
-                    fontSize = 11.sp
-                )
-            }
+        // ── Name + category + date ─────────────────────────────────────────
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                subscription.name,
+                color = TextHigh,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 15.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                subscription.category ?: "Genel",
+                color = TextMed,
+                fontSize = 12.sp
+            )
+            Text(
+                "Son: ${dateFormat.format(Date(subscription.lastPaymentDate))}",
+                color = TextLow,
+                fontSize = 11.sp
+            )
+        }
+
+        // ── Amount ─────────────────────────────────────────────────────────
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier.padding(end = 16.dp)
+        ) {
+            Text(
+                amountFormat.format(subscription.averageAmount),
+                color = accent,
+                fontWeight = FontWeight.Black,
+                fontSize = 16.sp,
+                letterSpacing = (-0.5).sp
+            )
+            Text("/ ay", color = TextMed, fontSize = 11.sp)
         }
     }
 }
+

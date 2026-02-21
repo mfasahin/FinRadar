@@ -22,16 +22,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.finradar.android.ui.theme.*
 
-val subscriptionCategories = listOf(
-    "Yayın Hizmeti",
-    "Müzik",
-    "Yazılım",
-    "Bulut Depolama",
-    "Oyun",
-    "Fitness",
-    "Eğitim",
-    "Haberler",
-    "Genel"
+private val subscriptionCategories = listOf(
+    "Yayın Hizmeti", "Müzik", "Yazılım", "Bulut Depolama",
+    "Oyun", "Fitness", "Eğitim", "Haberler", "Genel"
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,29 +40,35 @@ fun AddSubscriptionScreen(
     var nameError by remember { mutableStateOf(false) }
     var amountError by remember { mutableStateOf(false) }
 
+    val fieldColors = OutlinedTextFieldDefaults.colors(
+        focusedContainerColor   = BgCard,
+        unfocusedContainerColor = BgCard,
+        focusedBorderColor      = BrandFrom,
+        unfocusedBorderColor    = BgStroke,
+        focusedTextColor        = TextHigh,
+        unfocusedTextColor      = TextHigh,
+        errorContainerColor     = BgCard,
+        errorBorderColor        = AccentRed,
+        focusedLabelColor       = BrandFrom,
+        unfocusedLabelColor     = TextMed
+    )
+
     Scaffold(
+        containerColor = BgDeep,
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Abonelik Ekle",
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("Abonelik Ekle", color = TextHigh, fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp, letterSpacing = (-0.5).sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = "Geri",
-                            tint = TextPrimary
-                        )
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Geri", tint = TextHigh)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
-        },
-        containerColor = Background
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -79,116 +78,63 @@ fun AddSubscriptionScreen(
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-
-            // Header illustration
+            // Header card
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(24.dp))
                     .background(
-                        Brush.linearGradient(
-                            colors = listOf(GradientStart, GradientPurple)
-                        )
+                        Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo))
                     )
-                    .padding(24.dp),
+                    .padding(28.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
                     Text("➕", fontSize = 36.sp)
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        "Yeni Abonelik",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                    Text(
-                        "Manuel olarak abonelik ekleyin",
-                        color = Color.White.copy(alpha = 0.75f),
-                        fontSize = 13.sp
-                    )
+                    Text("Yeni Abonelik Ekle", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text("Bilgileri doldurun ve kaydedin", color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
                 }
             }
 
-            // Name Field
+            // Name field
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    "Abonelik Adı",
-                    color = TextSecondary,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                Text("Abonelik Adı", color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 OutlinedTextField(
                     value = name,
-                    onValueChange = {
-                        name = it
-                        nameError = false
-                    },
-                    placeholder = { Text("Netflix, Spotify, vb.", color = TextDisabled) },
+                    onValueChange = { name = it; nameError = false },
+                    placeholder = { Text("Netflix, Spotify, vb.", color = TextLow) },
                     isError = nameError,
-                    supportingText = {
-                        if (nameError) Text("Abonelik adı boş bırakılamaz", color = ErrorRed)
-                    },
+                    supportingText = { if (nameError) Text("Bu alan zorunludur", color = AccentRed, fontSize = 12.sp) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CardBackground,
-                        unfocusedContainerColor = CardBackground,
-                        focusedBorderColor = Primary,
-                        unfocusedBorderColor = TextDisabled,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        errorContainerColor = CardBackground,
-                        errorBorderColor = ErrorRed
-                    )
+                    colors = fieldColors
                 )
             }
 
-            // Amount Field
+            // Amount field
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    "Aylık Tutar (₺)",
-                    color = TextSecondary,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                Text("Aylık Tutar (₺)", color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 OutlinedTextField(
                     value = amountText,
-                    onValueChange = {
-                        amountText = it.replace(',', '.')
-                        amountError = false
-                    },
-                    placeholder = { Text("0.00", color = TextDisabled) },
+                    onValueChange = { amountText = it.replace(',', '.'); amountError = false },
+                    placeholder = { Text("0.00", color = TextLow) },
                     isError = amountError,
-                    supportingText = {
-                        if (amountError) Text("Geçerli bir tutar girin", color = ErrorRed)
-                    },
+                    supportingText = { if (amountError) Text("Geçerli bir tutar girin", color = AccentRed, fontSize = 12.sp) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CardBackground,
-                        unfocusedContainerColor = CardBackground,
-                        focusedBorderColor = Primary,
-                        unfocusedBorderColor = TextDisabled,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        errorContainerColor = CardBackground,
-                        errorBorderColor = ErrorRed
-                    )
+                    colors = fieldColors
                 )
             }
 
-            // Category Dropdown
+            // Category dropdown
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    "Kategori",
-                    color = TextSecondary,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                Text("Kategori", color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 ExposedDropdownMenuBox(
                     expanded = categoryMenuExpanded,
                     onExpandedChange = { categoryMenuExpanded = !categoryMenuExpanded }
@@ -198,72 +144,46 @@ fun AddSubscriptionScreen(
                         onValueChange = {},
                         readOnly = true,
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryMenuExpanded) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor(),
+                        modifier = Modifier.fillMaxWidth().menuAnchor(),
                         shape = RoundedCornerShape(14.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = CardBackground,
-                            unfocusedContainerColor = CardBackground,
-                            focusedBorderColor = Primary,
-                            unfocusedBorderColor = TextDisabled,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        colors = fieldColors
                     )
                     ExposedDropdownMenu(
                         expanded = categoryMenuExpanded,
                         onDismissRequest = { categoryMenuExpanded = false },
-                        modifier = Modifier.background(SurfaceVariant)
+                        modifier = Modifier.background(BgCardAlt)
                     ) {
                         subscriptionCategories.forEach { category ->
                             DropdownMenuItem(
-                                text = { Text(category, color = TextPrimary) },
-                                onClick = {
-                                    selectedCategory = category
-                                    categoryMenuExpanded = false
-                                }
+                                text = { Text(category, color = TextHigh) },
+                                onClick = { selectedCategory = category; categoryMenuExpanded = false }
                             )
                         }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(Modifier.height(4.dp))
 
-            // Save Button
+            // Save button
             Button(
                 onClick = {
-                    val trimmedName = name.trim()
-                    val amount = amountText.toDoubleOrNull()
-
-                    nameError = trimmedName.isEmpty()
-                    amountError = amount == null || amount <= 0.0
-
+                    val amt = amountText.toDoubleOrNull()
+                    nameError = name.trim().isEmpty()
+                    amountError = amt == null || amt <= 0.0
                     if (!nameError && !amountError) {
-                        viewModel.addSubscription(
-                            name = trimmedName,
-                            amount = amount!!,
-                            category = selectedCategory
-                        )
+                        viewModel.addSubscription(name.trim(), amt!!, selectedCategory)
                         onNavigateBack()
                     }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = BrandFrom)
             ) {
-                Text(
-                    "Aboneliği Kaydet",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.White
-                )
+                Text("Kaydet", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(20.dp))
         }
     }
 }

@@ -11,7 +11,7 @@ import com.finradar.android.data.local.entity.TransactionEntity
 
 @Database(
     entities = [TransactionEntity::class, SubscriptionEntity::class, AlertEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

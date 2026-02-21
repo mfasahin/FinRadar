@@ -1,7 +1,6 @@
 package com.finradar.android.presentation.dashboard
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,12 +8,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -36,120 +37,101 @@ fun DashboardScreen(
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
+        containerColor = BgDeep,
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = "FinRadar",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = TextPrimary
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(
+                                    Brush.linearGradient(listOf(BrandFrom, BrandMid))
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("📡", fontSize = 16.sp)
+                        }
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            "FinRadar",
+                            color = TextHigh,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            letterSpacing = (-0.5).sp
+                        )
+                    }
                 },
                 actions = {
                     IconButton(onClick = onNavigateToAlerts) {
                         BadgedBox(
                             badge = {
                                 if (state.unreadAlertCount > 0) {
-                                    Badge(
-                                        containerColor = ErrorRed
-                                    ) {
+                                    Badge(containerColor = AccentRed) {
                                         Text(
                                             "${state.unreadAlertCount}",
-                                            color = Color.White,
-                                            fontSize = 10.sp
+                                            color = TextHigh,
+                                            fontSize = 9.sp,
+                                            fontWeight = FontWeight.Bold
                                         )
                                     }
                                 }
                             }
                         ) {
                             Icon(
-                                Icons.Default.Notifications,
+                                Icons.Outlined.Notifications,
                                 contentDescription = "Uyarılar",
-                                tint = if (state.unreadAlertCount > 0) ErrorRed else TextSecondary
+                                tint = if (state.unreadAlertCount > 0) AccentRed else TextMed,
+                                modifier = Modifier.size(22.dp)
                             )
                         }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Background
+                    containerColor = Color.Transparent
                 )
             )
-        },
-        containerColor = Background
+        }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            contentPadding = PaddingValues(vertical = 16.dp)
+                .padding(padding),
+            contentPadding = PaddingValues(bottom = 32.dp)
         ) {
-            item {
-                // Total Monthly Spend — Hero Card with gradient
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(
-                            Brush.linearGradient(
-                                colors = listOf(GradientStart, GradientEnd)
-                            )
-                        )
-                        .padding(28.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Bu Ay Toplam Abonelik",
-                            color = Color.White.copy(alpha = 0.8f),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = formatAmount(state.totalMonthlySpend),
-                            color = Color.White,
-                            fontSize = 42.sp,
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${state.topSubscriptions.size} aktif abonelik",
-                            color = Color.White.copy(alpha = 0.7f),
-                            fontSize = 13.sp
-                        )
-                    }
-                }
-            }
+            item { HeroCard(state.totalMonthlySpend, state.topSubscriptions.size) }
 
             item {
+                Spacer(Modifier.height(32.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    Box(
+                        modifier = Modifier
+                            .width(3.dp)
+                            .height(18.dp)
+                            .clip(CircleShape)
+                            .background(Brush.verticalGradient(listOf(BrandFrom, BrandMid)))
+                    )
                     Text(
-                        text = "En Pahalı 3 Abonelik",
-                        color = TextPrimary,
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.SemiBold
+                        "En Pahalı Abonelikler",
+                        color = TextHigh,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 17.sp
                     )
                 }
+                Spacer(Modifier.height(14.dp))
             }
 
             if (state.topSubscriptions.isEmpty()) {
-                item {
-                    EmptyStateCard(
-                        message = "Henüz abonelik tespit edilmedi.\nBanka bildirimlerini etkinleştirin."
-                    )
-                }
+                item { EmptyState() }
             } else {
                 items(state.topSubscriptions) { sub ->
-                    DashboardSubscriptionCard(subscription = sub)
+                    PremiumSubscriptionRow(sub)
+                    Spacer(Modifier.height(10.dp))
                 }
             }
         }
@@ -157,90 +139,196 @@ fun DashboardScreen(
 }
 
 @Composable
-fun DashboardSubscriptionCard(subscription: Subscription) {
-    val gradients = listOf(
-        listOf(Color(0xFF4F8EFF), Color(0xFF9747FF)),
-        listOf(Color(0xFF00D4FF), Color(0xFF4F8EFF)),
-        listOf(Color(0xFF9747FF), Color(0xFFFF4D6D))
-    )
-    val gradientIndex = (subscription.name.hashCode() % 3).let { if (it < 0) it + 3 else it }
-    val gradient = gradients[gradientIndex]
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = CardBackground),
-        elevation = CardDefaults.cardElevation(0.dp)
+private fun HeroCard(totalSpend: Double, activeCount: Int) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(220.dp)
     ) {
+        // Glow blobs behind card
+        Box(
+            modifier = Modifier
+                .size(260.dp)
+                .offset(x = (-40).dp, y = (-20).dp)
+                .blur(80.dp)
+                .background(BrandFrom.copy(alpha = 0.3f), CircleShape)
+        )
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.BottomEnd)
+                .offset(x = 40.dp, y = 40.dp)
+                .blur(80.dp)
+                .background(BrandMid.copy(alpha = 0.25f), CircleShape)
+        )
+
+        // Glass card
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .clip(RoundedCornerShape(28.dp))
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            BrandFrom.copy(alpha = 0.85f),
+                            BrandMid.copy(alpha = 0.75f),
+                            BrandTo.copy(alpha = 0.7f)
+                        ),
+                        start = Offset(0f, 0f),
+                        end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                    )
+                )
+        ) {
+            // Subtle grid texture overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0.08f),
+                                Color.Transparent
+                            ),
+                            radius = 400f
+                        )
+                    )
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(28.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Bu Ay Toplam",
+                    color = Color.White.copy(alpha = 0.75f),
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 0.5.sp
+                )
+
+                Column {
+                    Text(
+                        text = formatAmount(totalSpend),
+                        color = Color.White,
+                        fontSize = 40.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = (-1.5).sp,
+                        lineHeight = 44.sp
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        StatChip("$activeCount Aktif", AccentCyan)
+                        StatChip("Aylık", Color.White.copy(alpha = 0.6f))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun StatChip(label: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White.copy(alpha = 0.15f))
+            .padding(horizontal = 12.dp, vertical = 5.dp)
+    ) {
+        Text(label, color = color, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+@Composable
+fun PremiumSubscriptionRow(subscription: Subscription) {
+    val colorIdx = (subscription.name.hashCode() % CategoryColors.size).let { if (it < 0) it + CategoryColors.size else it }
+    val accent = CategoryColors[colorIdx]
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(BgDeep)
+    ) {
+        // Left colour accent
+        Box(
+            modifier = Modifier
+                .width(3.dp)
+                .fillMaxHeight()
+                .background(
+                    Brush.verticalGradient(listOf(accent, accent.copy(alpha = 0.3f)))
+                )
+        )
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(start = 18.dp, end = 16.dp, top = 14.dp, bottom = 14.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Colorful avatar
             Box(
                 modifier = Modifier
-                    .size(46.dp)
-                    .clip(CircleShape)
-                    .background(Brush.linearGradient(gradient)),
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(13.dp))
+                    .background(accent.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = subscription.name.take(1).uppercase(),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
+                    subscription.name.take(1).uppercase(),
+                    color = accent,
+                    fontWeight = FontWeight.Black,
                     fontSize = 18.sp
                 )
             }
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = subscription.name,
-                    color = TextPrimary,
+                    subscription.name,
+                    color = TextHigh,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = subscription.category ?: "Genel",
-                    color = TextSecondary,
+                    subscription.category ?: "Genel",
+                    color = TextMed,
                     fontSize = 12.sp
                 )
             }
 
             Text(
-                text = formatAmount(subscription.averageAmount),
-                color = Primary,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
+                formatAmount(subscription.averageAmount),
+                color = accent,
+                fontWeight = FontWeight.Black,
+                fontSize = 16.sp,
+                letterSpacing = (-0.5).sp
             )
         }
     }
 }
 
 @Composable
-fun EmptyStateCard(message: String) {
+fun EmptyState(message: String = "Henüz abonelik yok.\nBanka bildirimlerini etkinleştirin.") {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(CardBackground)
-            .padding(32.dp),
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(BgDeep)
+            .padding(40.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = message,
-            color = TextSecondary,
-            fontSize = 14.sp,
-            lineHeight = 22.sp
-        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("🔍", fontSize = 32.sp)
+            Text(message, color = TextMed, fontSize = 14.sp, lineHeight = 22.sp)
+        }
     }
 }
 
-private fun formatAmount(amount: Double): String {
-    val format = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
-    return format.format(amount)
-}
+private fun formatAmount(amount: Double) =
+    NumberFormat.getCurrencyInstance(Locale("tr", "TR")).format(amount)

@@ -39,7 +39,7 @@ public final class AlertDao_Impl implements AlertDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `alerts` (`id`,`subscriptionId`,`oldAmount`,`newAmount`,`percentageChange`,`isRead`,`date`) VALUES (nullif(?, 0),?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `alerts` (`id`,`subscriptionId`,`subscriptionName`,`oldAmount`,`newAmount`,`percentageChange`,`isRead`,`date`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -47,12 +47,17 @@ public final class AlertDao_Impl implements AlertDao {
           @NonNull final AlertEntity entity) {
         statement.bindLong(1, entity.getId());
         statement.bindLong(2, entity.getSubscriptionId());
-        statement.bindDouble(3, entity.getOldAmount());
-        statement.bindDouble(4, entity.getNewAmount());
-        statement.bindDouble(5, entity.getPercentageChange());
+        if (entity.getSubscriptionName() == null) {
+          statement.bindNull(3);
+        } else {
+          statement.bindString(3, entity.getSubscriptionName());
+        }
+        statement.bindDouble(4, entity.getOldAmount());
+        statement.bindDouble(5, entity.getNewAmount());
+        statement.bindDouble(6, entity.getPercentageChange());
         final int _tmp = entity.isRead() ? 1 : 0;
-        statement.bindLong(6, _tmp);
-        statement.bindLong(7, entity.getDate());
+        statement.bindLong(7, _tmp);
+        statement.bindLong(8, entity.getDate());
       }
     };
   }
@@ -87,6 +92,7 @@ public final class AlertDao_Impl implements AlertDao {
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfSubscriptionId = CursorUtil.getColumnIndexOrThrow(_cursor, "subscriptionId");
+          final int _cursorIndexOfSubscriptionName = CursorUtil.getColumnIndexOrThrow(_cursor, "subscriptionName");
           final int _cursorIndexOfOldAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "oldAmount");
           final int _cursorIndexOfNewAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "newAmount");
           final int _cursorIndexOfPercentageChange = CursorUtil.getColumnIndexOrThrow(_cursor, "percentageChange");
@@ -99,6 +105,12 @@ public final class AlertDao_Impl implements AlertDao {
             _tmpId = _cursor.getLong(_cursorIndexOfId);
             final long _tmpSubscriptionId;
             _tmpSubscriptionId = _cursor.getLong(_cursorIndexOfSubscriptionId);
+            final String _tmpSubscriptionName;
+            if (_cursor.isNull(_cursorIndexOfSubscriptionName)) {
+              _tmpSubscriptionName = null;
+            } else {
+              _tmpSubscriptionName = _cursor.getString(_cursorIndexOfSubscriptionName);
+            }
             final double _tmpOldAmount;
             _tmpOldAmount = _cursor.getDouble(_cursorIndexOfOldAmount);
             final double _tmpNewAmount;
@@ -111,7 +123,7 @@ public final class AlertDao_Impl implements AlertDao {
             _tmpIsRead = _tmp != 0;
             final long _tmpDate;
             _tmpDate = _cursor.getLong(_cursorIndexOfDate);
-            _item = new AlertEntity(_tmpId,_tmpSubscriptionId,_tmpOldAmount,_tmpNewAmount,_tmpPercentageChange,_tmpIsRead,_tmpDate);
+            _item = new AlertEntity(_tmpId,_tmpSubscriptionId,_tmpSubscriptionName,_tmpOldAmount,_tmpNewAmount,_tmpPercentageChange,_tmpIsRead,_tmpDate);
             _result.add(_item);
           }
           return _result;

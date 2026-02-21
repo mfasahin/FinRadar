@@ -3,16 +3,25 @@ package com.finradar.android.presentation.navigation
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -29,53 +38,39 @@ import com.finradar.android.ui.theme.*
 data class BottomNavItem(
     val screen: Screen,
     val label: String,
-    val icon: ImageVector
+    val icon: ImageVector,
+    val activeIcon: ImageVector
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem(Screen.Dashboard, "Ana Sayfa", Icons.Default.Home),
-    BottomNavItem(Screen.Subscriptions, "Abonelikler", Icons.Default.List),
-    BottomNavItem(Screen.Alerts, "Uyarılar", Icons.Default.Notifications)
+    BottomNavItem(Screen.Dashboard, "Ana Sayfa", Icons.Outlined.Home, Icons.Filled.Home),
+    BottomNavItem(Screen.Subscriptions, "Abonelikler", Icons.Outlined.List, Icons.Filled.List),
+    BottomNavItem(Screen.Alerts, "Uyarılar", Icons.Outlined.Notifications, Icons.Filled.Notifications)
 )
 
 @Composable
 fun FinRadarNavGraph(navController: NavHostController) {
     val context = LocalContext.current
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDest = navBackStackEntry?.destination
+    val showBar = bottomNavItems.any { it.screen.route == currentDest?.route }
 
     Scaffold(
+        containerColor = BgDeep,
         bottomBar = {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDest = navBackStackEntry?.destination
-            val showBar = bottomNavItems.any { it.screen.route == currentDest?.route }
             if (showBar) {
                 NavigationBar(
-                    containerColor = Surface,
-                    contentColor = Primary
+                    containerColor = BgDeep,
+                    tonalElevation = 0.dp,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 10.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(BgDeep)
                 ) {
                     bottomNavItems.forEach { item ->
                         val selected = currentDest?.hierarchy?.any { it.route == item.screen.route } == true
                         NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    item.icon,
-                                    contentDescription = item.label,
-                                    tint = if (selected) Primary else TextSecondary
-                                )
-                            },
-                            label = {
-                                Text(
-                                    item.label,
-                                    color = if (selected) Primary else TextSecondary
-                                )
-                            },
                             selected = selected,
-                            colors = NavigationBarItemDefaults.colors(
-                                indicatorColor = SurfaceVariant,
-                                selectedIconColor = Primary,
-                                selectedTextColor = Primary,
-                                unselectedIconColor = TextSecondary,
-                                unselectedTextColor = TextSecondary
-                            ),
                             onClick = {
                                 navController.navigate(item.screen.route) {
                                     popUpTo(navController.graph.findStartDestination().id) {
@@ -84,13 +79,33 @@ fun FinRadarNavGraph(navController: NavHostController) {
                                     launchSingleTop = true
                                     restoreState = true
                                 }
-                            }
+                            },
+                            icon = {
+                                Icon(
+                                    if (selected) item.activeIcon else item.icon,
+                                    contentDescription = item.label,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            },
+                            label = {
+                                Text(
+                                    item.label,
+                                    fontSize = 11.sp,
+                                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = BrandFrom,
+                                selectedTextColor = BrandFrom,
+                                unselectedIconColor = TextMed,
+                                unselectedTextColor = TextMed,
+                                indicatorColor = BrandFrom.copy(alpha = 0.15f)
+                            )
                         )
                     }
                 }
             }
-        },
-        containerColor = Background
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -100,8 +115,7 @@ fun FinRadarNavGraph(navController: NavHostController) {
             composable(Screen.Onboarding.route) {
                 OnboardingScreen(
                     onPermissionsGranted = {
-                        val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-                        context.startActivity(intent)
+                        context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         navController.navigate(Screen.Dashboard.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }
@@ -109,28 +123,16 @@ fun FinRadarNavGraph(navController: NavHostController) {
                 )
             }
             composable(Screen.Dashboard.route) {
-                DashboardScreen(
-                    onNavigateToAlerts = {
-                        navController.navigate(Screen.Alerts.route)
-                    }
-                )
+                DashboardScreen(onNavigateToAlerts = { navController.navigate(Screen.Alerts.route) })
             }
             composable(Screen.Subscriptions.route) {
-                SubscriptionsScreen(
-                    onNavigateToAdd = {
-                        navController.navigate(Screen.AddSubscription.route)
-                    }
-                )
+                SubscriptionsScreen(onNavigateToAdd = { navController.navigate(Screen.AddSubscription.route) })
             }
             composable(Screen.Alerts.route) {
                 AlertsScreen()
             }
             composable(Screen.AddSubscription.route) {
-                AddSubscriptionScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
-                )
+                AddSubscriptionScreen(onNavigateBack = { navController.popBackStack() })
             }
         }
     }
