@@ -1,5 +1,6 @@
 package com.finradar.android.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -13,5 +14,7 @@ data class AlertEntity(
     val newAmount: Double,
     val percentageChange: Double,
     val isRead: Boolean = false,
-    val date: Long
+    val date: Long,
+    @ColumnInfo(defaultValue = "PRICE_CHANGE")
+    val type: String = "PRICE_CHANGE"
 )

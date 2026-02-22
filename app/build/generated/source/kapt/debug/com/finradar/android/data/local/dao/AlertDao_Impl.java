@@ -39,7 +39,7 @@ public final class AlertDao_Impl implements AlertDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `alerts` (`id`,`subscriptionId`,`subscriptionName`,`oldAmount`,`newAmount`,`percentageChange`,`isRead`,`date`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `alerts` (`id`,`subscriptionId`,`subscriptionName`,`oldAmount`,`newAmount`,`percentageChange`,`isRead`,`date`,`type`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -58,6 +58,11 @@ public final class AlertDao_Impl implements AlertDao {
         final int _tmp = entity.isRead() ? 1 : 0;
         statement.bindLong(7, _tmp);
         statement.bindLong(8, entity.getDate());
+        if (entity.getType() == null) {
+          statement.bindNull(9);
+        } else {
+          statement.bindString(9, entity.getType());
+        }
       }
     };
   }
@@ -98,6 +103,7 @@ public final class AlertDao_Impl implements AlertDao {
           final int _cursorIndexOfPercentageChange = CursorUtil.getColumnIndexOrThrow(_cursor, "percentageChange");
           final int _cursorIndexOfIsRead = CursorUtil.getColumnIndexOrThrow(_cursor, "isRead");
           final int _cursorIndexOfDate = CursorUtil.getColumnIndexOrThrow(_cursor, "date");
+          final int _cursorIndexOfType = CursorUtil.getColumnIndexOrThrow(_cursor, "type");
           final List<AlertEntity> _result = new ArrayList<AlertEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final AlertEntity _item;
@@ -123,7 +129,13 @@ public final class AlertDao_Impl implements AlertDao {
             _tmpIsRead = _tmp != 0;
             final long _tmpDate;
             _tmpDate = _cursor.getLong(_cursorIndexOfDate);
-            _item = new AlertEntity(_tmpId,_tmpSubscriptionId,_tmpSubscriptionName,_tmpOldAmount,_tmpNewAmount,_tmpPercentageChange,_tmpIsRead,_tmpDate);
+            final String _tmpType;
+            if (_cursor.isNull(_cursorIndexOfType)) {
+              _tmpType = null;
+            } else {
+              _tmpType = _cursor.getString(_cursorIndexOfType);
+            }
+            _item = new AlertEntity(_tmpId,_tmpSubscriptionId,_tmpSubscriptionName,_tmpOldAmount,_tmpNewAmount,_tmpPercentageChange,_tmpIsRead,_tmpDate,_tmpType);
             _result.add(_item);
           }
           return _result;

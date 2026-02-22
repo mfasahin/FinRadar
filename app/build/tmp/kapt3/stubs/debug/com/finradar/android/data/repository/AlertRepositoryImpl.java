@@ -3,6 +3,7 @@ package com.finradar.android.data.repository;
 import com.finradar.android.data.local.dao.AlertDao;
 import com.finradar.android.data.local.entity.AlertEntity;
 import com.finradar.android.domain.model.Alert;
+import com.finradar.android.domain.model.AlertType;
 import com.finradar.android.domain.repository.AlertRepository;
 import kotlinx.coroutines.flow.Flow;
 import javax.inject.Inject;

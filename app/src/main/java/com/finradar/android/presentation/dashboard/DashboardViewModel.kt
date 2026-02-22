@@ -14,7 +14,9 @@ import javax.inject.Inject
 
 data class DashboardUiState(
     val totalMonthlySpend: Double = 0.0,
+    val totalActiveCount: Int = 0,
     val topSubscriptions: List<Subscription> = emptyList(),
+    val upcomingPayments: List<Subscription> = emptyList(),
     val unreadAlertCount: Int = 0
 )
 
@@ -29,9 +31,14 @@ class DashboardViewModel @Inject constructor(
         alertRepository.getUnreadAlertCount()
     ) { subscriptions, alertCount ->
         DashboardUiState(
-            totalMonthlySpend = subscriptions.sumOf { it.averageAmount },
-            topSubscriptions = subscriptions.sortedByDescending { it.averageAmount }.take(3),
-            unreadAlertCount = alertCount
+            totalMonthlySpend  = subscriptions.sumOf { it.averageAmount },
+            totalActiveCount   = subscriptions.size,
+            topSubscriptions   = subscriptions.sortedByDescending { it.averageAmount }.take(3),
+            upcomingPayments   = subscriptions
+                .filter { it.nextPaymentDate > 0 }
+                .sortedBy { it.nextPaymentDate }
+                .take(5),
+            unreadAlertCount   = alertCount
         )
     }.stateIn(
         scope = viewModelScope,

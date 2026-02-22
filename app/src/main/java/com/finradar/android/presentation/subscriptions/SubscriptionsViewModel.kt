@@ -1,6 +1,5 @@
 package com.finradar.android.presentation.subscriptions
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finradar.android.domain.model.Subscription
@@ -23,19 +22,19 @@ class SubscriptionsViewModel @Inject constructor(
         .getActiveSubscriptions()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    // Subscription loaded for editing
     private val _editTarget = MutableStateFlow<Subscription?>(null)
     val editTarget: StateFlow<Subscription?> = _editTarget.asStateFlow()
 
-    fun addSubscription(name: String, amount: Double, category: String) {
+    fun addSubscription(name: String, amount: Double, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {
             subscriptionRepository.saveSubscription(
                 Subscription(
-                    name = name.trim(),
-                    averageAmount = amount,
+                    name            = name.trim(),
+                    averageAmount   = amount,
                     lastPaymentDate = System.currentTimeMillis(),
-                    category = category.ifBlank { "Genel" },
-                    isActive = true
+                    nextPaymentDate = nextPaymentDate,
+                    category        = category.ifBlank { "general" },
+                    isActive        = true
                 )
             )
         }
@@ -47,16 +46,17 @@ class SubscriptionsViewModel @Inject constructor(
         }
     }
 
-    fun updateSubscription(id: Long, name: String, amount: Double, category: String) {
+    fun updateSubscription(id: Long, name: String, amount: Double, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {
             subscriptionRepository.updateSubscription(
                 Subscription(
-                    id = id,
-                    name = name.trim(),
-                    averageAmount = amount,
+                    id              = id,
+                    name            = name.trim(),
+                    averageAmount   = amount,
                     lastPaymentDate = System.currentTimeMillis(),
-                    category = category.ifBlank { "Genel" },
-                    isActive = true
+                    nextPaymentDate = nextPaymentDate,
+                    category        = category.ifBlank { "general" },
+                    isActive        = true
                 )
             )
             _editTarget.value = null

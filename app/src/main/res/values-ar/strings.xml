@@ -8,6 +8,7 @@
     <string name="dashboard_title">الرئيسية</string>
     <string name="dashboard_monthly_total">الإجمالي هذا الشهر</string>
     <string name="dashboard_monthly">شهري</string>
+    <string name="dashboard_avg_per_sub">متوسط/اشتراك</string>
     <string name="dashboard_active">نشط</string>
     <string name="dashboard_top_subs">الأغلى تكلفة</string>
     <string name="dashboard_see_all">عرض الكل</string>
@@ -49,6 +50,26 @@
     <string name="settings_version">الإصدار</string>
     <string name="settings_pick_language">اختر اللغة</string>
     <string name="settings_tagline">أدّر اشتراكاتك بذكاء</string>
+    <string name="settings_notifications">الإشعارات</string>
+    <string name="settings_reminder_title">تذكير الدفع</string>
+    <string name="settings_reminder_desc">إشعار قبل %d أيام من الدفع</string>
+    <string name="settings_reminder_days">%d أيام</string>
+    <string name="notif_reminder_title">تذكير دفع: %s</string>
+    <string name="notif_reminder_today">موعد الدفع اليوم! المبلغ: %s</string>
+    <string name="notif_reminder_tomorrow">موعد الدفع غداً! المبلغ: %s</string>
+    <string name="notif_reminder_days">الدفع خلال %d أيام! المبلغ: %s</string>
+
+
+    <!-- Next payment date -->
+    <string name="add_next_payment_label">تاريخ الدفعة التالية</string>
+    <string name="add_next_payment_hint">اختر تاريخًا</string>
+    <string name="add_next_payment_not_set">غير محدد</string>
+    <string name="subs_next_payment">التالي: %s</string>
+    <string name="subs_due_today">الدفع اليوم!</string>
+    <string name="subs_due_days">خلال %d يوم</string>
+    <string name="subs_overdue">متأخر %d يوم</string>
+    <string name="dashboard_upcoming">المدفوعات القادمة</string>
+    <string name="dashboard_no_upcoming">لا توجد مدفوعات قادمة</string>
 
     <!-- Subscription categories -->
     <string name="cat_streaming">بث مباشر</string>

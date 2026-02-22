@@ -10,13 +10,14 @@ import androidx.compose.ui.graphics.Brush;
 import androidx.compose.ui.text.font.FontWeight;
 import com.finradar.android.R;
 import com.finradar.android.domain.model.Alert;
+import com.finradar.android.domain.model.AlertType;
 import com.finradar.android.ui.theme.*;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@kotlin.Metadata(mv = {1, 9, 0}, k = 2, xi = 48, d1 = {"\u0000\u0016\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\u001a\u0010\u0010\u0000\u001a\u00020\u00012\u0006\u0010\u0002\u001a\u00020\u0003H\u0007\u001a\u0012\u0010\u0004\u001a\u00020\u00012\b\b\u0002\u0010\u0005\u001a\u00020\u0006H\u0007\u00a8\u0006\u0007"}, d2 = {"AlertCard", "", "alert", "Lcom/finradar/android/domain/model/Alert;", "AlertsScreen", "viewModel", "Lcom/finradar/android/presentation/alerts/AlertsViewModel;", "app_debug"})
+@kotlin.Metadata(mv = {1, 9, 0}, k = 2, xi = 48, d1 = {"\u0000\u0018\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u001a\u0012\u0010\u0000\u001a\u00020\u00012\b\b\u0002\u0010\u0002\u001a\u00020\u0003H\u0007\u001a\u0010\u0010\u0004\u001a\u00020\u00012\u0006\u0010\u0005\u001a\u00020\u0006H\u0007\u001a\u0010\u0010\u0007\u001a\u00020\u00012\u0006\u0010\u0005\u001a\u00020\u0006H\u0007\u00a8\u0006\b"}, d2 = {"AlertsScreen", "", "viewModel", "Lcom/finradar/android/presentation/alerts/AlertsViewModel;", "PriceChangeAlertCard", "alert", "Lcom/finradar/android/domain/model/Alert;", "ReminderAlertCard", "app_debug"})
 public final class AlertsScreenKt {
     
     @kotlin.OptIn(markerClass = {androidx.compose.material3.ExperimentalMaterial3Api.class})
@@ -26,7 +27,12 @@ public final class AlertsScreenKt {
     }
     
     @androidx.compose.runtime.Composable()
-    public static final void AlertCard(@org.jetbrains.annotations.NotNull()
+    public static final void PriceChangeAlertCard(@org.jetbrains.annotations.NotNull()
+    com.finradar.android.domain.model.Alert alert) {
+    }
+    
+    @androidx.compose.runtime.Composable()
+    public static final void ReminderAlertCard(@org.jetbrains.annotations.NotNull()
     com.finradar.android.domain.model.Alert alert) {
     }
 }

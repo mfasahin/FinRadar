@@ -37,6 +37,9 @@
     <string name="add_category_label">Категория</string>
     <string name="add_name_hint">Netflix, Spotify и т.д.</string>
     <string name="add_name_label">Название подписки</string>
+    <string name="add_next_payment_hint">Выбрать дату</string>
+    <string name="add_next_payment_label">Дата следующего платежа</string>
+    <string name="add_next_payment_not_set">Не задано</string>
     <string name="add_save">Сохранить</string>
     <string name="add_title">Добавить подписку</string>
     <string name="add_update">Обновить</string>
@@ -71,12 +74,15 @@
     <string msgid="406453423630273620" name="close_drawer">"Закрыть меню навигации"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Закрыть лист"</string>
     <string name="dashboard_active">Активных</string>
+    <string name="dashboard_avg_per_sub">Ср./подписка</string>
     <string name="dashboard_empty">Подписок ещё нет.\nВключите банковские уведомления.</string>
     <string name="dashboard_monthly">В месяц</string>
     <string name="dashboard_monthly_total">За этот месяц</string>
+    <string name="dashboard_no_upcoming">Нет предстоящих платежей</string>
     <string name="dashboard_see_all">Все</string>
     <string name="dashboard_title">Главная</string>
     <string name="dashboard_top_subs">Самые дорогие</string>
+    <string name="dashboard_upcoming">Предстоящие платежи</string>
     <string msgid="8038256446254964252" name="default_error_message">"Неправильный ввод"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Всплывающее окно"</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Раскрывающееся меню"</string>
@@ -204,6 +210,10 @@
     <string name="nav_subscriptions">Подписки</string>
     <string msgid="542007171693138492" name="navigation_menu">"Меню навигации"</string>
     <string msgid="6610465462668679431" name="not_selected">"Не выбрано"</string>
+    <string name="notif_reminder_days">Оплата через %d дней! Сумма: %s</string>
+    <string name="notif_reminder_title">Напоминание: %s</string>
+    <string name="notif_reminder_today">Оплата сегодня! Сумма: %s</string>
+    <string name="notif_reminder_tomorrow">Оплата завтра! Сумма: %s</string>
     <string msgid="875452955155264703" name="off">"Отключено"</string>
     <string msgid="8655164131929253426" name="on">"Включено"</string>
     <string name="password_toggle_content_description">Показать пароль</string>
@@ -219,7 +229,11 @@
     <string name="settings_dark_mode_off">Переключить на тёмную тему</string>
     <string name="settings_dark_mode_on">Переключить на светлую тему</string>
     <string name="settings_language_region">ЯЗЫК И РЕГИОН</string>
+    <string name="settings_notifications">УВЕДОМЛЕНИЯ</string>
     <string name="settings_pick_language">Выбрать язык</string>
+    <string name="settings_reminder_days">%d дней</string>
+    <string name="settings_reminder_desc">Уведомлять за %d дней до оплаты</string>
+    <string name="settings_reminder_title">Напоминание об оплате</string>
     <string name="settings_tagline">Управляйте подписками умно</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_version">Версия</string>
@@ -229,12 +243,16 @@
     <string name="subs_delete_confirm">Вы уверены, что хотите удалить \"%s\"?</string>
     <string name="subs_delete_ok">Удалить</string>
     <string name="subs_delete_title">Удалить подписку</string>
+    <string name="subs_due_days">Через %d дней</string>
+    <string name="subs_due_today">Срок сегодня!</string>
     <string name="subs_edit">Изменить</string>
     <string name="subs_empty_body">Добавьте вручную через +\nили включите SMS-уведомления.</string>
     <string name="subs_empty_title">Нет подписок</string>
     <string name="subs_general">Общее</string>
     <string name="subs_last_date">Последний: %s</string>
+    <string name="subs_next_payment">Следующий: %s</string>
     <string name="subs_no_results">Результатов нет</string>
+    <string name="subs_overdue">Просрочено %d дней</string>
     <string name="subs_per_month">/ мес</string>
     <string name="subs_search_hint">Поиск подписок…</string>
     <string name="subs_title">Подписки</string>

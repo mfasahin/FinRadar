@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.finradar.android.R
 import com.finradar.android.domain.model.Subscription
+import com.finradar.android.presentation.common.localizedCategory
 import com.finradar.android.ui.theme.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +51,6 @@ fun SubscriptionsScreen(
         }
     }
 
-    // Delete confirmation dialog
     deleteCandidate?.let { sub ->
         AlertDialog(
             onDismissRequest = { deleteCandidate = null },
@@ -84,7 +84,6 @@ fun SubscriptionsScreen(
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
                 )
-                // Search bar
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
@@ -179,18 +178,36 @@ fun SubscriptionDetailCard(
     val accent      = CategoryColors[colorIdx]
     var menuExpanded by remember { mutableStateOf(false) }
 
-    val genLabel    = stringResource(R.string.subs_general)
+    // Next-payment countdown
+    val today       = System.currentTimeMillis()
+    val daysUntil   = if (subscription.nextPaymentDate > 0) {
+        TimeUnit.MILLISECONDS.toDays(subscription.nextPaymentDate - today)
+    } else null
+
+    val nextPayLabel = when {
+        daysUntil == null          -> null
+        daysUntil == 0L            -> stringResource(R.string.subs_due_today)
+        daysUntil > 0              -> stringResource(R.string.subs_due_days, daysUntil)
+        else                       -> stringResource(R.string.subs_overdue, -daysUntil)
+    }
+    val nextPayColor = when {
+        daysUntil == null   -> TextLow
+        daysUntil <= 0L     -> AccentRed
+        daysUntil <= 3L     -> AccentAmber
+        else                -> AccentCyan
+    }
+
     val perMonth    = stringResource(R.string.subs_per_month)
     val lastDate    = stringResource(R.string.subs_last_date, dateFormat.format(Date(subscription.lastPaymentDate)))
     val editLabel   = stringResource(R.string.subs_edit)
     val deleteLabel = stringResource(R.string.subs_delete)
 
     Row(
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(BgDeep),
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(BgCard),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Left accent bar
-        Box(modifier = Modifier.width(4.dp).height(76.dp)
+        Box(modifier = Modifier.width(4.dp).height(if (daysUntil != null) 92.dp else 76.dp)
             .background(Brush.verticalGradient(listOf(accent, accent.copy(alpha = 0.4f))),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)))
         Spacer(Modifier.width(14.dp))
@@ -200,15 +217,18 @@ fun SubscriptionDetailCard(
             Text(subscription.name.take(1).uppercase(), color = accent, fontWeight = FontWeight.Black, fontSize = 18.sp)
         }
         Spacer(Modifier.width(12.dp))
-        // Name + category + date
+        // Name + category + dates
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(subscription.name, color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(subscription.category ?: genLabel, color = TextMed, fontSize = 12.sp)
+            Text(localizedCategory(subscription.category), color = TextMed, fontSize = 12.sp)
             Text(lastDate, color = TextLow, fontSize = 11.sp)
+            if (nextPayLabel != null) {
+                Text(nextPayLabel, color = nextPayColor, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+            }
         }
-        // Amount
-        Column(horizontalAlignment = Alignment.End) {
+        // Amount column
+        Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 4.dp)) {
             Text(amountFmt.format(subscription.averageAmount), color = accent,
                 fontWeight = FontWeight.Black, fontSize = 16.sp, letterSpacing = (-0.5).sp)
             Text(perMonth, color = TextMed, fontSize = 11.sp)

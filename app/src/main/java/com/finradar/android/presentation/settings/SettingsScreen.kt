@@ -38,8 +38,9 @@ val supportedLanguages = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
-    val isDark    by viewModel.isDarkTheme.collectAsState()
-    val langCode  by viewModel.languageCode.collectAsState()
+    val isDark       by viewModel.isDarkTheme.collectAsState()
+    val langCode     by viewModel.languageCode.collectAsState()
+    val reminderDays by viewModel.reminderDays.collectAsState()
     var showLangSheet by remember { mutableStateOf(false) }
     val context   = LocalContext.current
     val scope     = rememberCoroutineScope()
@@ -173,6 +174,55 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                         }
                     }
                     Text("›", color = TextMed, fontSize = 22.sp, fontWeight = FontWeight.Light)
+                }
+            }
+
+            Spacer(Modifier.height(8.dp))
+            SectionHeader(stringResource(R.string.settings_notifications))
+
+            SettingsCard {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        SettingsIconBadge("🔔")
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                stringResource(R.string.settings_reminder_title),
+                                color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 15.sp
+                            )
+                            Text(
+                                stringResource(R.string.settings_reminder_desc, reminderDays),
+                                color = TextMed, fontSize = 12.sp
+                            )
+                        }
+                    }
+                    // Stepper
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        FilledTonalIconButton(
+                            onClick = { if (reminderDays > 1) viewModel.setReminderDays(reminderDays - 1) },
+                            modifier = Modifier.size(32.dp)
+                        ) { Text("−", fontSize = 16.sp, color = TextHigh) }
+                        Text(
+                            stringResource(R.string.settings_reminder_days, reminderDays),
+                            color = BrandFrom, fontWeight = FontWeight.Bold, fontSize = 15.sp,
+                            modifier = Modifier.widthIn(min = 42.dp),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                        FilledTonalIconButton(
+                            onClick = { if (reminderDays < 14) viewModel.setReminderDays(reminderDays + 1) },
+                            modifier = Modifier.size(32.dp)
+                        ) { Text("+", fontSize = 16.sp, color = TextHigh) }
+                    }
                 }
             }
 

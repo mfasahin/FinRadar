@@ -35,6 +35,9 @@
     <string name="add_category_label">Kategorie</string>
     <string name="add_name_hint">Netflix, Spotify, usw.</string>
     <string name="add_name_label">Name des Abonnements</string>
+    <string name="add_next_payment_hint">Datum wählen</string>
+    <string name="add_next_payment_label">Nächstes Zahlungsdatum</string>
+    <string name="add_next_payment_not_set">Nicht festgelegt</string>
     <string name="add_save">Speichern</string>
     <string name="add_title">Abonnement hinzufügen</string>
     <string name="add_update">Aktualisieren</string>
@@ -69,12 +72,15 @@
     <string msgid="406453423630273620" name="close_drawer">"Navigationsmenü schließen"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Tabelle schließen"</string>
     <string name="dashboard_active">Aktiv</string>
+    <string name="dashboard_avg_per_sub">Ø/Abo</string>
     <string name="dashboard_empty">Noch keine Abonnements.\nBankbenachrichtigungen aktivieren.</string>
     <string name="dashboard_monthly">Monatlich</string>
     <string name="dashboard_monthly_total">Diesen Monat gesamt</string>
+    <string name="dashboard_no_upcoming">Keine bevorstehenden Zahlungen</string>
     <string name="dashboard_see_all">Alle anzeigen</string>
     <string name="dashboard_title">Startseite</string>
     <string name="dashboard_top_subs">Teuerste Abonnements</string>
+    <string name="dashboard_upcoming">Bevorstehende Zahlungen</string>
     <string msgid="8038256446254964252" name="default_error_message">"Ungültige Eingabe"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Pop-up-Fenster"</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Drop-down-Menü"</string>
@@ -202,6 +208,10 @@
     <string name="nav_subscriptions">Abonnements</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigationsmenü"</string>
     <string msgid="6610465462668679431" name="not_selected">"Nicht ausgewählt"</string>
+    <string name="notif_reminder_days">Zahlung in %d Tagen! Betrag: %s</string>
+    <string name="notif_reminder_title">%s Zahlungserinnerung</string>
+    <string name="notif_reminder_today">Zahlung heute fällig! Betrag: %s</string>
+    <string name="notif_reminder_tomorrow">Zahlung morgen fällig! Betrag: %s</string>
     <string msgid="875452955155264703" name="off">"Aus"</string>
     <string msgid="8655164131929253426" name="on">"An"</string>
     <string name="password_toggle_content_description">Passwort anzeigen</string>
@@ -217,7 +227,11 @@
     <string name="settings_dark_mode_off">Zum dunklen Thema wechseln</string>
     <string name="settings_dark_mode_on">Zum hellen Thema wechseln</string>
     <string name="settings_language_region">SPRACHE &amp; REGION</string>
+    <string name="settings_notifications">BENACHRICHTIGUNGEN</string>
     <string name="settings_pick_language">Sprache auswählen</string>
+    <string name="settings_reminder_days">%d Tage</string>
+    <string name="settings_reminder_desc">%d Tage vor Zahlung benachrichtigen</string>
+    <string name="settings_reminder_title">Zahlungserinnerung</string>
     <string name="settings_tagline">Verwalten Sie Ihre Abonnements clever</string>
     <string name="settings_title">Einstellungen</string>
     <string name="settings_version">Version</string>
@@ -227,12 +241,16 @@
     <string name="subs_delete_confirm">Möchten Sie \"%s\" wirklich löschen?</string>
     <string name="subs_delete_ok">Löschen</string>
     <string name="subs_delete_title">Abonnement löschen</string>
+    <string name="subs_due_days">In %d Tagen</string>
+    <string name="subs_due_today">Heute fällig!</string>
     <string name="subs_edit">Bearbeiten</string>
     <string name="subs_empty_body">Manuell über + hinzufügen\noder SMS-Benachrichtigungen aktivieren.</string>
     <string name="subs_empty_title">Keine Abonnements</string>
     <string name="subs_general">Allgemein</string>
     <string name="subs_last_date">Zuletzt: %s</string>
+    <string name="subs_next_payment">Nächste: %s</string>
     <string name="subs_no_results">Keine Ergebnisse</string>
+    <string name="subs_overdue">%d Tage überfällig</string>
     <string name="subs_per_month">/ Monat</string>
     <string name="subs_search_hint">Abonnements suchen…</string>
     <string name="subs_title">Abonnements</string>

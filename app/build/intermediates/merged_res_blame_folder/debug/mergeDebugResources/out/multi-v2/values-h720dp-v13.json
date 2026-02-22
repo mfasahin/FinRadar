@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.finradar.android.app-mergeDebugResources-70:/values-h720dp-v13/values-h720dp-v13.xml",
+            "outputFile": "com.finradar.android.app-mergeDebugResources-74:/values-h720dp-v13/values-h720dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\1195b6d7e07712869e41d3d2c0f88414\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
+                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\b93b120702ae0114c2f4a57f82c684e7\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

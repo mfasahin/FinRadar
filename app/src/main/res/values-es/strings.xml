@@ -8,6 +8,7 @@
     <string name="dashboard_title">Inicio</string>
     <string name="dashboard_monthly_total">Total este mes</string>
     <string name="dashboard_monthly">Mensual</string>
+    <string name="dashboard_avg_per_sub">Prom./Suscripción</string>
     <string name="dashboard_active">Activo</string>
     <string name="dashboard_top_subs">Más caros</string>
     <string name="dashboard_see_all">Ver todo</string>
@@ -49,6 +50,26 @@
     <string name="settings_version">Versión</string>
     <string name="settings_pick_language">Seleccionar idioma</string>
     <string name="settings_tagline">Gestione sus suscripciones de forma inteligente</string>
+    <string name="settings_notifications">NOTIFICACIONES</string>
+    <string name="settings_reminder_title">Recordatorio de pago</string>
+    <string name="settings_reminder_desc">Notificar %d días antes del pago</string>
+    <string name="settings_reminder_days">%d días</string>
+    <string name="notif_reminder_title">Recordatorio de pago: %s</string>
+    <string name="notif_reminder_today">¡Pago vence hoy! Importe: %s</string>
+    <string name="notif_reminder_tomorrow">¡Pago vence mañana! Importe: %s</string>
+    <string name="notif_reminder_days">¡Pago en %d días! Importe: %s</string>
+
+
+    <!-- Next payment date -->
+    <string name="add_next_payment_label">Fecha del próximo pago</string>
+    <string name="add_next_payment_hint">Elegir fecha</string>
+    <string name="add_next_payment_not_set">No establecido</string>
+    <string name="subs_next_payment">Próximo: %s</string>
+    <string name="subs_due_today">¡Vence hoy!</string>
+    <string name="subs_due_days">En %d días</string>
+    <string name="subs_overdue">%d días de retraso</string>
+    <string name="dashboard_upcoming">Próximos pagos</string>
+    <string name="dashboard_no_upcoming">No hay próximos pagos</string>
 
     <!-- Subscription categories -->
     <string name="cat_streaming">Streaming</string>

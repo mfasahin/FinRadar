@@ -81,6 +81,11 @@ dependencies {
     // DataStore (theme preference)
     implementation(libs.datastore.preferences)
 
+    // WorkManager + Hilt integration
+    implementation(libs.workmanager.ktx)
+    implementation(libs.hilt.work)
+    kapt(libs.hilt.work.compiler)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

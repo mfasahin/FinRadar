@@ -21,12 +21,19 @@ class SettingsViewModel @Inject constructor(
     val languageCode: StateFlow<String> = prefsRepo.languageCode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "tr")
 
+    val reminderDays: StateFlow<Int> = prefsRepo.reminderDays
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 3)
+
     fun toggleTheme() {
         viewModelScope.launch { prefsRepo.setDarkTheme(!isDarkTheme.value) }
     }
 
     fun setLanguage(code: String) {
         viewModelScope.launch { prefsRepo.setLanguageCode(code) }
+    }
+
+    fun setReminderDays(days: Int) {
+        viewModelScope.launch { prefsRepo.setReminderDays(days) }
     }
 
     /**

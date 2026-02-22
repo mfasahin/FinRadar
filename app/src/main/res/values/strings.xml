@@ -12,6 +12,7 @@
     <string name="dashboard_title">Ana Sayfa</string>
     <string name="dashboard_monthly_total">Bu Ay Toplam</string>
     <string name="dashboard_monthly">Aylık</string>
+    <string name="dashboard_avg_per_sub">Ort./Abonelik</string>
     <string name="dashboard_active">Aktif</string>
     <string name="dashboard_top_subs">En Pahalı Abonelikler</string>
     <string name="dashboard_see_all">Tümünü Gör</string>
@@ -61,6 +62,25 @@
     <string name="settings_version">Sürüm</string>
     <string name="settings_pick_language">Dil Seçin</string>
     <string name="settings_tagline">Aboneliklerinizi akıllıca yönetin</string>
+    <string name="settings_notifications">BİLDİRİMLER</string>
+    <string name="settings_reminder_title">Ödeme Hatırlatıcısı</string>
+    <string name="settings_reminder_desc">%d gün önceden bildirim al</string>
+    <string name="settings_reminder_days">%d gün</string>
+    <string name="notif_reminder_title">%s ödeme hatırlatıcısı</string>
+    <string name="notif_reminder_today">Bugün ödeme tarihi! Tutar: %s</string>
+    <string name="notif_reminder_tomorrow">Yarın ödeme var! Tutar: %s</string>
+    <string name="notif_reminder_days">%d gün sonra ödeme! Tutar: %s</string>
+
+    <!-- Next payment date -->
+    <string name="add_next_payment_label">Sonraki Ödeme Tarihi</string>
+    <string name="add_next_payment_hint">Tarihi seçin</string>
+    <string name="add_next_payment_not_set">Belirlenmedi</string>
+    <string name="subs_next_payment">Sonraki: %s</string>
+    <string name="subs_due_today">Bugün ödeme var!</string>
+    <string name="subs_due_days">%d gün sonra</string>
+    <string name="subs_overdue">%d gün gecikti</string>
+    <string name="dashboard_upcoming">Yaklaşan Ödemeler</string>
+    <string name="dashboard_no_upcoming">Yaklaşan ödeme yok</string>
 
     <!-- Subscription categories -->
     <string name="cat_streaming">Yayın Hizmeti</string>

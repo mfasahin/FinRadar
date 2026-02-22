@@ -1,6 +1,8 @@
 package com.finradar.android.presentation.subscriptions
 
+import android.app.DatePickerDialog
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -22,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.finradar.android.R
+import com.finradar.android.presentation.common.CategoryMapper
 import com.finradar.android.ui.theme.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Add (subscriptionId=null) and Edit (subscriptionId!=null) in one screen.
@@ -34,21 +41,14 @@ fun AddSubscriptionScreen(
     onNavigateBack: () -> Unit,
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
-    val isEditMode = subscriptionId != null
-    val editTarget by viewModel.editTarget.collectAsState()
+    val context     = LocalContext.current
+    val isEditMode  = subscriptionId != null
+    val editTarget  by viewModel.editTarget.collectAsState()
 
-    // Category labels — declared here so stringResource is available
-    val categories = listOf(
-        stringResource(R.string.cat_streaming),
-        stringResource(R.string.cat_music),
-        stringResource(R.string.cat_software),
-        stringResource(R.string.cat_cloud),
-        stringResource(R.string.cat_gaming),
-        stringResource(R.string.cat_fitness),
-        stringResource(R.string.cat_education),
-        stringResource(R.string.cat_news),
-        stringResource(R.string.cat_general)
-    )
+    // Localized labels paired with stable internal keys
+    val categoryLabels = CategoryMapper.keys.map { key ->
+        key to stringResource(CategoryMapper.resIdFor(key))
+    }
 
     LaunchedEffect(subscriptionId) {
         if (isEditMode) viewModel.loadForEdit(subscriptionId!!)
@@ -56,25 +56,42 @@ fun AddSubscriptionScreen(
 
     var name by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("") }
+    // selectedCategory holds a stable key ("general", "streaming", ...)
+    var selectedCategory by remember { mutableStateOf("general") }
+    var nextPaymentDate by remember { mutableStateOf(0L) }   // 0 = not set
     var categoryMenuExpanded by remember { mutableStateOf(false) }
     var nameError by remember { mutableStateOf(false) }
     var amountError by remember { mutableStateOf(false) }
 
-    // Set default category once categories are available
-    LaunchedEffect(categories) {
-        if (selectedCategory.isEmpty() && !isEditMode) {
-            selectedCategory = categories.last()  // "Genel" / "General" / etc.
+    // Pre-fill form in edit mode — normalize legacy Turkish strings to keys
+    LaunchedEffect(editTarget) {
+        editTarget?.let { sub ->
+            name            = sub.name
+            amountText      = sub.averageAmount.toString()
+            selectedCategory = CategoryMapper.toKey(sub.category)
+            nextPaymentDate = sub.nextPaymentDate
         }
     }
 
-    // Pre-fill form in edit mode
-    LaunchedEffect(editTarget) {
-        editTarget?.let { sub ->
-            name = sub.name
-            amountText = sub.averageAmount.toString()
-            selectedCategory = sub.category ?: categories.last()
+    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+
+    // Shared DatePickerDialog launcher
+    fun showDatePicker() {
+        val cal = Calendar.getInstance().apply {
+            if (nextPaymentDate > 0) timeInMillis = nextPaymentDate
         }
+        DatePickerDialog(
+            context,
+            { _, year, month, day ->
+                nextPaymentDate = Calendar.getInstance().apply {
+                    set(year, month, day, 0, 0, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }.timeInMillis
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
     val fieldColors = OutlinedTextFieldDefaults.colors(
@@ -90,12 +107,14 @@ fun AddSubscriptionScreen(
         unfocusedLabelColor     = TextMed
     )
 
-    val screenTitle  = stringResource(if (isEditMode) R.string.edit_title else R.string.add_title)
-    val buttonLabel  = stringResource(if (isEditMode) R.string.add_update else R.string.add_save)
-    val nameLbl      = stringResource(R.string.add_name_label)
-    val nameHint     = stringResource(R.string.add_name_hint)
-    val amountLbl    = stringResource(R.string.add_amount_label)
-    val categoryLbl  = stringResource(R.string.add_category_label)
+    val screenTitle     = stringResource(if (isEditMode) R.string.edit_title else R.string.add_title)
+    val buttonLabel     = stringResource(if (isEditMode) R.string.add_update else R.string.add_save)
+    val nameLbl         = stringResource(R.string.add_name_label)
+    val nameHint        = stringResource(R.string.add_name_hint)
+    val amountLbl       = stringResource(R.string.add_amount_label)
+    val categoryLbl     = stringResource(R.string.add_category_label)
+    val nextPayLbl      = stringResource(R.string.add_next_payment_label)
+    val nextPayNotSet   = stringResource(R.string.add_next_payment_not_set)
 
     Scaffold(
         containerColor = BgDeep,
@@ -164,15 +183,56 @@ fun AddSubscriptionScreen(
                 )
             }
 
+            // Next payment date picker
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(nextPayLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(BgCard)
+                        .clickable { showDatePicker() }
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Icon(
+                            Icons.Outlined.DateRange,
+                            contentDescription = null,
+                            tint = if (nextPaymentDate > 0) BrandFrom else TextMed,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            if (nextPaymentDate > 0) dateFormat.format(Date(nextPaymentDate)) else nextPayNotSet,
+                            color = if (nextPaymentDate > 0) TextHigh else TextMed,
+                            fontSize = 15.sp
+                        )
+                        if (nextPaymentDate > 0) {
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                "✕",
+                                color = TextMed,
+                                fontSize = 14.sp,
+                                modifier = Modifier.clickable { nextPaymentDate = 0L }
+                            )
+                        }
+                    }
+                }
+            }
+
             // Category dropdown
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(categoryLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
+                val displayLabel = categoryLabels.firstOrNull { it.first == selectedCategory }?.second
+                    ?: categoryLabels.last().second
                 ExposedDropdownMenuBox(
                     expanded = categoryMenuExpanded,
                     onExpandedChange = { categoryMenuExpanded = !categoryMenuExpanded }
                 ) {
                     OutlinedTextField(
-                        value = selectedCategory,
+                        value = displayLabel,
                         onValueChange = {},
                         readOnly = true,
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryMenuExpanded) },
@@ -185,10 +245,10 @@ fun AddSubscriptionScreen(
                         onDismissRequest = { categoryMenuExpanded = false },
                         modifier = Modifier.background(BgCard)
                     ) {
-                        categories.forEach { cat ->
+                        categoryLabels.forEach { (key, label) ->
                             DropdownMenuItem(
-                                text = { Text(cat, color = TextHigh) },
-                                onClick = { selectedCategory = cat; categoryMenuExpanded = false }
+                                text = { Text(label, color = TextHigh) },
+                                onClick = { selectedCategory = key; categoryMenuExpanded = false }
                             )
                         }
                     }
@@ -204,8 +264,8 @@ fun AddSubscriptionScreen(
                     nameError   = name.trim().isEmpty()
                     amountError = amt == null || amt <= 0.0
                     if (!nameError && !amountError) {
-                        if (isEditMode) viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCategory)
-                        else            viewModel.addSubscription(name.trim(), amt!!, selectedCategory)
+                        if (isEditMode) viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCategory, nextPaymentDate)
+                        else            viewModel.addSubscription(name.trim(), amt!!, selectedCategory, nextPaymentDate)
                         onNavigateBack()
                     }
                 },

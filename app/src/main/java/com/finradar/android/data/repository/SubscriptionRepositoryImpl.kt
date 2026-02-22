@@ -42,6 +42,7 @@ class SubscriptionRepositoryImpl @Inject constructor(
         name = name,
         averageAmount = averageAmount,
         lastPaymentDate = lastPaymentDate,
+        nextPaymentDate = nextPaymentDate,
         category = category,
         isActive = isActive
     )
@@ -51,6 +52,7 @@ class SubscriptionRepositoryImpl @Inject constructor(
         name = name,
         averageAmount = averageAmount,
         lastPaymentDate = lastPaymentDate,
+        nextPaymentDate = nextPaymentDate,
         category = category,
         isActive = isActive
     )

@@ -8,6 +8,7 @@
     <string name="dashboard_title">ホーム</string>
     <string name="dashboard_monthly_total">今月の合計</string>
     <string name="dashboard_monthly">月額</string>
+    <string name="dashboard_avg_per_sub">平均/契約</string>
     <string name="dashboard_active">有効</string>
     <string name="dashboard_top_subs">高額サブスク</string>
     <string name="dashboard_see_all">すべて見る</string>
@@ -49,6 +50,26 @@
     <string name="settings_version">バージョン</string>
     <string name="settings_pick_language">言語を選択</string>
     <string name="settings_tagline">サブスクをスマートに管理</string>
+    <string name="settings_notifications">通知</string>
+    <string name="settings_reminder_title">支払いリマインダー</string>
+    <string name="settings_reminder_desc">支払い%d日前に通知</string>
+    <string name="settings_reminder_days">%d日前</string>
+    <string name="notif_reminder_title">%s 支払いリマインダー</string>
+    <string name="notif_reminder_today">今日が支払日です！金額：%s</string>
+    <string name="notif_reminder_tomorrow">明日が支払日です！金額：%s</string>
+    <string name="notif_reminder_days">%d日後に支払い！金額：%s</string>
+
+
+    <!-- Next payment date -->
+    <string name="add_next_payment_label">次回の支払日</string>
+    <string name="add_next_payment_hint">日付を選択</string>
+    <string name="add_next_payment_not_set">未設定</string>
+    <string name="subs_next_payment">次回: %s</string>
+    <string name="subs_due_today">今日期限！</string>
+    <string name="subs_due_days">%d 日後</string>
+    <string name="subs_overdue">%d 日遅延</string>
+    <string name="dashboard_upcoming">指辺の支払い</string>
+    <string name="dashboard_no_upcoming">指辺の支払いはありません</string>
 
     <!-- Subscription categories -->
     <string name="cat_streaming">動画配信</string>

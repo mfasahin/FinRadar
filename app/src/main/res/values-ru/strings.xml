@@ -8,6 +8,7 @@
     <string name="dashboard_title">Главная</string>
     <string name="dashboard_monthly_total">За этот месяц</string>
     <string name="dashboard_monthly">В месяц</string>
+    <string name="dashboard_avg_per_sub">Ср./подписка</string>
     <string name="dashboard_active">Активных</string>
     <string name="dashboard_top_subs">Самые дорогие</string>
     <string name="dashboard_see_all">Все</string>
@@ -49,6 +50,26 @@
     <string name="settings_version">Версия</string>
     <string name="settings_pick_language">Выбрать язык</string>
     <string name="settings_tagline">Управляйте подписками умно</string>
+    <string name="settings_notifications">УВЕДОМЛЕНИЯ</string>
+    <string name="settings_reminder_title">Напоминание об оплате</string>
+    <string name="settings_reminder_desc">Уведомлять за %d дней до оплаты</string>
+    <string name="settings_reminder_days">%d дней</string>
+    <string name="notif_reminder_title">Напоминание: %s</string>
+    <string name="notif_reminder_today">Оплата сегодня! Сумма: %s</string>
+    <string name="notif_reminder_tomorrow">Оплата завтра! Сумма: %s</string>
+    <string name="notif_reminder_days">Оплата через %d дней! Сумма: %s</string>
+
+
+    <!-- Next payment date -->
+    <string name="add_next_payment_label">Дата следующего платежа</string>
+    <string name="add_next_payment_hint">Выбрать дату</string>
+    <string name="add_next_payment_not_set">Не задано</string>
+    <string name="subs_next_payment">Следующий: %s</string>
+    <string name="subs_due_today">Срок сегодня!</string>
+    <string name="subs_due_days">Через %d дней</string>
+    <string name="subs_overdue">Просрочено %d дней</string>
+    <string name="dashboard_upcoming">Предстоящие платежи</string>
+    <string name="dashboard_no_upcoming">Нет предстоящих платежей</string>
 
     <!-- Subscription categories -->
     <string name="cat_streaming">Стриминг</string>

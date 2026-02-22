@@ -47,7 +47,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `subscriptions` (`id`,`name`,`averageAmount`,`lastPaymentDate`,`category`,`isActive`) VALUES (nullif(?, 0),?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `subscriptions` (`id`,`name`,`averageAmount`,`lastPaymentDate`,`nextPaymentDate`,`category`,`isActive`) VALUES (nullif(?, 0),?,?,?,?,?,?)";
       }
 
       @Override
@@ -61,20 +61,21 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
         }
         statement.bindDouble(3, entity.getAverageAmount());
         statement.bindLong(4, entity.getLastPaymentDate());
+        statement.bindLong(5, entity.getNextPaymentDate());
         if (entity.getCategory() == null) {
-          statement.bindNull(5);
+          statement.bindNull(6);
         } else {
-          statement.bindString(5, entity.getCategory());
+          statement.bindString(6, entity.getCategory());
         }
         final int _tmp = entity.isActive() ? 1 : 0;
-        statement.bindLong(6, _tmp);
+        statement.bindLong(7, _tmp);
       }
     };
     this.__updateAdapterOfSubscriptionEntity = new EntityDeletionOrUpdateAdapter<SubscriptionEntity>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR ABORT `subscriptions` SET `id` = ?,`name` = ?,`averageAmount` = ?,`lastPaymentDate` = ?,`category` = ?,`isActive` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `subscriptions` SET `id` = ?,`name` = ?,`averageAmount` = ?,`lastPaymentDate` = ?,`nextPaymentDate` = ?,`category` = ?,`isActive` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -88,14 +89,15 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
         }
         statement.bindDouble(3, entity.getAverageAmount());
         statement.bindLong(4, entity.getLastPaymentDate());
+        statement.bindLong(5, entity.getNextPaymentDate());
         if (entity.getCategory() == null) {
-          statement.bindNull(5);
+          statement.bindNull(6);
         } else {
-          statement.bindString(5, entity.getCategory());
+          statement.bindString(6, entity.getCategory());
         }
         final int _tmp = entity.isActive() ? 1 : 0;
-        statement.bindLong(6, _tmp);
-        statement.bindLong(7, entity.getId());
+        statement.bindLong(7, _tmp);
+        statement.bindLong(8, entity.getId());
       }
     };
     this.__preparedStmtOfSoftDeleteSubscription = new SharedSQLiteStatement(__db) {
@@ -110,7 +112,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   @Override
   public Object insertSubscription(final SubscriptionEntity subscription,
-      final Continuation<? super Long> $completion) {
+      final Continuation<? super Long> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -124,12 +126,12 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object updateSubscription(final SubscriptionEntity subscription,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -143,12 +145,11 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object softDeleteSubscription(final long id,
-      final Continuation<? super Unit> $completion) {
+  public Object softDeleteSubscription(final long id, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -169,7 +170,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __preparedStmtOfSoftDeleteSubscription.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
@@ -186,6 +187,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfAverageAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "averageAmount");
           final int _cursorIndexOfLastPaymentDate = CursorUtil.getColumnIndexOrThrow(_cursor, "lastPaymentDate");
+          final int _cursorIndexOfNextPaymentDate = CursorUtil.getColumnIndexOrThrow(_cursor, "nextPaymentDate");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
           final int _cursorIndexOfIsActive = CursorUtil.getColumnIndexOrThrow(_cursor, "isActive");
           final List<SubscriptionEntity> _result = new ArrayList<SubscriptionEntity>(_cursor.getCount());
@@ -203,6 +205,8 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
             _tmpAverageAmount = _cursor.getDouble(_cursorIndexOfAverageAmount);
             final long _tmpLastPaymentDate;
             _tmpLastPaymentDate = _cursor.getLong(_cursorIndexOfLastPaymentDate);
+            final long _tmpNextPaymentDate;
+            _tmpNextPaymentDate = _cursor.getLong(_cursorIndexOfNextPaymentDate);
             final String _tmpCategory;
             if (_cursor.isNull(_cursorIndexOfCategory)) {
               _tmpCategory = null;
@@ -213,7 +217,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
             final int _tmp;
             _tmp = _cursor.getInt(_cursorIndexOfIsActive);
             _tmpIsActive = _tmp != 0;
-            _item = new SubscriptionEntity(_tmpId,_tmpName,_tmpAverageAmount,_tmpLastPaymentDate,_tmpCategory,_tmpIsActive);
+            _item = new SubscriptionEntity(_tmpId,_tmpName,_tmpAverageAmount,_tmpLastPaymentDate,_tmpNextPaymentDate,_tmpCategory,_tmpIsActive);
             _result.add(_item);
           }
           return _result;
@@ -231,7 +235,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   @Override
   public Object getSubscriptionById(final long id,
-      final Continuation<? super SubscriptionEntity> $completion) {
+      final Continuation<? super SubscriptionEntity> arg1) {
     final String _sql = "SELECT * FROM subscriptions WHERE id = ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -247,6 +251,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfAverageAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "averageAmount");
           final int _cursorIndexOfLastPaymentDate = CursorUtil.getColumnIndexOrThrow(_cursor, "lastPaymentDate");
+          final int _cursorIndexOfNextPaymentDate = CursorUtil.getColumnIndexOrThrow(_cursor, "nextPaymentDate");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
           final int _cursorIndexOfIsActive = CursorUtil.getColumnIndexOrThrow(_cursor, "isActive");
           final SubscriptionEntity _result;
@@ -263,6 +268,8 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
             _tmpAverageAmount = _cursor.getDouble(_cursorIndexOfAverageAmount);
             final long _tmpLastPaymentDate;
             _tmpLastPaymentDate = _cursor.getLong(_cursorIndexOfLastPaymentDate);
+            final long _tmpNextPaymentDate;
+            _tmpNextPaymentDate = _cursor.getLong(_cursorIndexOfNextPaymentDate);
             final String _tmpCategory;
             if (_cursor.isNull(_cursorIndexOfCategory)) {
               _tmpCategory = null;
@@ -273,7 +280,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
             final int _tmp;
             _tmp = _cursor.getInt(_cursorIndexOfIsActive);
             _tmpIsActive = _tmp != 0;
-            _result = new SubscriptionEntity(_tmpId,_tmpName,_tmpAverageAmount,_tmpLastPaymentDate,_tmpCategory,_tmpIsActive);
+            _result = new SubscriptionEntity(_tmpId,_tmpName,_tmpAverageAmount,_tmpLastPaymentDate,_tmpNextPaymentDate,_tmpCategory,_tmpIsActive);
           } else {
             _result = null;
           }
@@ -283,12 +290,12 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object getSubscriptionByName(final String name,
-      final Continuation<? super SubscriptionEntity> $completion) {
+      final Continuation<? super SubscriptionEntity> arg1) {
     final String _sql = "SELECT * FROM subscriptions WHERE name = ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -308,6 +315,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfAverageAmount = CursorUtil.getColumnIndexOrThrow(_cursor, "averageAmount");
           final int _cursorIndexOfLastPaymentDate = CursorUtil.getColumnIndexOrThrow(_cursor, "lastPaymentDate");
+          final int _cursorIndexOfNextPaymentDate = CursorUtil.getColumnIndexOrThrow(_cursor, "nextPaymentDate");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
           final int _cursorIndexOfIsActive = CursorUtil.getColumnIndexOrThrow(_cursor, "isActive");
           final SubscriptionEntity _result;
@@ -324,6 +332,8 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
             _tmpAverageAmount = _cursor.getDouble(_cursorIndexOfAverageAmount);
             final long _tmpLastPaymentDate;
             _tmpLastPaymentDate = _cursor.getLong(_cursorIndexOfLastPaymentDate);
+            final long _tmpNextPaymentDate;
+            _tmpNextPaymentDate = _cursor.getLong(_cursorIndexOfNextPaymentDate);
             final String _tmpCategory;
             if (_cursor.isNull(_cursorIndexOfCategory)) {
               _tmpCategory = null;
@@ -334,7 +344,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
             final int _tmp;
             _tmp = _cursor.getInt(_cursorIndexOfIsActive);
             _tmpIsActive = _tmp != 0;
-            _result = new SubscriptionEntity(_tmpId,_tmpName,_tmpAverageAmount,_tmpLastPaymentDate,_tmpCategory,_tmpIsActive);
+            _result = new SubscriptionEntity(_tmpId,_tmpName,_tmpAverageAmount,_tmpLastPaymentDate,_tmpNextPaymentDate,_tmpCategory,_tmpIsActive);
           } else {
             _result = null;
           }
@@ -344,7 +354,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @NonNull
