@@ -11,6 +11,7 @@ import com.finradar.android.data.local.dao.AlertDao;
 import com.finradar.android.data.local.dao.SubscriptionDao;
 import com.finradar.android.data.local.dao.TransactionDao;
 import com.finradar.android.data.parser.SmsParser;
+import com.finradar.android.data.preferences.UserPreferencesRepository;
 import com.finradar.android.di.AppModule_ProvideAlertDaoFactory;
 import com.finradar.android.di.AppModule_ProvideAlertRepositoryFactory;
 import com.finradar.android.di.AppModule_ProvideAppDatabaseFactory;
@@ -31,6 +32,8 @@ import com.finradar.android.presentation.alerts.AlertsViewModel;
 import com.finradar.android.presentation.alerts.AlertsViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.finradar.android.presentation.dashboard.DashboardViewModel;
 import com.finradar.android.presentation.dashboard.DashboardViewModel_HiltModules_KeyModule_ProvideFactory;
+import com.finradar.android.presentation.settings.SettingsViewModel;
+import com.finradar.android.presentation.settings.SettingsViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.finradar.android.presentation.subscriptions.SubscriptionsViewModel;
 import com.finradar.android.presentation.subscriptions.SubscriptionsViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.finradar.android.service.NotificationListenerService;
@@ -393,7 +396,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     @Override
     public Set<String> getViewModelKeys() {
-      return SetBuilder.<String>newSetBuilder(3).add(AlertsViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(DashboardViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(SubscriptionsViewModel_HiltModules_KeyModule_ProvideFactory.provide()).build();
+      return SetBuilder.<String>newSetBuilder(4).add(AlertsViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(DashboardViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(SettingsViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(SubscriptionsViewModel_HiltModules_KeyModule_ProvideFactory.provide()).build();
     }
 
     @Override
@@ -423,6 +426,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private Provider<DashboardViewModel> dashboardViewModelProvider;
 
+    private Provider<SettingsViewModel> settingsViewModelProvider;
+
     private Provider<SubscriptionsViewModel> subscriptionsViewModelProvider;
 
     private ViewModelCImpl(SingletonCImpl singletonCImpl,
@@ -440,12 +445,13 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
         final ViewModelLifecycle viewModelLifecycleParam) {
       this.alertsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
       this.dashboardViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
-      this.subscriptionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
+      this.settingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
+      this.subscriptionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
     }
 
     @Override
     public Map<String, javax.inject.Provider<ViewModel>> getHiltViewModelMap() {
-      return MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(3).put("com.finradar.android.presentation.alerts.AlertsViewModel", ((Provider) alertsViewModelProvider)).put("com.finradar.android.presentation.dashboard.DashboardViewModel", ((Provider) dashboardViewModelProvider)).put("com.finradar.android.presentation.subscriptions.SubscriptionsViewModel", ((Provider) subscriptionsViewModelProvider)).build();
+      return MapBuilder.<String, javax.inject.Provider<ViewModel>>newMapBuilder(4).put("com.finradar.android.presentation.alerts.AlertsViewModel", ((Provider) alertsViewModelProvider)).put("com.finradar.android.presentation.dashboard.DashboardViewModel", ((Provider) dashboardViewModelProvider)).put("com.finradar.android.presentation.settings.SettingsViewModel", ((Provider) settingsViewModelProvider)).put("com.finradar.android.presentation.subscriptions.SubscriptionsViewModel", ((Provider) subscriptionsViewModelProvider)).build();
     }
 
     @Override
@@ -480,7 +486,10 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
           case 1: // com.finradar.android.presentation.dashboard.DashboardViewModel 
           return (T) new DashboardViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get());
 
-          case 2: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
+          case 2: // com.finradar.android.presentation.settings.SettingsViewModel 
+          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get());
+
+          case 3: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
           return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get());
 
           default: throw new AssertionError(id);
@@ -590,6 +599,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private Provider<SubscriptionRepository> provideSubscriptionRepositoryProvider;
 
+    private Provider<UserPreferencesRepository> userPreferencesRepositoryProvider;
+
     private Provider<SmsParser> provideSmsParserProvider;
 
     private Provider<TransactionDao> provideTransactionDaoProvider;
@@ -613,11 +624,12 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       this.provideAlertRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<AlertRepository>(singletonCImpl, 0));
       this.provideSubscriptionDaoProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionDao>(singletonCImpl, 4));
       this.provideSubscriptionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionRepository>(singletonCImpl, 3));
-      this.provideSmsParserProvider = DoubleCheck.provider(new SwitchingProvider<SmsParser>(singletonCImpl, 5));
-      this.provideTransactionDaoProvider = DoubleCheck.provider(new SwitchingProvider<TransactionDao>(singletonCImpl, 7));
-      this.provideTransactionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<TransactionRepository>(singletonCImpl, 6));
-      this.provideSubscriptionDetectorProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionDetector>(singletonCImpl, 8));
-      this.providePriceHikeDetectorProvider = DoubleCheck.provider(new SwitchingProvider<PriceHikeDetector>(singletonCImpl, 9));
+      this.userPreferencesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesRepository>(singletonCImpl, 5));
+      this.provideSmsParserProvider = DoubleCheck.provider(new SwitchingProvider<SmsParser>(singletonCImpl, 6));
+      this.provideTransactionDaoProvider = DoubleCheck.provider(new SwitchingProvider<TransactionDao>(singletonCImpl, 8));
+      this.provideTransactionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<TransactionRepository>(singletonCImpl, 7));
+      this.provideSubscriptionDetectorProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionDetector>(singletonCImpl, 9));
+      this.providePriceHikeDetectorProvider = DoubleCheck.provider(new SwitchingProvider<PriceHikeDetector>(singletonCImpl, 10));
     }
 
     @Override
@@ -668,19 +680,22 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
           case 4: // com.finradar.android.data.local.dao.SubscriptionDao 
           return (T) AppModule_ProvideSubscriptionDaoFactory.provideSubscriptionDao(singletonCImpl.provideAppDatabaseProvider.get());
 
-          case 5: // com.finradar.android.data.parser.SmsParser 
+          case 5: // com.finradar.android.data.preferences.UserPreferencesRepository 
+          return (T) new UserPreferencesRepository(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 6: // com.finradar.android.data.parser.SmsParser 
           return (T) AppModule_ProvideSmsParserFactory.provideSmsParser();
 
-          case 6: // com.finradar.android.domain.repository.TransactionRepository 
+          case 7: // com.finradar.android.domain.repository.TransactionRepository 
           return (T) AppModule_ProvideTransactionRepositoryFactory.provideTransactionRepository(singletonCImpl.provideTransactionDaoProvider.get());
 
-          case 7: // com.finradar.android.data.local.dao.TransactionDao 
+          case 8: // com.finradar.android.data.local.dao.TransactionDao 
           return (T) AppModule_ProvideTransactionDaoFactory.provideTransactionDao(singletonCImpl.provideAppDatabaseProvider.get());
 
-          case 8: // com.finradar.android.domain.usecase.SubscriptionDetector 
+          case 9: // com.finradar.android.domain.usecase.SubscriptionDetector 
           return (T) AppModule_ProvideSubscriptionDetectorFactory.provideSubscriptionDetector(singletonCImpl.provideTransactionRepositoryProvider.get());
 
-          case 9: // com.finradar.android.domain.usecase.PriceHikeDetector 
+          case 10: // com.finradar.android.domain.usecase.PriceHikeDetector 
           return (T) AppModule_ProvidePriceHikeDetectorFactory.providePriceHikeDetector();
 
           default: throw new AssertionError(id);

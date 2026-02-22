@@ -9,9 +9,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import androidx.navigation.navArgument
 import com.finradar.android.presentation.alerts.AlertsScreen
 import com.finradar.android.presentation.dashboard.DashboardScreen
 import com.finradar.android.presentation.onboarding.OnboardingScreen
+import com.finradar.android.presentation.settings.SettingsScreen
 import com.finradar.android.presentation.subscriptions.AddSubscriptionScreen
 import com.finradar.android.presentation.subscriptions.SubscriptionsScreen
 import com.finradar.android.ui.theme.*
@@ -47,7 +50,8 @@ data class BottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem(Screen.Dashboard,     "Ana Sayfa",   Icons.Outlined.Home,          Icons.Filled.Home),
     BottomNavItem(Screen.Subscriptions, "Abonelikler", Icons.Outlined.List,          Icons.Filled.List),
-    BottomNavItem(Screen.Alerts,        "Uyarılar",    Icons.Outlined.Notifications, Icons.Filled.Notifications)
+    BottomNavItem(Screen.Alerts,        "Uyarılar",    Icons.Outlined.Notifications, Icons.Filled.Notifications),
+    BottomNavItem(Screen.Settings,      "Ayarlar",     Icons.Outlined.Settings,      Icons.Filled.Settings)
 )
 
 @Composable
@@ -75,9 +79,7 @@ fun FinRadarNavGraph(navController: NavHostController) {
                             selected = selected,
                             onClick = {
                                 navController.navigate(item.screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
+                                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                                     launchSingleTop = true
                                     restoreState = true
                                 }
@@ -110,9 +112,9 @@ fun FinRadarNavGraph(navController: NavHostController) {
         }
     ) { innerPadding ->
         NavHost(
-            navController = navController,
+            navController    = navController,
             startDestination = Screen.Dashboard.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier         = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Onboarding.route) {
                 OnboardingScreen(
@@ -136,24 +138,21 @@ fun FinRadarNavGraph(navController: NavHostController) {
                 )
             }
 
-            composable(Screen.Alerts.route) { AlertsScreen() }
+            composable(Screen.Alerts.route)   { AlertsScreen() }
+            composable(Screen.Settings.route) { SettingsScreen() }
 
-            // ── Add new subscription ───────────────────────────────────────
+            // Add
             composable(Screen.AddSubscription.route) {
-                AddSubscriptionScreen(
-                    subscriptionId  = null,
-                    onNavigateBack  = { navController.popBackStack() }
-                )
+                AddSubscriptionScreen(subscriptionId = null, onNavigateBack = { navController.popBackStack() })
             }
 
-            // ── Edit existing subscription ─────────────────────────────────
+            // Edit
             composable(
-                route = Screen.EditSubscription.route,
+                route     = Screen.EditSubscription.route,
                 arguments = listOf(navArgument("subscriptionId") { type = NavType.LongType })
             ) { backStackEntry ->
-                val id = backStackEntry.arguments?.getLong("subscriptionId")
                 AddSubscriptionScreen(
-                    subscriptionId = id,
+                    subscriptionId = backStackEntry.arguments?.getLong("subscriptionId"),
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

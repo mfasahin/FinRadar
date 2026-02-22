@@ -3,6 +3,7 @@ package com.finradar.android;
 import com.finradar.android.di.AppModule;
 import com.finradar.android.presentation.alerts.AlertsViewModel_HiltModules;
 import com.finradar.android.presentation.dashboard.DashboardViewModel_HiltModules;
+import com.finradar.android.presentation.settings.SettingsViewModel_HiltModules;
 import com.finradar.android.presentation.subscriptions.SubscriptionsViewModel_HiltModules;
 import com.finradar.android.service.NotificationListenerService_GeneratedInjector;
 import dagger.Binds;
@@ -163,6 +164,7 @@ public final class FinRadarApp_HiltComponents {
           ViewModelCBuilderModule.class,
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           HiltWrapper_SavedStateHandleModule.class,
+          SettingsViewModel_HiltModules.KeyModule.class,
           SubscriptionsViewModel_HiltModules.KeyModule.class
       }
   )
@@ -202,6 +204,7 @@ public final class FinRadarApp_HiltComponents {
           AlertsViewModel_HiltModules.BindsModule.class,
           DashboardViewModel_HiltModules.BindsModule.class,
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
+          SettingsViewModel_HiltModules.BindsModule.class,
           SubscriptionsViewModel_HiltModules.BindsModule.class
       }
   )
