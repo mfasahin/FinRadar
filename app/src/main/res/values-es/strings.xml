@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FinRadar</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_subscriptions">Suscripciones</string>
+    <string name="nav_alerts">Alertas</string>
+    <string name="nav_settings">Ajustes</string>
+    <string name="dashboard_title">Inicio</string>
+    <string name="dashboard_monthly_total">Total este mes</string>
+    <string name="dashboard_monthly">Mensual</string>
+    <string name="dashboard_active">Activo</string>
+    <string name="dashboard_top_subs">Más caros</string>
+    <string name="dashboard_see_all">Ver todo</string>
+    <string name="dashboard_empty">Sin suscripciones.\nActive las notificaciones bancarias.</string>
+    <string name="subs_title">Suscripciones</string>
+    <string name="subs_search_hint">Buscar suscripción…</string>
+    <string name="subs_empty_title">Sin suscripciones</string>
+    <string name="subs_empty_body">Añada manualmente con +\no active las notificaciones SMS.</string>
+    <string name="subs_no_results">Sin resultados</string>
+    <string name="subs_per_month">/ mes</string>
+    <string name="subs_general">General</string>
+    <string name="subs_last_date">Último: %s</string>
+    <string name="subs_edit">Editar</string>
+    <string name="subs_delete">Eliminar</string>
+    <string name="subs_delete_title">Eliminar suscripción</string>
+    <string name="subs_delete_confirm">¿Desea eliminar \"%s\"?</string>
+    <string name="subs_delete_ok">Eliminar</string>
+    <string name="subs_cancel">Cancelar</string>
+    <string name="add_title">Añadir suscripción</string>
+    <string name="edit_title">Editar suscripción</string>
+    <string name="add_name_label">Nombre de suscripción</string>
+    <string name="add_name_hint">Netflix, Spotify, etc.</string>
+    <string name="add_amount_label">Importe mensual (₺)</string>
+    <string name="add_category_label">Categoría</string>
+    <string name="add_save">Guardar</string>
+    <string name="add_update">Actualizar</string>
+    <string name="alerts_title">Alertas</string>
+    <string name="alerts_empty_title">Sin alertas</string>
+    <string name="alerts_empty_body">Le notificaremos automáticamente\ncuando cambien los precios.</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_appearance">APARIENCIA</string>
+    <string name="settings_dark_mode">Modo oscuro</string>
+    <string name="settings_dark_mode_on">Cambiar a tema claro</string>
+    <string name="settings_dark_mode_off">Cambiar a tema oscuro</string>
+    <string name="settings_language_region">IDIOMA &amp; REGIÓN</string>
+    <string name="settings_app_language">Idioma de la app</string>
+    <string name="settings_app">APLICACIÓN</string>
+    <string name="settings_app_name_label">Nombre de la app</string>
+    <string name="settings_version">Versión</string>
+    <string name="settings_pick_language">Seleccionar idioma</string>
+    <string name="settings_tagline">Gestione sus suscripciones de forma inteligente</string>
+
+    <!-- Subscription categories -->
+    <string name="cat_streaming">Streaming</string>
+    <string name="cat_music">Música</string>
+    <string name="cat_software">Software</string>
+    <string name="cat_cloud">Almacenamiento en la nube</string>
+    <string name="cat_gaming">Juegos</string>
+    <string name="cat_fitness">Fitness</string>
+    <string name="cat_education">Educación</string>
+    <string name="cat_news">Noticias</string>
+    <string name="cat_general">General</string>
+</resources>

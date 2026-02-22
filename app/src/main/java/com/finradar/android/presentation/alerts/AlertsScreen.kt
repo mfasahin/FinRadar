@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.finradar.android.R
 import com.finradar.android.domain.model.Alert
 import com.finradar.android.ui.theme.*
 import java.text.NumberFormat
@@ -36,11 +38,9 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
             TopAppBar(
                 title = {
                     Text(
-                        "Uyarılar",
-                        color = TextHigh,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        letterSpacing = (-0.5).sp
+                        stringResource(R.string.alerts_title),
+                        color = TextHigh, fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp, letterSpacing = (-0.5).sp
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -51,8 +51,8 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
             Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("🎉", fontSize = 48.sp)
-                    Text("Zam Uyarısı Yok!", color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                    Text("Abonelikleriniz stabil görünüyor.", color = TextMed, fontSize = 14.sp)
+                    Text(stringResource(R.string.alerts_empty_title), color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(stringResource(R.string.alerts_empty_body), color = TextMed, fontSize = 14.sp, lineHeight = 22.sp)
                 }
             }
         } else {
@@ -69,85 +69,33 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
 
 @Composable
 fun AlertCard(alert: Alert) {
-    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("tr"))
+    val locale      = Locale.getDefault()
+    val dateFormat  = SimpleDateFormat("dd MMM yyyy", locale)
     val amountFormat = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(BgDeep),
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(BgDeep),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // ── Red accent bar ────────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .width(4.dp)
-                .height(80.dp)
-                .background(
-                    Brush.verticalGradient(listOf(AccentRed, AccentRed.copy(alpha = 0.4f))),
-                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
-                )
-        )
-
+        Box(modifier = Modifier.width(4.dp).height(80.dp)
+            .background(Brush.verticalGradient(listOf(AccentRed, AccentRed.copy(alpha = 0.4f))),
+                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)))
         Spacer(Modifier.width(14.dp))
-
-        // ── Warning icon ─────────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .clip(RoundedCornerShape(13.dp))
-                .background(AccentRed.copy(alpha = 0.10f)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                Icons.Outlined.Warning,
-                contentDescription = null,
-                tint = AccentRed,
-                modifier = Modifier.size(20.dp)
-            )
+        Box(modifier = Modifier.size(44.dp).clip(RoundedCornerShape(13.dp)).background(AccentRed.copy(alpha = 0.10f)),
+            contentAlignment = Alignment.Center) {
+            Icon(Icons.Outlined.Warning, contentDescription = null, tint = AccentRed, modifier = Modifier.size(20.dp))
         }
-
         Spacer(Modifier.width(12.dp))
-
-        // ── Text ─────────────────────────────────────────────────────────
-        Column(
-            modifier = Modifier.weight(1f).padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(3.dp)
-        ) {
-            Text(
-                alert.subscriptionName.ifBlank { "Abonelik #${alert.subscriptionId}" },
-                color = TextHigh,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
-            )
-            Text(
-                "${amountFormat.format(alert.oldAmount)}  →  ${amountFormat.format(alert.newAmount)}",
-                color = TextMed,
-                fontSize = 13.sp
-            )
-            Text(
-                dateFormat.format(Date(alert.date)),
-                color = TextLow,
-                fontSize = 11.sp
-            )
+        Column(modifier = Modifier.weight(1f).padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(alert.subscriptionName.ifBlank { "Subscription #${alert.subscriptionId}" },
+                color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text("${amountFormat.format(alert.oldAmount)}  →  ${amountFormat.format(alert.newAmount)}",
+                color = TextMed, fontSize = 13.sp)
+            Text(dateFormat.format(Date(alert.date)), color = TextLow, fontSize = 11.sp)
         }
-
-        // ── Percentage pill ───────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(AccentRed.copy(alpha = 0.10f))
-                .padding(horizontal = 10.dp, vertical = 6.dp)
-        ) {
-            Text(
-                "+%.0f%%".format(alert.percentageChange),
-                color = AccentRed,
-                fontWeight = FontWeight.Black,
-                fontSize = 14.sp
-            )
+        Box(modifier = Modifier.padding(end = 16.dp).clip(RoundedCornerShape(10.dp))
+            .background(AccentRed.copy(alpha = 0.10f)).padding(horizontal = 10.dp, vertical = 6.dp)) {
+            Text("+%.0f%%".format(alert.percentageChange), color = AccentRed, fontWeight = FontWeight.Black, fontSize = 14.sp)
         }
     }
 }
-

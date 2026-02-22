@@ -15,21 +15,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.finradar.android.R
 import com.finradar.android.ui.theme.*
 
-private val subscriptionCategories = listOf(
-    "Yayın Hizmeti", "Müzik", "Yazılım", "Bulut Depolama",
-    "Oyun", "Fitness", "Eğitim", "Haberler", "Genel"
-)
-
 /**
- * Hem yeni abonelik ekleme hem de mevcut abonelik düzenleme için tek ekran.
- * @param subscriptionId null ise "Ekle" modunda, değer verilirse "Düzenle" modunda çalışır.
+ * Add (subscriptionId=null) and Edit (subscriptionId!=null) in one screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,24 +37,43 @@ fun AddSubscriptionScreen(
     val isEditMode = subscriptionId != null
     val editTarget by viewModel.editTarget.collectAsState()
 
-    // Load existing subscription when editing
+    // Category labels — declared here so stringResource is available
+    val categories = listOf(
+        stringResource(R.string.cat_streaming),
+        stringResource(R.string.cat_music),
+        stringResource(R.string.cat_software),
+        stringResource(R.string.cat_cloud),
+        stringResource(R.string.cat_gaming),
+        stringResource(R.string.cat_fitness),
+        stringResource(R.string.cat_education),
+        stringResource(R.string.cat_news),
+        stringResource(R.string.cat_general)
+    )
+
     LaunchedEffect(subscriptionId) {
         if (isEditMode) viewModel.loadForEdit(subscriptionId!!)
     }
 
     var name by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("Genel") }
+    var selectedCategory by remember { mutableStateOf("") }
     var categoryMenuExpanded by remember { mutableStateOf(false) }
     var nameError by remember { mutableStateOf(false) }
     var amountError by remember { mutableStateOf(false) }
 
-    // Pre-fill form fields when edit data arrives
+    // Set default category once categories are available
+    LaunchedEffect(categories) {
+        if (selectedCategory.isEmpty() && !isEditMode) {
+            selectedCategory = categories.last()  // "Genel" / "General" / etc.
+        }
+    }
+
+    // Pre-fill form in edit mode
     LaunchedEffect(editTarget) {
         editTarget?.let { sub ->
             name = sub.name
             amountText = sub.averageAmount.toString()
-            selectedCategory = sub.category ?: "Genel"
+            selectedCategory = sub.category ?: categories.last()
         }
     }
 
@@ -75,22 +90,21 @@ fun AddSubscriptionScreen(
         unfocusedLabelColor     = TextMed
     )
 
+    val screenTitle  = stringResource(if (isEditMode) R.string.edit_title else R.string.add_title)
+    val buttonLabel  = stringResource(if (isEditMode) R.string.add_update else R.string.add_save)
+    val nameLbl      = stringResource(R.string.add_name_label)
+    val nameHint     = stringResource(R.string.add_name_hint)
+    val amountLbl    = stringResource(R.string.add_amount_label)
+    val categoryLbl  = stringResource(R.string.add_category_label)
+
     Scaffold(
         containerColor = BgDeep,
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        if (isEditMode) "Aboneliği Düzenle" else "Abonelik Ekle",
-                        color = TextHigh,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        letterSpacing = (-0.5).sp
-                    )
-                },
+                title = { Text(screenTitle, color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 20.sp, letterSpacing = (-0.5).sp) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Geri", tint = TextHigh)
+                        Icon(Icons.Default.ArrowBack, contentDescription = null, tint = TextHigh)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -105,43 +119,28 @@ fun AddSubscriptionScreen(
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Header card
+            // Header banner
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
                     .clip(RoundedCornerShape(24.dp))
                     .background(Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo)))
                     .padding(28.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(if (isEditMode) "✏️" else "➕", fontSize = 36.sp)
-                    Text(
-                        if (isEditMode) "Aboneliği Düzenle" else "Yeni Abonelik Ekle",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                    Text(
-                        "Bilgileri doldurun ve kaydedin",
-                        color = Color.White.copy(alpha = 0.7f),
-                        fontSize = 13.sp
-                    )
+                    Text(screenTitle, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 }
             }
 
-            // Name field
+            // Name
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Abonelik Adı", color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
+                Text(nameLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it; nameError = false },
-                    placeholder = { Text("Netflix, Spotify, vb.", color = TextLow) },
+                    placeholder = { Text(nameHint, color = TextLow) },
                     isError = nameError,
-                    supportingText = { if (nameError) Text("Bu alan zorunludur", color = AccentRed, fontSize = 12.sp) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
@@ -149,15 +148,14 @@ fun AddSubscriptionScreen(
                 )
             }
 
-            // Amount field
+            // Amount
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Aylık Tutar (₺)", color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
+                Text(amountLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 OutlinedTextField(
                     value = amountText,
                     onValueChange = { amountText = it.replace(',', '.'); amountError = false },
                     placeholder = { Text("0.00", color = TextLow) },
                     isError = amountError,
-                    supportingText = { if (amountError) Text("Geçerli bir tutar girin", color = AccentRed, fontSize = 12.sp) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
@@ -168,7 +166,7 @@ fun AddSubscriptionScreen(
 
             // Category dropdown
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Kategori", color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
+                Text(categoryLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 ExposedDropdownMenuBox(
                     expanded = categoryMenuExpanded,
                     onExpandedChange = { categoryMenuExpanded = !categoryMenuExpanded }
@@ -185,12 +183,12 @@ fun AddSubscriptionScreen(
                     ExposedDropdownMenu(
                         expanded = categoryMenuExpanded,
                         onDismissRequest = { categoryMenuExpanded = false },
-                        modifier = Modifier.background(Color.White)
+                        modifier = Modifier.background(BgCard)
                     ) {
-                        subscriptionCategories.forEach { category ->
+                        categories.forEach { cat ->
                             DropdownMenuItem(
-                                text = { Text(category, color = TextHigh) },
-                                onClick = { selectedCategory = category; categoryMenuExpanded = false }
+                                text = { Text(cat, color = TextHigh) },
+                                onClick = { selectedCategory = cat; categoryMenuExpanded = false }
                             )
                         }
                     }
@@ -203,27 +201,19 @@ fun AddSubscriptionScreen(
             Button(
                 onClick = {
                     val amt = amountText.toDoubleOrNull()
-                    nameError = name.trim().isEmpty()
+                    nameError   = name.trim().isEmpty()
                     amountError = amt == null || amt <= 0.0
                     if (!nameError && !amountError) {
-                        if (isEditMode) {
-                            viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCategory)
-                        } else {
-                            viewModel.addSubscription(name.trim(), amt!!, selectedCategory)
-                        }
+                        if (isEditMode) viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCategory)
+                        else            viewModel.addSubscription(name.trim(), amt!!, selectedCategory)
                         onNavigateBack()
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = BrandFrom)
+                shape    = RoundedCornerShape(16.dp),
+                colors   = ButtonDefaults.buttonColors(containerColor = BrandFrom)
             ) {
-                Text(
-                    if (isEditMode) "Güncelle" else "Kaydet",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.White
-                )
+                Text(buttonLabel, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
             }
 
             Spacer(Modifier.height(20.dp))

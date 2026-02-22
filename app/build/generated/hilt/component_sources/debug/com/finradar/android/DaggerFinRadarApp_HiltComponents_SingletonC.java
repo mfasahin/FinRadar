@@ -589,6 +589,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private final SingletonCImpl singletonCImpl = this;
 
+    private Provider<UserPreferencesRepository> userPreferencesRepositoryProvider;
+
     private Provider<AppDatabase> provideAppDatabaseProvider;
 
     private Provider<AlertDao> provideAlertDaoProvider;
@@ -598,8 +600,6 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
     private Provider<SubscriptionDao> provideSubscriptionDaoProvider;
 
     private Provider<SubscriptionRepository> provideSubscriptionRepositoryProvider;
-
-    private Provider<UserPreferencesRepository> userPreferencesRepositoryProvider;
 
     private Provider<SmsParser> provideSmsParserProvider;
 
@@ -619,12 +619,12 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     @SuppressWarnings("unchecked")
     private void initialize(final ApplicationContextModule applicationContextModuleParam) {
-      this.provideAppDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<AppDatabase>(singletonCImpl, 2));
-      this.provideAlertDaoProvider = DoubleCheck.provider(new SwitchingProvider<AlertDao>(singletonCImpl, 1));
-      this.provideAlertRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<AlertRepository>(singletonCImpl, 0));
-      this.provideSubscriptionDaoProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionDao>(singletonCImpl, 4));
-      this.provideSubscriptionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionRepository>(singletonCImpl, 3));
-      this.userPreferencesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesRepository>(singletonCImpl, 5));
+      this.userPreferencesRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserPreferencesRepository>(singletonCImpl, 0));
+      this.provideAppDatabaseProvider = DoubleCheck.provider(new SwitchingProvider<AppDatabase>(singletonCImpl, 3));
+      this.provideAlertDaoProvider = DoubleCheck.provider(new SwitchingProvider<AlertDao>(singletonCImpl, 2));
+      this.provideAlertRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<AlertRepository>(singletonCImpl, 1));
+      this.provideSubscriptionDaoProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionDao>(singletonCImpl, 5));
+      this.provideSubscriptionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionRepository>(singletonCImpl, 4));
       this.provideSmsParserProvider = DoubleCheck.provider(new SwitchingProvider<SmsParser>(singletonCImpl, 6));
       this.provideTransactionDaoProvider = DoubleCheck.provider(new SwitchingProvider<TransactionDao>(singletonCImpl, 8));
       this.provideTransactionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<TransactionRepository>(singletonCImpl, 7));
@@ -634,6 +634,11 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     @Override
     public void injectFinRadarApp(FinRadarApp finRadarApp) {
+    }
+
+    @Override
+    public UserPreferencesRepository userPreferencesRepository() {
+      return userPreferencesRepositoryProvider.get();
     }
 
     @Override
@@ -665,23 +670,23 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.finradar.android.domain.repository.AlertRepository 
+          case 0: // com.finradar.android.data.preferences.UserPreferencesRepository 
+          return (T) new UserPreferencesRepository(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+
+          case 1: // com.finradar.android.domain.repository.AlertRepository 
           return (T) AppModule_ProvideAlertRepositoryFactory.provideAlertRepository(singletonCImpl.provideAlertDaoProvider.get());
 
-          case 1: // com.finradar.android.data.local.dao.AlertDao 
+          case 2: // com.finradar.android.data.local.dao.AlertDao 
           return (T) AppModule_ProvideAlertDaoFactory.provideAlertDao(singletonCImpl.provideAppDatabaseProvider.get());
 
-          case 2: // com.finradar.android.data.local.AppDatabase 
+          case 3: // com.finradar.android.data.local.AppDatabase 
           return (T) AppModule_ProvideAppDatabaseFactory.provideAppDatabase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 3: // com.finradar.android.domain.repository.SubscriptionRepository 
+          case 4: // com.finradar.android.domain.repository.SubscriptionRepository 
           return (T) AppModule_ProvideSubscriptionRepositoryFactory.provideSubscriptionRepository(singletonCImpl.provideSubscriptionDaoProvider.get());
 
-          case 4: // com.finradar.android.data.local.dao.SubscriptionDao 
+          case 5: // com.finradar.android.data.local.dao.SubscriptionDao 
           return (T) AppModule_ProvideSubscriptionDaoFactory.provideSubscriptionDao(singletonCImpl.provideAppDatabaseProvider.get());
-
-          case 5: // com.finradar.android.data.preferences.UserPreferencesRepository 
-          return (T) new UserPreferencesRepository(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
           case 6: // com.finradar.android.data.parser.SmsParser 
           return (T) AppModule_ProvideSmsParserFactory.provideSmsParser();

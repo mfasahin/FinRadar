@@ -139,6 +139,7 @@ public final class FinRadarApp_HiltComponents {
   )
   @Singleton
   public abstract static class SingletonC implements FinRadarApp_GeneratedInjector,
+      PrefsEntryPoint,
       FragmentGetContextFix.FragmentGetContextFixEntryPoint,
       HiltWrapper_ActivityRetainedComponentManager_ActivityRetainedComponentBuilderEntryPoint,
       ServiceComponentManager.ServiceComponentBuilderEntryPoint,

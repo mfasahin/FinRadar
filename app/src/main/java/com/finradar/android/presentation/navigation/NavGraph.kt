@@ -2,6 +2,7 @@ package com.finradar.android.presentation.navigation
 
 import android.content.Intent
 import android.provider.Settings
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,9 +19,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.finradar.android.R
 import com.finradar.android.presentation.alerts.AlertsScreen
 import com.finradar.android.presentation.dashboard.DashboardScreen
 import com.finradar.android.presentation.onboarding.OnboardingScreen
@@ -42,16 +44,16 @@ import com.finradar.android.ui.theme.*
 
 data class BottomNavItem(
     val screen: Screen,
-    val label: String,
+    @StringRes val labelRes: Int,
     val icon: ImageVector,
     val activeIcon: ImageVector
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem(Screen.Dashboard,     "Ana Sayfa",   Icons.Outlined.Home,          Icons.Filled.Home),
-    BottomNavItem(Screen.Subscriptions, "Abonelikler", Icons.Outlined.List,          Icons.Filled.List),
-    BottomNavItem(Screen.Alerts,        "Uyarılar",    Icons.Outlined.Notifications, Icons.Filled.Notifications),
-    BottomNavItem(Screen.Settings,      "Ayarlar",     Icons.Outlined.Settings,      Icons.Filled.Settings)
+    BottomNavItem(Screen.Dashboard,     R.string.nav_home,          Icons.Outlined.Home,          Icons.Filled.Home),
+    BottomNavItem(Screen.Subscriptions, R.string.nav_subscriptions, Icons.Outlined.List,          Icons.Filled.List),
+    BottomNavItem(Screen.Alerts,        R.string.nav_alerts,        Icons.Outlined.Notifications, Icons.Filled.Notifications),
+    BottomNavItem(Screen.Settings,      R.string.nav_settings,      Icons.Outlined.Settings,      Icons.Filled.Settings)
 )
 
 @Composable
@@ -87,13 +89,13 @@ fun FinRadarNavGraph(navController: NavHostController) {
                             icon = {
                                 Icon(
                                     if (selected) item.activeIcon else item.icon,
-                                    contentDescription = item.label,
+                                    contentDescription = stringResource(item.labelRes),
                                     modifier = Modifier.size(22.dp)
                                 )
                             },
                             label = {
                                 Text(
-                                    item.label,
+                                    stringResource(item.labelRes),          // ← localized
                                     fontSize = 11.sp,
                                     fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
                                 )
@@ -126,27 +128,20 @@ fun FinRadarNavGraph(navController: NavHostController) {
                     }
                 )
             }
-
             composable(Screen.Dashboard.route) {
                 DashboardScreen(onNavigateToAlerts = { navController.navigate(Screen.Alerts.route) })
             }
-
             composable(Screen.Subscriptions.route) {
                 SubscriptionsScreen(
                     onNavigateToAdd  = { navController.navigate(Screen.AddSubscription.route) },
                     onNavigateToEdit = { id -> navController.navigate(Screen.EditSubscription.createRoute(id)) }
                 )
             }
-
             composable(Screen.Alerts.route)   { AlertsScreen() }
             composable(Screen.Settings.route) { SettingsScreen() }
-
-            // Add
             composable(Screen.AddSubscription.route) {
                 AddSubscriptionScreen(subscriptionId = null, onNavigateBack = { navController.popBackStack() })
             }
-
-            // Edit
             composable(
                 route     = Screen.EditSubscription.route,
                 arguments = listOf(navArgument("subscriptionId") { type = NavType.LongType })

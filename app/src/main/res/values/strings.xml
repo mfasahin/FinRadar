@@ -1,4 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FinRadar</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_subscriptions">Abonelikler</string>
+    <string name="nav_alerts">Uyarılar</string>
+    <string name="nav_settings">Ayarlar</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Ana Sayfa</string>
+    <string name="dashboard_monthly_total">Bu Ay Toplam</string>
+    <string name="dashboard_monthly">Aylık</string>
+    <string name="dashboard_active">Aktif</string>
+    <string name="dashboard_top_subs">En Pahalı Abonelikler</string>
+    <string name="dashboard_see_all">Tümünü Gör</string>
+    <string name="dashboard_empty">Henüz abonelik yok.\nBanka bildirimlerini etkinleştirin.</string>
+
+    <!-- Subscriptions -->
+    <string name="subs_title">Abonelikler</string>
+    <string name="subs_search_hint">Abonelik ara…</string>
+    <string name="subs_empty_title">Abonelik Yok</string>
+    <string name="subs_empty_body">SMS bildirimleri veya + butonu ile\nmanuel olarak ekleyebilirsiniz.</string>
+    <string name="subs_no_results">Sonuç bulunamadı</string>
+    <string name="subs_per_month">/ ay</string>
+    <string name="subs_general">Genel</string>
+    <string name="subs_last_date">Son: %s</string>
+    <string name="subs_edit">Düzenle</string>
+    <string name="subs_delete">Sil</string>
+    <string name="subs_delete_title">Aboneliği Sil</string>
+    <string name="subs_delete_confirm">"%s" aboneliğini silmek istediğinize emin misiniz?</string>
+    <string name="subs_delete_ok">Sil</string>
+    <string name="subs_cancel">İptal</string>
+
+    <!-- Add / Edit Subscription -->
+    <string name="add_title">Abonelik Ekle</string>
+    <string name="edit_title">Aboneliği Düzenle</string>
+    <string name="add_name_label">Abonelik Adı</string>
+    <string name="add_name_hint">Netflix, Spotify, vb.</string>
+    <string name="add_amount_label">Aylık Tutar (₺)</string>
+    <string name="add_category_label">Kategori</string>
+    <string name="add_save">Kaydet</string>
+    <string name="add_update">Güncelle</string>
+
+    <!-- Alerts -->
+    <string name="alerts_title">Uyarılar</string>
+    <string name="alerts_empty_title">Uyarı Yok</string>
+    <string name="alerts_empty_body">Fiyat değişikliklerinde otomatik\nbildirim alacaksınız.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_appearance">GÖRÜNÜM</string>
+    <string name="settings_dark_mode">Koyu Tema</string>
+    <string name="settings_dark_mode_on">Açık temaya geç</string>
+    <string name="settings_dark_mode_off">Koyu temaya geç</string>
+    <string name="settings_language_region">DİL &amp; BÖLGE</string>
+    <string name="settings_app_language">Uygulama Dili</string>
+    <string name="settings_app">UYGULAMA</string>
+    <string name="settings_app_name_label">Uygulama Adı</string>
+    <string name="settings_version">Sürüm</string>
+    <string name="settings_pick_language">Dil Seçin</string>
+    <string name="settings_tagline">Aboneliklerinizi akıllıca yönetin</string>
+
+    <!-- Subscription categories -->
+    <string name="cat_streaming">Yayın Hizmeti</string>
+    <string name="cat_music">Müzik</string>
+    <string name="cat_software">Yazılım</string>
+    <string name="cat_cloud">Bulut Depolama</string>
+    <string name="cat_gaming">Oyun</string>
+    <string name="cat_fitness">Fitness</string>
+    <string name="cat_education">Eğitim</string>
+    <string name="cat_news">Haberler</string>
+    <string name="cat_general">Genel</string>
 </resources>

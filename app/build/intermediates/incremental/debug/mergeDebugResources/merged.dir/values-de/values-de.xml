@@ -31,6 +31,17 @@
     <string msgid="8875138169939072951" name="abc_shareactionprovider_share_with">"Teilen mit"</string>
     <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Mit <ns1:g id="APPLICATION_NAME">%s</ns1:g> teilen"</string>
     <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Minimieren"</string>
+    <string name="add_amount_label">Monatlicher Betrag (₺)</string>
+    <string name="add_category_label">Kategorie</string>
+    <string name="add_name_hint">Netflix, Spotify, usw.</string>
+    <string name="add_name_label">Name des Abonnements</string>
+    <string name="add_save">Speichern</string>
+    <string name="add_title">Abonnement hinzufügen</string>
+    <string name="add_update">Aktualisieren</string>
+    <string name="alerts_empty_body">Sie werden automatisch benachrichtigt,\nwenn sich Preise ändern.</string>
+    <string name="alerts_empty_title">Keine Benachrichtigungen</string>
+    <string name="alerts_title">Benachrichtigungen</string>
+    <string name="app_name">FinRadar</string>
     <string name="bottomsheet_action_collapse">Ansicht am unteren Rand minimieren</string>
     <string name="bottomsheet_action_expand">Ansicht am unteren Rand maximieren</string>
     <string name="bottomsheet_action_expand_halfway">Zur Hälfte maximieren</string>
@@ -43,14 +54,31 @@
     <string msgid="6107532579223922871" name="call_notification_incoming_text">"Eingehender Anruf"</string>
     <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Aktueller Anruf"</string>
     <string msgid="59049573811482460" name="call_notification_screening_text">"Filter für eingehenden Anruf"</string>
+    <string name="cat_cloud">Cloud-Speicher</string>
+    <string name="cat_education">Bildung</string>
+    <string name="cat_fitness">Fitness</string>
+    <string name="cat_gaming">Gaming</string>
+    <string name="cat_general">Allgemein</string>
+    <string name="cat_music">Musik</string>
+    <string name="cat_news">Nachrichten</string>
+    <string name="cat_software">Software</string>
+    <string name="cat_streaming">Streaming</string>
     <string name="character_counter_content_description">Eingegebene Zeichen: %1$d von %2$d</string>
     <string name="character_counter_overflowed_content_description">Zeichenbeschränkung überschritten: %1$d/%2$d</string>
     <string name="clear_text_end_icon_content_description">Text löschen</string>
     <string msgid="406453423630273620" name="close_drawer">"Navigationsmenü schließen"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Tabelle schließen"</string>
+    <string name="dashboard_active">Aktiv</string>
+    <string name="dashboard_empty">Noch keine Abonnements.\nBankbenachrichtigungen aktivieren.</string>
+    <string name="dashboard_monthly">Monatlich</string>
+    <string name="dashboard_monthly_total">Diesen Monat gesamt</string>
+    <string name="dashboard_see_all">Alle anzeigen</string>
+    <string name="dashboard_title">Startseite</string>
+    <string name="dashboard_top_subs">Teuerste Abonnements</string>
     <string msgid="8038256446254964252" name="default_error_message">"Ungültige Eingabe"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Pop-up-Fenster"</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Drop-down-Menü"</string>
+    <string name="edit_title">Abonnement bearbeiten</string>
     <string name="error_icon_content_description">Fehler</string>
     <string name="exposed_dropdown_menu_content_description">Drop-down-Menü anzeigen</string>
     <string name="icon_content_description">Dialogfeldsymbol</string>
@@ -168,6 +196,10 @@
     <string name="mtrl_picker_toggle_to_year_selection">Tippen, um zur Jahresansicht zu wechseln</string>
     <string name="mtrl_timepicker_cancel">Abbrechen</string>
     <string name="mtrl_timepicker_confirm">OK</string>
+    <string name="nav_alerts">Benachrichtigungen</string>
+    <string name="nav_home">Startseite</string>
+    <string name="nav_settings">Einstellungen</string>
+    <string name="nav_subscriptions">Abonnements</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigationsmenü"</string>
     <string msgid="6610465462668679431" name="not_selected">"Nicht ausgewählt"</string>
     <string msgid="875452955155264703" name="off">"Aus"</string>
@@ -177,7 +209,33 @@
     <string msgid="7097486360902471446" name="range_start">"Bereichsstart"</string>
     <string msgid="6264217191555673260" name="search_menu_title">"Suche"</string>
     <string msgid="6043586758067023" name="selected">"Ausgewählt"</string>
+    <string name="settings_app">ANWENDUNG</string>
+    <string name="settings_app_language">App-Sprache</string>
+    <string name="settings_app_name_label">App-Name</string>
+    <string name="settings_appearance">ERSCHEINUNGSBILD</string>
+    <string name="settings_dark_mode">Dunkelmodus</string>
+    <string name="settings_dark_mode_off">Zum dunklen Thema wechseln</string>
+    <string name="settings_dark_mode_on">Zum hellen Thema wechseln</string>
+    <string name="settings_language_region">SPRACHE &amp; REGION</string>
+    <string name="settings_pick_language">Sprache auswählen</string>
+    <string name="settings_tagline">Verwalten Sie Ihre Abonnements clever</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_version">Version</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="subs_cancel">Abbrechen</string>
+    <string name="subs_delete">Löschen</string>
+    <string name="subs_delete_confirm">Möchten Sie \"%s\" wirklich löschen?</string>
+    <string name="subs_delete_ok">Löschen</string>
+    <string name="subs_delete_title">Abonnement löschen</string>
+    <string name="subs_edit">Bearbeiten</string>
+    <string name="subs_empty_body">Manuell über + hinzufügen\noder SMS-Benachrichtigungen aktivieren.</string>
+    <string name="subs_empty_title">Keine Abonnements</string>
+    <string name="subs_general">Allgemein</string>
+    <string name="subs_last_date">Zuletzt: %s</string>
+    <string name="subs_no_results">Keine Ergebnisse</string>
+    <string name="subs_per_month">/ Monat</string>
+    <string name="subs_search_hint">Abonnements suchen…</string>
+    <string name="subs_title">Abonnements</string>
     <string msgid="2561197295334830845" name="switch_role">"Wechseln"</string>
     <string msgid="1672349317127674378" name="tab">"Tab"</string>
     <string msgid="5946805113151406391" name="template_percent">"<ns1:g id="PERCENTAGE">%1$d</ns1:g> Prozent."</string>

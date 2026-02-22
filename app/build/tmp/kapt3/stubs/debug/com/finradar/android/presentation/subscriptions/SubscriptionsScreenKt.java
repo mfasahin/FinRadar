@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier;
 import androidx.compose.ui.graphics.Brush;
 import androidx.compose.ui.text.font.FontWeight;
 import androidx.compose.ui.text.style.TextOverflow;
+import com.finradar.android.R;
 import com.finradar.android.domain.model.Subscription;
 import com.finradar.android.ui.theme.*;
 import java.text.NumberFormat;

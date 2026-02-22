@@ -18,9 +18,22 @@ class SettingsViewModel @Inject constructor(
     val isDarkTheme: StateFlow<Boolean> = prefsRepo.isDarkTheme
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
+    val languageCode: StateFlow<String> = prefsRepo.languageCode
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "tr")
+
     fun toggleTheme() {
-        viewModelScope.launch {
-            prefsRepo.setDarkTheme(!isDarkTheme.value)
-        }
+        viewModelScope.launch { prefsRepo.setDarkTheme(!isDarkTheme.value) }
+    }
+
+    fun setLanguage(code: String) {
+        viewModelScope.launch { prefsRepo.setLanguageCode(code) }
+    }
+
+    /**
+     * Suspend version — caller awaits this before calling activity.recreate(),
+     * guaranteeing the synchronous SharedPrefs commit has completed.
+     */
+    suspend fun setLanguageAndWait(code: String) {
+        prefsRepo.setLanguageCode(code)
     }
 }

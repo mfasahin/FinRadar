@@ -33,6 +33,17 @@
     <string msgid="8875138169939072951" name="abc_shareactionprovider_share_with">"Поделиться с помощью"</string>
     <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"Поделиться с помощью <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
     <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"Свернуть"</string>
+    <string name="add_amount_label">Ежемесячная сумма (₺)</string>
+    <string name="add_category_label">Категория</string>
+    <string name="add_name_hint">Netflix, Spotify и т.д.</string>
+    <string name="add_name_label">Название подписки</string>
+    <string name="add_save">Сохранить</string>
+    <string name="add_title">Добавить подписку</string>
+    <string name="add_update">Обновить</string>
+    <string name="alerts_empty_body">Вы получите уведомление\nпри изменении цен.</string>
+    <string name="alerts_empty_title">Нет оповещений</string>
+    <string name="alerts_title">Оповещения</string>
+    <string name="app_name">FinRadar</string>
     <string name="bottomsheet_action_collapse">Свернуть нижний экран</string>
     <string name="bottomsheet_action_expand">Развернуть нижний экран</string>
     <string name="bottomsheet_action_expand_halfway">Развернуть наполовину</string>
@@ -45,14 +56,31 @@
     <string msgid="6107532579223922871" name="call_notification_incoming_text">"Входящий вызов"</string>
     <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Текущий вызов"</string>
     <string msgid="59049573811482460" name="call_notification_screening_text">"Фильтрация входящего вызова"</string>
+    <string name="cat_cloud">Облако хранилище</string>
+    <string name="cat_education">Образование</string>
+    <string name="cat_fitness">Фитнес</string>
+    <string name="cat_gaming">Игры</string>
+    <string name="cat_general">Общее</string>
+    <string name="cat_music">Музыка</string>
+    <string name="cat_news">Новости</string>
+    <string name="cat_software">Программы</string>
+    <string name="cat_streaming">Стриминг</string>
     <string name="character_counter_content_description">Введено символов: %1$d из %2$d</string>
     <string name="character_counter_overflowed_content_description">Превышено ограничение на количество символов (%1$d из %2$d)</string>
     <string name="clear_text_end_icon_content_description">Очистить текстовое поле</string>
     <string msgid="406453423630273620" name="close_drawer">"Закрыть меню навигации"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Закрыть лист"</string>
+    <string name="dashboard_active">Активных</string>
+    <string name="dashboard_empty">Подписок ещё нет.\nВключите банковские уведомления.</string>
+    <string name="dashboard_monthly">В месяц</string>
+    <string name="dashboard_monthly_total">За этот месяц</string>
+    <string name="dashboard_see_all">Все</string>
+    <string name="dashboard_title">Главная</string>
+    <string name="dashboard_top_subs">Самые дорогие</string>
     <string msgid="8038256446254964252" name="default_error_message">"Неправильный ввод"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Всплывающее окно"</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Раскрывающееся меню"</string>
+    <string name="edit_title">Редактировать подписку</string>
     <string name="error_icon_content_description">Ошибка</string>
     <string name="exposed_dropdown_menu_content_description">Показать раскрывающееся меню</string>
     <string name="icon_content_description">Значок диалогового окна</string>
@@ -170,6 +198,10 @@
     <string name="mtrl_picker_toggle_to_year_selection">Нажмите, чтобы выбрать год</string>
     <string name="mtrl_timepicker_cancel">Отмена</string>
     <string name="mtrl_timepicker_confirm">ОК</string>
+    <string name="nav_alerts">Оповещения</string>
+    <string name="nav_home">Главная</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_subscriptions">Подписки</string>
     <string msgid="542007171693138492" name="navigation_menu">"Меню навигации"</string>
     <string msgid="6610465462668679431" name="not_selected">"Не выбрано"</string>
     <string msgid="875452955155264703" name="off">"Отключено"</string>
@@ -179,7 +211,33 @@
     <string msgid="7097486360902471446" name="range_start">"Начало диапазона"</string>
     <string msgid="6264217191555673260" name="search_menu_title">"Поиск"</string>
     <string msgid="6043586758067023" name="selected">"Выбрано"</string>
+    <string name="settings_app">ПРИЛОЖЕНИЕ</string>
+    <string name="settings_app_language">Язык приложения</string>
+    <string name="settings_app_name_label">Имя приложения</string>
+    <string name="settings_appearance">ВНЕШНИЙ ВИД</string>
+    <string name="settings_dark_mode">Тёмная тема</string>
+    <string name="settings_dark_mode_off">Переключить на тёмную тему</string>
+    <string name="settings_dark_mode_on">Переключить на светлую тему</string>
+    <string name="settings_language_region">ЯЗЫК И РЕГИОН</string>
+    <string name="settings_pick_language">Выбрать язык</string>
+    <string name="settings_tagline">Управляйте подписками умно</string>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_version">Версия</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">">999"</string>
+    <string name="subs_cancel">Отмена</string>
+    <string name="subs_delete">Удалить</string>
+    <string name="subs_delete_confirm">Вы уверены, что хотите удалить \"%s\"?</string>
+    <string name="subs_delete_ok">Удалить</string>
+    <string name="subs_delete_title">Удалить подписку</string>
+    <string name="subs_edit">Изменить</string>
+    <string name="subs_empty_body">Добавьте вручную через +\nили включите SMS-уведомления.</string>
+    <string name="subs_empty_title">Нет подписок</string>
+    <string name="subs_general">Общее</string>
+    <string name="subs_last_date">Последний: %s</string>
+    <string name="subs_no_results">Результатов нет</string>
+    <string name="subs_per_month">/ мес</string>
+    <string name="subs_search_hint">Поиск подписок…</string>
+    <string name="subs_title">Подписки</string>
     <string msgid="2561197295334830845" name="switch_role">"Переключатель"</string>
     <string msgid="1672349317127674378" name="tab">"Вкладка"</string>
     <string msgid="5946805113151406391" name="template_percent">"Процентов: <ns1:g id="PERCENTAGE">%1$d</ns1:g>."</string>

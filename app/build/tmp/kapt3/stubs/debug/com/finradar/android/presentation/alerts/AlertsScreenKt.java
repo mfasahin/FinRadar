@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment;
 import androidx.compose.ui.Modifier;
 import androidx.compose.ui.graphics.Brush;
 import androidx.compose.ui.text.font.FontWeight;
+import com.finradar.android.R;
 import com.finradar.android.domain.model.Alert;
 import com.finradar.android.ui.theme.*;
 import java.text.NumberFormat;
