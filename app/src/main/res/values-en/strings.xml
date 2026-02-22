@@ -48,6 +48,8 @@
     <string name="alerts_title">Alerts</string>
     <string name="alerts_empty_title">No Alerts</string>
     <string name="alerts_empty_body">You\'ll be notified automatically\nwhen prices change.</string>
+    <string name="alerts_clear_all">Clear All</string>
+    <string name="alerts_delete">Delete</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>

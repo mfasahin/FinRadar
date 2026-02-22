@@ -72,6 +72,7 @@ dependencies {
     
     // Lifecycle (Compose ViewModel support)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // Room
     implementation(libs.androidx.room.runtime)

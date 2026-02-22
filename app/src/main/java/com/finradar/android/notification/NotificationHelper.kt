@@ -38,34 +38,38 @@ object NotificationHelper {
         amount: Double,
         daysLeft: Long
     ) {
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val amountStr = NumberFormat.getCurrencyInstance(Locale("tr", "TR")).format(amount)
+        try {
+            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val amountStr = NumberFormat.getCurrencyInstance(Locale("tr", "TR")).format(amount)
 
-        val title = context.getString(R.string.notif_reminder_title, subscriptionName)
-        val body  = when {
-            daysLeft <= 0L -> context.getString(R.string.notif_reminder_today, amountStr)
-            daysLeft == 1L -> context.getString(R.string.notif_reminder_tomorrow, amountStr)
-            else           -> context.getString(R.string.notif_reminder_days, daysLeft, amountStr)
+            val title = context.getString(R.string.notif_reminder_title, subscriptionName)
+            val body = when {
+                daysLeft <= 0L -> context.getString(R.string.notif_reminder_today, amountStr)
+                daysLeft == 1L -> context.getString(R.string.notif_reminder_tomorrow, amountStr)
+                else -> context.getString(R.string.notif_reminder_days, daysLeft, amountStr)
+            }
+
+            val intent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            val pendingIntent = PendingIntent.getActivity(
+                context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_info) // System default icon for safety
+                .setContentTitle(title)
+                .setContentText(body)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build()
+
+            nm.notify(subscriptionId.toInt(), notification)
+        } catch (e: Exception) {
+            android.util.Log.e("NotificationHelper", "failed to send notification", e)
         }
-
-        val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(context.applicationInfo.icon)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .build()
-
-        nm.notify(subscriptionId.toInt(), notification)
     }
 }

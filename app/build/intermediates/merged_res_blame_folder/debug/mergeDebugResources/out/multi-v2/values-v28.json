@@ -4,7 +4,7 @@
             "outputFile": "com.finradar.android.app-mergeDebugResources-74:/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\1d5e20a094d3a083964476f78189e61c\\transformed\\material-1.11.0\\res\\values-v28\\values-v28.xml",
+                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\29dc034dae63f798c11bbbfd80b97264\\transformed\\material-1.11.0\\res\\values-v28\\values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\b93b120702ae0114c2f4a57f82c684e7\\transformed\\appcompat-1.6.1\\res\\values-v28\\values-v28.xml",
+                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\60e181aca01e166f94910e09b561e6ee\\transformed\\appcompat-1.6.1\\res\\values-v28\\values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",

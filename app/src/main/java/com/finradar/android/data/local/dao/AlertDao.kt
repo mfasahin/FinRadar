@@ -17,4 +17,13 @@ interface AlertDao {
 
     @Query("SELECT COUNT(*) FROM alerts WHERE isRead = 0")
     fun getUnreadAlertCount(): Flow<Int>
+
+    @Query("DELETE FROM alerts WHERE id = :id")
+    suspend fun deleteAlert(id: Long)
+
+    @Query("DELETE FROM alerts")
+    suspend fun clearAllAlerts()
+
+    @Query("SELECT COUNT(*) FROM alerts WHERE subscriptionId = :subId AND type = 'PAYMENT_REMINDER' AND date >= :since")
+    suspend fun countRemindersSince(subId: Long, since: Long): Int
 }

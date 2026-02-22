@@ -10,7 +10,12 @@
     <string name="add_save">Kaydet</string>
     <string name="add_title">Abonelik Ekle</string>
     <string name="add_update">Güncelle</string>
+    <string name="alerts_clear_all">Tümünü Temizle</string>
+    <string name="alerts_clear_all_en">Clear All</string>
+    <string name="alerts_delete">Sil</string>
+    <string name="alerts_delete_en">Delete</string>
     <string name="alerts_empty_body">Fiyat değişikliklerinde otomatik\nbildirim alacaksınız.</string>
+    <string name="alerts_empty_body_en">You\'ll be notified automatically\nwhen prices change.</string>
     <string name="alerts_empty_title">Uyarı Yok</string>
     <string name="alerts_title">Uyarılar</string>
     <string name="app_name">FinRadar</string>

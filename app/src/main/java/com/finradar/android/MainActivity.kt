@@ -76,11 +76,6 @@ class MainActivity : ComponentActivity() {
             workRequest
         )
 
-        // ⚠️ TEST ONLY — Remove after testing!
-        val testWork = OneTimeWorkRequestBuilder<PaymentReminderWorker>().build()
-        WorkManager.getInstance(this).enqueue(testWork)
-
-
         setContent {
             val isDark by settingsViewModel.isDarkTheme.collectAsState()
 

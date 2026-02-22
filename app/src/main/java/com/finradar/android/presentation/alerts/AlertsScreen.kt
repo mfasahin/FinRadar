@@ -1,11 +1,13 @@
 package com.finradar.android.presentation.alerts
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
@@ -45,6 +47,17 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
                         fontSize = 20.sp, letterSpacing = (-0.5).sp
                     )
                 },
+                actions = {
+                    if (alerts.isNotEmpty()) {
+                        TextButton(onClick = { viewModel.clearAllAlerts() }) {
+                            Text(
+                                stringResource(R.string.alerts_clear_all),
+                                color = AccentRed,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         }
@@ -63,12 +76,13 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
-                items(alerts) { alert ->
-                    if (alert.type == AlertType.PAYMENT_REMINDER) {
-                        ReminderAlertCard(alert)
-                    } else {
-                        PriceChangeAlertCard(alert)
-                    }
+                items(alerts, key = { it.id }) { alert ->
+                    // Wrapping in a Box to allow swipe-like or simple long-press delete if needed, 
+                    // for now let's add a small delete button to the card for simplicity and better UX than just swipe
+                    AlertItemWrapper(
+                        alert = alert,
+                        onDelete = { viewModel.deleteAlert(alert.id) }
+                    )
                 }
             }
         }
@@ -76,7 +90,18 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun PriceChangeAlertCard(alert: Alert) {
+fun AlertItemWrapper(alert: Alert, onDelete: () -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        if (alert.type == AlertType.PAYMENT_REMINDER) {
+            ReminderAlertCard(alert, onDelete)
+        } else {
+            PriceChangeAlertCard(alert, onDelete)
+        }
+    }
+}
+
+@Composable
+fun PriceChangeAlertCard(alert: Alert, onDelete: () -> Unit) {
     val locale       = Locale.getDefault()
     val dateFormat   = SimpleDateFormat("dd MMM yyyy", locale)
     val amountFormat = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
@@ -101,6 +126,11 @@ fun PriceChangeAlertCard(alert: Alert) {
                 color = TextMed, fontSize = 13.sp)
             Text(dateFormat.format(Date(alert.date)), color = TextLow, fontSize = 11.sp)
         }
+        
+        IconButton(onClick = onDelete, modifier = Modifier.padding(end = 4.dp)) {
+            Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.alerts_delete), tint = TextLow.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
+        }
+
         Box(modifier = Modifier.padding(end = 16.dp).clip(RoundedCornerShape(10.dp))
             .background(AccentRed.copy(alpha = 0.10f)).padding(horizontal = 10.dp, vertical = 6.dp)) {
             Text("+%.0f%%".format(alert.percentageChange), color = AccentRed, fontWeight = FontWeight.Black, fontSize = 14.sp)
@@ -109,11 +139,11 @@ fun PriceChangeAlertCard(alert: Alert) {
 }
 
 @Composable
-fun ReminderAlertCard(alert: Alert) {
+fun ReminderAlertCard(alert: Alert, onDelete: () -> Unit) {
     val locale       = Locale.getDefault()
     val dateFormat   = SimpleDateFormat("dd MMM yyyy", locale)
     val amountFormat = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
-    val accentBlue   = BrandFrom   // reuse app's brand blue
+    val accentBlue   = BrandFrom
 
     Row(
         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(BgDeep),
@@ -134,6 +164,11 @@ fun ReminderAlertCard(alert: Alert) {
             Text(amountFormat.format(alert.oldAmount), color = TextMed, fontSize = 13.sp)
             Text(dateFormat.format(Date(alert.date)), color = TextLow, fontSize = 11.sp)
         }
+
+        IconButton(onClick = onDelete, modifier = Modifier.padding(end = 4.dp)) {
+            Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.alerts_delete), tint = TextLow.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
+        }
+
         Box(modifier = Modifier.padding(end = 16.dp).clip(RoundedCornerShape(10.dp))
             .background(accentBlue.copy(alpha = 0.12f)).padding(horizontal = 10.dp, vertical = 6.dp)) {
             Text("🔔", fontSize = 16.sp)

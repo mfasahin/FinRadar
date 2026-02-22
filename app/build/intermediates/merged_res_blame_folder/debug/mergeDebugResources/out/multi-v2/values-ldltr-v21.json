@@ -4,7 +4,7 @@
             "outputFile": "com.finradar.android.app-mergeDebugResources-74:/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\b93b120702ae0114c2f4a57f82c684e7\\transformed\\appcompat-1.6.1\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
+                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\60e181aca01e166f94910e09b561e6ee\\transformed\\appcompat-1.6.1\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

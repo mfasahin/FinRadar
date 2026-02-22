@@ -10,6 +10,8 @@
     <string name="add_save">Save</string>
     <string name="add_title">Add Subscription</string>
     <string name="add_update">Update</string>
+    <string name="alerts_clear_all">Clear All</string>
+    <string name="alerts_delete">Delete</string>
     <string name="alerts_empty_body">You\'ll be notified automatically\nwhen prices change.</string>
     <string name="alerts_empty_title">No Alerts</string>
     <string name="alerts_title">Alerts</string>

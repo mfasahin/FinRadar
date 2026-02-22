@@ -7,4 +7,7 @@ interface AlertRepository {
     suspend fun saveAlert(alert: Alert): Long
     fun getAllAlerts(): Flow<List<Alert>>
     fun getUnreadAlertCount(): Flow<Int>
+    suspend fun hasReminderBeenSentToday(subscriptionId: Long): Boolean
+    suspend fun deleteAlert(id: Long)
+    suspend fun clearAllAlerts()
 }

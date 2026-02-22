@@ -74,7 +74,7 @@ public final class TransactionDao_Impl implements TransactionDao {
 
   @Override
   public Object insertTransaction(final TransactionEntity transaction,
-      final Continuation<? super Long> arg1) {
+      final Continuation<? super Long> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -88,7 +88,7 @@ public final class TransactionDao_Impl implements TransactionDao {
           __db.endTransaction();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
@@ -159,7 +159,7 @@ public final class TransactionDao_Impl implements TransactionDao {
 
   @Override
   public Object getTransactionsByMerchant(final String merchantName,
-      final Continuation<? super List<TransactionEntity>> arg1) {
+      final Continuation<? super List<TransactionEntity>> $completion) {
     final String _sql = "SELECT * FROM transactions WHERE merchantName = ? ORDER BY date DESC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -224,7 +224,7 @@ public final class TransactionDao_Impl implements TransactionDao {
           _statement.release();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @NonNull

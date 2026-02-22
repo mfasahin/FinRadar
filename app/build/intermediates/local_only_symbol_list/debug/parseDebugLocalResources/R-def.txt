@@ -10,7 +10,12 @@ string add_next_payment_not_set
 string add_save
 string add_title
 string add_update
+string alerts_clear_all
+string alerts_clear_all_en
+string alerts_delete
+string alerts_delete_en
 string alerts_empty_body
+string alerts_empty_body_en
 string alerts_empty_title
 string alerts_title
 string app_name

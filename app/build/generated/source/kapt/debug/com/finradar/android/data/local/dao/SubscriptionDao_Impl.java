@@ -112,7 +112,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   @Override
   public Object insertSubscription(final SubscriptionEntity subscription,
-      final Continuation<? super Long> arg1) {
+      final Continuation<? super Long> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -126,12 +126,12 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __db.endTransaction();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
   public Object updateSubscription(final SubscriptionEntity subscription,
-      final Continuation<? super Unit> arg1) {
+      final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -145,11 +145,12 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __db.endTransaction();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
-  public Object softDeleteSubscription(final long id, final Continuation<? super Unit> arg1) {
+  public Object softDeleteSubscription(final long id,
+      final Continuation<? super Unit> $completion) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -170,7 +171,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           __preparedStmtOfSoftDeleteSubscription.release(_stmt);
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
@@ -235,7 +236,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   @Override
   public Object getSubscriptionById(final long id,
-      final Continuation<? super SubscriptionEntity> arg1) {
+      final Continuation<? super SubscriptionEntity> $completion) {
     final String _sql = "SELECT * FROM subscriptions WHERE id = ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -290,12 +291,12 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           _statement.release();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @Override
   public Object getSubscriptionByName(final String name,
-      final Continuation<? super SubscriptionEntity> arg1) {
+      final Continuation<? super SubscriptionEntity> $completion) {
     final String _sql = "SELECT * FROM subscriptions WHERE name = ? LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -354,7 +355,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           _statement.release();
         }
       }
-    }, arg1);
+    }, $completion);
   }
 
   @NonNull

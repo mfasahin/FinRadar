@@ -61,6 +61,16 @@ fun FinRadarNavGraph(navController: NavHostController) {
     val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDest = navBackStackEntry?.destination
+
+    // Helper to navigate to bottom tabs consistently
+    val navigateToTab: (String) -> Unit = { route ->
+        navController.navigate(route) {
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     val showBar = bottomNavItems.any { it.screen.route == currentDest?.route }
 
     Scaffold(
@@ -79,13 +89,7 @@ fun FinRadarNavGraph(navController: NavHostController) {
                         val selected = currentDest?.hierarchy?.any { it.route == item.screen.route } == true
                         NavigationBarItem(
                             selected = selected,
-                            onClick = {
-                                navController.navigate(item.screen.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
+                            onClick = { navigateToTab(item.screen.route) },
                             icon = {
                                 Icon(
                                     if (selected) item.activeIcon else item.icon,
@@ -129,7 +133,7 @@ fun FinRadarNavGraph(navController: NavHostController) {
                 )
             }
             composable(Screen.Dashboard.route) {
-                DashboardScreen(onNavigateToAlerts = { navController.navigate(Screen.Alerts.route) })
+                DashboardScreen(onNavigateToAlerts = { navigateToTab(Screen.Alerts.route) })
             }
             composable(Screen.Subscriptions.route) {
                 SubscriptionsScreen(

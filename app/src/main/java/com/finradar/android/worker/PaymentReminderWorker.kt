@@ -1,7 +1,6 @@
 package com.finradar.android.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -25,30 +24,22 @@ class PaymentReminderWorker @AssistedInject constructor(
     private val alertRepository: AlertRepository
 ) : CoroutineWorker(context, workerParams) {
 
-    companion object {
-        private const val TAG = "PaymentReminderWorker"
-    }
-
     override suspend fun doWork(): Result {
-        Log.d(TAG, "doWork() started")
         return try {
             val reminderDays = prefsRepository.reminderDays.first().toLong()
-            Log.d(TAG, "reminderDays = $reminderDays")
-
             val subscriptions = subscriptionRepository.getActiveSubscriptions().first()
-            Log.d(TAG, "total active subscriptions = ${subscriptions.size}")
-
             val today = System.currentTimeMillis()
 
             val withDate = subscriptions.filter { it.nextPaymentDate > 0 }
-            Log.d(TAG, "subscriptions with nextPaymentDate set = ${withDate.size}")
-
             withDate.forEach { sub ->
                 val daysUntil = TimeUnit.MILLISECONDS.toDays(sub.nextPaymentDate - today)
-                Log.d(TAG, "${sub.name}: nextPaymentDate=${sub.nextPaymentDate}, daysUntil=$daysUntil, window=0..$reminderDays")
 
                 if (daysUntil in 0..reminderDays) {
-                    Log.d(TAG, "→ SENDING notification for ${sub.name}")
+                    // Unique check: don't send if already sent today
+                    if (alertRepository.hasReminderBeenSentToday(sub.id)) {
+                        return@forEach
+                    }
+
                     NotificationHelper.sendPaymentReminder(
                         context          = context,
                         subscriptionId   = sub.id,
@@ -68,15 +59,10 @@ class PaymentReminderWorker @AssistedInject constructor(
                             type             = AlertType.PAYMENT_REMINDER
                         )
                     )
-                    Log.d(TAG, "→ Alert saved to DB for ${sub.name}")
-                } else {
-                    Log.d(TAG, "→ SKIPPED (daysUntil=$daysUntil not in 0..$reminderDays)")
                 }
             }
-            Log.d(TAG, "doWork() completed successfully")
             Result.success()
         } catch (e: Exception) {
-            Log.e(TAG, "doWork() FAILED with exception: ${e.message}", e)
             Result.retry()
         }
     }
