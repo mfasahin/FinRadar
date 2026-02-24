@@ -24,6 +24,7 @@ class UserPreferencesRepository @Inject constructor(
         private val IS_DARK_THEME  = booleanPreferencesKey("is_dark_theme")
         private val LANGUAGE_CODE  = stringPreferencesKey("language_code")
         private val REMINDER_DAYS  = intPreferencesKey("reminder_days")
+        private val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
         private const val LANG_PREFS = "lang_pref"
         private const val LANG_KEY   = "lang"
     }
@@ -66,5 +67,13 @@ class UserPreferencesRepository @Inject constructor(
 
     suspend fun setReminderDays(days: Int) {
         context.dataStore.edit { prefs -> prefs[REMINDER_DAYS] = days.coerceIn(1, 14) }
+    }
+
+    // ── Onboarding ────────────────────────────────────────────────────────
+    val isOnboardingCompleted: Flow<Boolean> = context.dataStore.data
+        .map { prefs -> prefs[IS_ONBOARDING_COMPLETED] ?: false }
+
+    suspend fun setOnboardingCompleted(completed: Boolean) {
+        context.dataStore.edit { prefs -> prefs[IS_ONBOARDING_COMPLETED] = completed }
     }
 }

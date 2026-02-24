@@ -37,10 +37,13 @@ import com.finradar.android.R
 import com.finradar.android.presentation.alerts.AlertsScreen
 import com.finradar.android.presentation.dashboard.DashboardScreen
 import com.finradar.android.presentation.onboarding.OnboardingScreen
+import com.finradar.android.presentation.settings.PrivacyPolicyScreen
 import com.finradar.android.presentation.settings.SettingsScreen
+import com.finradar.android.presentation.settings.SettingsViewModel
 import com.finradar.android.presentation.subscriptions.AddSubscriptionScreen
 import com.finradar.android.presentation.subscriptions.SubscriptionsScreen
 import com.finradar.android.ui.theme.*
+import androidx.hilt.navigation.compose.hiltViewModel
 
 data class BottomNavItem(
     val screen: Screen,
@@ -57,10 +60,16 @@ val bottomNavItems = listOf(
 )
 
 @Composable
-fun FinRadarNavGraph(navController: NavHostController) {
+fun FinRadarNavGraph(
+    navController: NavHostController,
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDest = navBackStackEntry?.destination
+    
+    val onboardingCompleted by viewModel.isOnboardingCompleted.collectAsState()
+    val startDest = if (onboardingCompleted) Screen.Dashboard.route else Screen.Onboarding.route
 
     // Helper to navigate to bottom tabs consistently
     val navigateToTab: (String) -> Unit = { route ->
@@ -119,17 +128,19 @@ fun FinRadarNavGraph(navController: NavHostController) {
     ) { innerPadding ->
         NavHost(
             navController    = navController,
-            startDestination = Screen.Dashboard.route,
+            startDestination = startDest,
             modifier         = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Onboarding.route) {
                 OnboardingScreen(
                     onPermissionsGranted = {
+                        viewModel.setOnboardingCompleted()
                         context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         navController.navigate(Screen.Dashboard.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }
-                    }
+                    },
+                    onNavigateToPrivacy = { navController.navigate(Screen.PrivacyPolicy.route) }
                 )
             }
             composable(Screen.Dashboard.route) {
@@ -142,7 +153,12 @@ fun FinRadarNavGraph(navController: NavHostController) {
                 )
             }
             composable(Screen.Alerts.route)   { AlertsScreen() }
-            composable(Screen.Settings.route) { SettingsScreen() }
+            composable(Screen.Settings.route) { 
+                SettingsScreen(onNavigateToPrivacy = { navController.navigate(Screen.PrivacyPolicy.route) }) 
+            }
+            composable(Screen.PrivacyPolicy.route) {
+                PrivacyPolicyScreen(onNavigateBack = { navController.popBackStack() })
+            }
             composable(Screen.AddSubscription.route) {
                 AddSubscriptionScreen(subscriptionId = null, onNavigateBack = { navController.popBackStack() })
             }

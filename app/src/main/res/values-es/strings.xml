@@ -81,4 +81,20 @@
     <string name="cat_education">Educación</string>
     <string name="cat_news">Noticias</string>
     <string name="cat_general">General</string>
+
+    <!-- Onboarding Privacy -->
+    <string name="onboarding_privacy_disclaimer">🔐 Todos los datos se procesan exclusivamente en su dispositivo y nunca se envían a ningún servidor.</string>
+    <string name="onboarding_view_privacy_policy">Ver Política de Privacidad</string>
+
+    <!-- Onboarding Features -->
+    <string name="onboarding_feature_1_title">Detección Automática</string>
+    <string name="onboarding_feature_1_desc">Escanea automáticamente sus suscripciones leyendo las notificaciones bancarias.</string>
+    <string name="onboarding_feature_2_title">Alertas de Aumento</string>
+    <string name="onboarding_feature_2_desc">Reciba notificaciones instantáneas cuando aumente el precio de su suscripción.</string>
+    <string name="onboarding_feature_3_title">Totalmente Privado</string>
+    <string name="onboarding_feature_3_desc">No se envían datos a ningún servidor. Todo permanece en su dispositivo.</string>
+
+    <string name="onboarding_start_button">Conceder Permiso de Notificaciones y Empezar</string>
+
+    <string name="settings_privacy_policy">Política de Privacidad</string>
 </resources>

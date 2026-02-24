@@ -81,4 +81,20 @@
     <string name="cat_education">Bildung</string>
     <string name="cat_news">Nachrichten</string>
     <string name="cat_general">Allgemein</string>
+
+    <!-- Onboarding Privacy -->
+    <string name="onboarding_privacy_disclaimer">🔐  Alle Daten werden ausschließlich auf Ihrem Gerät verarbeitet und niemals an Server gesendet.</string>
+    <string name="onboarding_view_privacy_policy">Datenschutzerklärung anzeigen</string>
+
+    <!-- Onboarding Features -->
+    <string name="onboarding_feature_1_title">Automatische Erkennung</string>
+    <string name="onboarding_feature_1_desc">Scannt Ihre Abonnements automatisch durch das Lesen von Bankbenachrichtigungen.</string>
+    <string name="onboarding_feature_2_title">Preiswarnungen</string>
+    <string name="onboarding_feature_2_desc">Lassen Sie sich sofort benachrichtigen, wenn sich Ihre Abonnementspreise ändern.</string>
+    <string name="onboarding_feature_3_title">Vollständige Privatsphäre</string>
+    <string name="onboarding_feature_3_desc">Es werden keine Daten an Server gesendet. Alles bleibt auf Ihrem Gerät.</string>
+
+    <string name="onboarding_start_button">Benachrichtigungsberechtigung erteilen &amp; Starten</string>
+
+    <string name="settings_privacy_policy">Datenschutzerklärung</string>
 </resources>

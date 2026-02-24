@@ -47,6 +47,15 @@
     <string name="notif_reminder_title">%s ödeme hatırlatıcısı</string>
     <string name="notif_reminder_today">Bugün ödeme tarihi! Tutar: %s</string>
     <string name="notif_reminder_tomorrow">Yarın ödeme var! Tutar: %s</string>
+    <string name="onboarding_feature_1_desc">Banka bildirimlerini okuyarak aboneliklerinizi otomatik tarar.</string>
+    <string name="onboarding_feature_1_title">Otomatik Tespit</string>
+    <string name="onboarding_feature_2_desc">Aboneliğinize zam geldiğinde anında bildirim alın.</string>
+    <string name="onboarding_feature_2_title">Zam Uyarıları</string>
+    <string name="onboarding_feature_3_desc">Hiçbir veri sunucuya gönderilmez. Her şey cihazınızda.</string>
+    <string name="onboarding_feature_3_title">Tamamen Gizli</string>
+    <string name="onboarding_privacy_disclaimer">🔐  Tüm veriler yalnızca cihazınızda işlenir, hiçbir yere gönderilmez.</string>
+    <string name="onboarding_start_button">Bildirim İzni Ver &amp; Başla</string>
+    <string name="onboarding_view_privacy_policy">Gizlilik Politikasını Görüntüle</string>
     <string name="settings_app">UYGULAMA</string>
     <string name="settings_app_language">Uygulama Dili</string>
     <string name="settings_app_name_label">Uygulama Adı</string>
@@ -57,6 +66,7 @@
     <string name="settings_language_region">DİL &amp; BÖLGE</string>
     <string name="settings_notifications">BİLDİRİMLER</string>
     <string name="settings_pick_language">Dil Seçin</string>
+    <string name="settings_privacy_policy">Gizlilik Politikası</string>
     <string name="settings_reminder_days">%d gün</string>
     <string name="settings_reminder_desc">%d gün önceden bildirim al</string>
     <string name="settings_reminder_title">Ödeme Hatırlatıcısı</string>

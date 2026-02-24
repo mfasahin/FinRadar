@@ -3944,6 +3944,15 @@ int string notif_reminder_days 0x7f0e0110
 int string notif_reminder_title 0x7f0e0111
 int string notif_reminder_today 0x7f0e0112
 int string notif_reminder_tomorrow 0x7f0e0113
+int string onboarding_feature_1_desc 0x7f0e014f
+int string onboarding_feature_1_title 0x7f0e0150
+int string onboarding_feature_2_desc 0x7f0e0151
+int string onboarding_feature_2_title 0x7f0e0152
+int string onboarding_feature_3_desc 0x7f0e0153
+int string onboarding_feature_3_title 0x7f0e0154
+int string onboarding_privacy_disclaimer 0x7f0e0155
+int string onboarding_start_button 0x7f0e0156
+int string onboarding_view_privacy_policy 0x7f0e0157
 int string password_toggle_content_description 0x7f0e0114
 int string path_password_eye 0x7f0e0115
 int string path_password_eye_mask_strike_through 0x7f0e0116
@@ -3966,6 +3975,7 @@ int string settings_dark_mode_on 0x7f0e0126
 int string settings_language_region 0x7f0e0127
 int string settings_notifications 0x7f0e0128
 int string settings_pick_language 0x7f0e0129
+int string settings_privacy_policy 0x7f0e0158
 int string settings_reminder_days 0x7f0e012a
 int string settings_reminder_desc 0x7f0e012b
 int string settings_reminder_title 0x7f0e012c

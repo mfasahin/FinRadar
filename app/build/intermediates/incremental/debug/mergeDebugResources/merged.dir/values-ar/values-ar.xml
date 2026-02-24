@@ -217,6 +217,15 @@
     <string name="notif_reminder_title">تذكير دفع: %s</string>
     <string name="notif_reminder_today">موعد الدفع اليوم! المبلغ: %s</string>
     <string name="notif_reminder_tomorrow">موعد الدفع غداً! المبلغ: %s</string>
+    <string name="onboarding_feature_1_desc">يفحص اشتراكاتك تلقائيًا عن طريق قراءة إشعارات البنك.</string>
+    <string name="onboarding_feature_1_title">كشف تلقائي</string>
+    <string name="onboarding_feature_2_desc">احصل على إشعار فور زيادة سعر اشتراكك.</string>
+    <string name="onboarding_feature_2_title">تنبيهات الزيادة</string>
+    <string name="onboarding_feature_3_desc">لا يتم إرسال أي بيانات إلى أي خادم. كل شيء يبقى على جهازك.</string>
+    <string name="onboarding_feature_3_title">خصوصية كاملة</string>
+    <string name="onboarding_privacy_disclaimer">🔐 تتم معalajat جميع البيانات حصريًا على جهازك ولا يتم إرسالها أبدًا إلى أي خادم.</string>
+    <string name="onboarding_start_button">منح إذن الإشعارات والبدء</string>
+    <string name="onboarding_view_privacy_policy">عرض سياسة الخصوصية</string>
     <string name="password_toggle_content_description">عرض كلمة المرور</string>
     <string msgid="5941395253238309765" name="range_end">"نهاية النطاق"</string>
     <string msgid="7097486360902471446" name="range_start">"بداية النطاق"</string>
@@ -232,6 +241,7 @@
     <string name="settings_language_region">اللغة والمنطقة</string>
     <string name="settings_notifications">الإشعارات</string>
     <string name="settings_pick_language">اختر اللغة</string>
+    <string name="settings_privacy_policy">سياسة الخصوصية</string>
     <string name="settings_reminder_days">%d أيام</string>
     <string name="settings_reminder_desc">إشعار قبل %d أيام من الدفع</string>
     <string name="settings_reminder_title">تذكير الدفع</string>

@@ -2,8 +2,10 @@ package com.finradar.android.presentation.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,22 +13,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.finradar.android.R
 import com.finradar.android.ui.theme.*
 
-private data class Feature(val emoji: String, val title: String, val desc: String)
-
-private val features = listOf(
-    Feature("🔔", "Otomatik Tespit", "Banka bildirimlerini okuyarak aboneliklerinizi otomatik tarar."),
-    Feature("📈", "Zam Uyarıları", "Aboneliğinize zam geldiğinde anında bildirim alın."),
-    Feature("🔒", "Tamamen Gizli", "Hiçbir veri sunucuya gönderilmez. Her şey cihazınızda.")
-)
-
 @Composable
-fun OnboardingScreen(onPermissionsGranted: () -> Unit) {
+fun OnboardingScreen(
+    onPermissionsGranted: () -> Unit,
+    onNavigateToPrivacy: () -> Unit
+) {
+    val scrollState = rememberScrollState()
+    
+    val featureList = listOf(
+        Feature("🔔", stringResource(R.string.onboarding_feature_1_title), stringResource(R.string.onboarding_feature_1_desc)),
+        Feature("📈", stringResource(R.string.onboarding_feature_2_title), stringResource(R.string.onboarding_feature_2_desc)),
+        Feature("🔒", stringResource(R.string.onboarding_feature_3_title), stringResource(R.string.onboarding_feature_3_desc))
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +42,8 @@ fun OnboardingScreen(onPermissionsGranted: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(72.dp))
@@ -69,28 +77,42 @@ fun OnboardingScreen(onPermissionsGranted: () -> Unit) {
 
             Spacer(Modifier.height(48.dp))
 
-            features.forEach { f ->
+            featureList.forEach { f ->
                 FeatureCard(f)
                 Spacer(Modifier.height(12.dp))
             }
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.height(32.dp))
 
             // Privacy disclaimer
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(16.dp))
                     .background(BgCard)
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    "🔐  Bildirim erişimi gereklidir. Verileriniz cihazınızda güvenle saklanır, hiçbir sunucuya gönderilmez.",
-                    color = TextMed,
-                    fontSize = 12.sp,
+                    stringResource(R.string.onboarding_privacy_disclaimer),
+                    color = TextHigh,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
                     lineHeight = 18.sp,
                     textAlign = TextAlign.Center
                 )
+                TextButton(
+                    onClick = onNavigateToPrivacy,
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.onboarding_view_privacy_policy),
+                        color = BrandFrom,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             Spacer(Modifier.height(16.dp))
@@ -101,13 +123,20 @@ fun OnboardingScreen(onPermissionsGranted: () -> Unit) {
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = BrandFrom)
             ) {
-                Text("Bildirim İzni Ver & Başla", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                Text(
+                    stringResource(R.string.onboarding_start_button), 
+                    fontWeight = FontWeight.Bold, 
+                    fontSize = 16.sp, 
+                    color = Color.White
+                )
             }
 
             Spacer(Modifier.height(36.dp))
         }
     }
 }
+
+private data class Feature(val emoji: String, val title: String, val desc: String)
 
 @Composable
 private fun FeatureCard(feature: Feature) {

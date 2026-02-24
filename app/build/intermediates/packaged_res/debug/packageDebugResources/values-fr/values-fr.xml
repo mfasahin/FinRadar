@@ -42,6 +42,15 @@
     <string name="notif_reminder_title">Rappel paiement %s</string>
     <string name="notif_reminder_today">Paiement dû aujourd\'hui! Montant: %s</string>
     <string name="notif_reminder_tomorrow">Paiement dû demain! Montant: %s</string>
+    <string name="onboarding_feature_1_desc">Scanne automatiquement vos abonnements en lisant les notifications bancaires.</string>
+    <string name="onboarding_feature_1_title">Détection Automatique</string>
+    <string name="onboarding_feature_2_desc">Sois averti instantanément si le prix de ton abonnement augmente.</string>
+    <string name="onboarding_feature_2_title">Alertes de Hausse</string>
+    <string name="onboarding_feature_3_desc">Aucune donnée n\'est envoyée à un serveur. Tout reste sur votre appareil.</string>
+    <string name="onboarding_feature_3_title">Entièrement Privé</string>
+    <string name="onboarding_privacy_disclaimer">🔐 Toutes les données sont traitées exclusivement sur votre appareil et ne sont jamais envoyées à un serveur.</string>
+    <string name="onboarding_start_button">Autoriser les Notifications &amp; Commencer</string>
+    <string name="onboarding_view_privacy_policy">Voir la Politique de Confidentialité</string>
     <string name="settings_app">APPLICATION</string>
     <string name="settings_app_language">Langue de l\'app</string>
     <string name="settings_app_name_label">Nom de l\'app</string>
@@ -52,6 +61,7 @@
     <string name="settings_language_region">LANGUE &amp; RÉGION</string>
     <string name="settings_notifications">NOTIFICATIONS</string>
     <string name="settings_pick_language">Choisir la langue</string>
+    <string name="settings_privacy_policy">Politique de Confidentialité</string>
     <string name="settings_reminder_days">%d jours</string>
     <string name="settings_reminder_desc">Notifier %d jours avant le paiement</string>
     <string name="settings_reminder_title">Rappel de paiement</string>

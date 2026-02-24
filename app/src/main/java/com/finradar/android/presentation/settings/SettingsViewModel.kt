@@ -36,6 +36,14 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { prefsRepo.setReminderDays(days) }
     }
 
+    // ── Onboarding ────────────────────────────────────────────────────────
+    val isOnboardingCompleted: StateFlow<Boolean> = prefsRepo.isOnboardingCompleted
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    fun setOnboardingCompleted() {
+        viewModelScope.launch { prefsRepo.setOnboardingCompleted(true) }
+    }
+
     /**
      * Suspend version — caller awaits this before calling activity.recreate(),
      * guaranteeing the synchronous SharedPrefs commit has completed.

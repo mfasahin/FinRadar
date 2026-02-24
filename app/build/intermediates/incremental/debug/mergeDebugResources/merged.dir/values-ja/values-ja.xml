@@ -213,6 +213,15 @@
     <string name="notif_reminder_title">%s 支払いリマインダー</string>
     <string name="notif_reminder_today">今日が支払日です！金額：%s</string>
     <string name="notif_reminder_tomorrow">明日が支払日です！金額：%s</string>
+    <string name="onboarding_feature_1_desc">銀行の通知を読み取ってサブスクリプションを自動的にスキャンします。</string>
+    <string name="onboarding_feature_1_title">自動検出</string>
+    <string name="onboarding_feature_2_desc">サブスクリプションの価格が上がったときに即座に通知を受け取ります。</string>
+    <string name="onboarding_feature_2_title">値上げアラート</string>
+    <string name="onboarding_feature_3_desc">データがサーバーに送信されることはありません。すべてはデバイス内にあります。</string>
+    <string name="onboarding_feature_3_title">完全なプライバシー</string>
+    <string name="onboarding_privacy_disclaimer">🔐 すべてのデータはお使いのデバイス上でのみ処理され、サーバーに送信されることはありません。</string>
+    <string name="onboarding_start_button">通知権限を許可して開始</string>
+    <string name="onboarding_view_privacy_policy">プライバシーポリシーを表示</string>
     <string name="password_toggle_content_description">パスワードを表示</string>
     <string msgid="5941395253238309765" name="range_end">"範囲の末尾"</string>
     <string msgid="7097486360902471446" name="range_start">"範囲の先頭"</string>
@@ -228,6 +237,7 @@
     <string name="settings_language_region">言語と地域</string>
     <string name="settings_notifications">通知</string>
     <string name="settings_pick_language">言語を選択</string>
+    <string name="settings_privacy_policy">プライバシーポリシー</string>
     <string name="settings_reminder_days">%d日前</string>
     <string name="settings_reminder_desc">支払い%d日前に通知</string>
     <string name="settings_reminder_title">支払いリマインダー</string>

@@ -81,4 +81,20 @@
     <string name="cat_education">教育</string>
     <string name="cat_news">ニュース</string>
     <string name="cat_general">一般</string>
+
+    <!-- Onboarding Privacy -->
+    <string name="onboarding_privacy_disclaimer">🔐 すべてのデータはお使いのデバイス上でのみ処理され、サーバーに送信されることはありません。</string>
+    <string name="onboarding_view_privacy_policy">プライバシーポリシーを表示</string>
+
+    <!-- Onboarding Features -->
+    <string name="onboarding_feature_1_title">自動検出</string>
+    <string name="onboarding_feature_1_desc">銀行の通知を読み取ってサブスクリプションを自動的にスキャンします。</string>
+    <string name="onboarding_feature_2_title">値上げアラート</string>
+    <string name="onboarding_feature_2_desc">サブスクリプションの価格が上がったときに即座に通知を受け取ります。</string>
+    <string name="onboarding_feature_3_title">完全なプライバシー</string>
+    <string name="onboarding_feature_3_desc">データがサーバーに送信されることはありません。すべてはデバイス内にあります。</string>
+
+    <string name="onboarding_start_button">通知権限を許可して開始</string>
+
+    <string name="settings_privacy_policy">プライバシーポリシー</string>
 </resources>

@@ -37,7 +37,10 @@ val supportedLanguages = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(
+    onNavigateToPrivacy: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     val isDark       by viewModel.isDarkTheme.collectAsState()
     val langCode     by viewModel.languageCode.collectAsState()
     val reminderDays by viewModel.reminderDays.collectAsState()
@@ -234,6 +237,18 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                     InfoRow(label = stringResource(R.string.settings_app_name_label), value = "FinRadar")
                     HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
                     InfoRow(label = stringResource(R.string.settings_version), value = "1.0.0")
+                    HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onNavigateToPrivacy() }
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(stringResource(R.string.settings_privacy_policy), color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text("›", color = TextMed, fontSize = 18.sp)
+                    }
                 }
             }
 

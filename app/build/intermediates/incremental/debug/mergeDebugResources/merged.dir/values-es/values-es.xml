@@ -213,6 +213,15 @@
     <string name="notif_reminder_title">Recordatorio de pago: %s</string>
     <string name="notif_reminder_today">¡Pago vence hoy! Importe: %s</string>
     <string name="notif_reminder_tomorrow">¡Pago vence mañana! Importe: %s</string>
+    <string name="onboarding_feature_1_desc">Escanea automáticamente sus suscripciones leyendo las notificaciones bancarias.</string>
+    <string name="onboarding_feature_1_title">Detección Automática</string>
+    <string name="onboarding_feature_2_desc">Reciba notificaciones instantáneas cuando aumente el precio de su suscripción.</string>
+    <string name="onboarding_feature_2_title">Alertas de Aumento</string>
+    <string name="onboarding_feature_3_desc">No se envían datos a ningún servidor. Todo permanece en su dispositivo.</string>
+    <string name="onboarding_feature_3_title">Totalmente Privado</string>
+    <string name="onboarding_privacy_disclaimer">🔐 Todos los datos se procesan exclusivamente en su dispositivo y nunca se envían a ningún servidor.</string>
+    <string name="onboarding_start_button">Conceder Permiso de Notificaciones y Empezar</string>
+    <string name="onboarding_view_privacy_policy">Ver Política de Privacidad</string>
     <string name="password_toggle_content_description">Mostrar contraseña</string>
     <string msgid="5941395253238309765" name="range_end">"Fin del intervalo"</string>
     <string msgid="7097486360902471446" name="range_start">"Inicio del intervalo"</string>
@@ -228,6 +237,7 @@
     <string name="settings_language_region">IDIOMA &amp; REGIÓN</string>
     <string name="settings_notifications">NOTIFICACIONES</string>
     <string name="settings_pick_language">Seleccionar idioma</string>
+    <string name="settings_privacy_policy">Política de Privacidad</string>
     <string name="settings_reminder_days">%d días</string>
     <string name="settings_reminder_desc">Notificar %d días antes del pago</string>
     <string name="settings_reminder_title">Recordatorio de pago</string>

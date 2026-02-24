@@ -42,6 +42,15 @@
     <string name="notif_reminder_title">%s Zahlungserinnerung</string>
     <string name="notif_reminder_today">Zahlung heute fällig! Betrag: %s</string>
     <string name="notif_reminder_tomorrow">Zahlung morgen fällig! Betrag: %s</string>
+    <string name="onboarding_feature_1_desc">Scannt Ihre Abonnements automatisch durch das Lesen von Bankbenachrichtigungen.</string>
+    <string name="onboarding_feature_1_title">Automatische Erkennung</string>
+    <string name="onboarding_feature_2_desc">Lassen Sie sich sofort benachrichtigen, wenn sich Ihre Abonnementspreise ändern.</string>
+    <string name="onboarding_feature_2_title">Preiswarnungen</string>
+    <string name="onboarding_feature_3_desc">Es werden keine Daten an Server gesendet. Alles bleibt auf Ihrem Gerät.</string>
+    <string name="onboarding_feature_3_title">Vollständige Privatsphäre</string>
+    <string name="onboarding_privacy_disclaimer">🔐  Alle Daten werden ausschließlich auf Ihrem Gerät verarbeitet und niemals an Server gesendet.</string>
+    <string name="onboarding_start_button">Benachrichtigungsberechtigung erteilen &amp; Starten</string>
+    <string name="onboarding_view_privacy_policy">Datenschutzerklärung anzeigen</string>
     <string name="settings_app">ANWENDUNG</string>
     <string name="settings_app_language">App-Sprache</string>
     <string name="settings_app_name_label">App-Name</string>
@@ -52,6 +61,7 @@
     <string name="settings_language_region">SPRACHE &amp; REGION</string>
     <string name="settings_notifications">BENACHRICHTIGUNGEN</string>
     <string name="settings_pick_language">Sprache auswählen</string>
+    <string name="settings_privacy_policy">Datenschutzerklärung</string>
     <string name="settings_reminder_days">%d Tage</string>
     <string name="settings_reminder_desc">%d Tage vor Zahlung benachrichtigen</string>
     <string name="settings_reminder_title">Zahlungserinnerung</string>

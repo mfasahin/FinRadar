@@ -47,6 +47,15 @@ string notif_reminder_days
 string notif_reminder_title
 string notif_reminder_today
 string notif_reminder_tomorrow
+string onboarding_feature_1_desc
+string onboarding_feature_1_title
+string onboarding_feature_2_desc
+string onboarding_feature_2_title
+string onboarding_feature_3_desc
+string onboarding_feature_3_title
+string onboarding_privacy_disclaimer
+string onboarding_start_button
+string onboarding_view_privacy_policy
 string settings_app
 string settings_app_language
 string settings_app_name_label
@@ -57,6 +66,7 @@ string settings_dark_mode_on
 string settings_language_region
 string settings_notifications
 string settings_pick_language
+string settings_privacy_policy
 string settings_reminder_days
 string settings_reminder_desc
 string settings_reminder_title

@@ -81,4 +81,20 @@
     <string name="cat_education">教育</string>
     <string name="cat_news">新闻</string>
     <string name="cat_general">常规</string>
+
+    <!-- Onboarding Privacy -->
+    <string name="onboarding_privacy_disclaimer">🔐 所有数据仅在您的设备上处理，绝不会发送到任何服务器。</string>
+    <string name="onboarding_view_privacy_policy">查看隐私政策</string>
+
+    <!-- Onboarding Features -->
+    <string name="onboarding_feature_1_title">自动检测</string>
+    <string name="onboarding_feature_1_desc">通过读取银行通知自动扫描您的订阅。</string>
+    <string name="onboarding_feature_2_title">涨价提醒</string>
+    <string name="onboarding_feature_2_desc">当您的订阅价格上涨时，立即获得通知。</string>
+    <string name="onboarding_feature_3_title">完全私密</string>
+    <string name="onboarding_feature_3_desc">没有任何数据被发送到服务器。一切都保留在您的设备上。</string>
+
+    <string name="onboarding_start_button">授予通知权限并开始</string>
+
+    <string name="settings_privacy_policy">隐私政策</string>
 </resources>
