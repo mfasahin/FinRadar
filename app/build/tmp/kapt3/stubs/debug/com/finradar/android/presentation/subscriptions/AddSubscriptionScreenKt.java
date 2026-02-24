@@ -1,6 +1,7 @@
 package com.finradar.android.presentation.subscriptions;
 
 import android.app.DatePickerDialog;
+import androidx.compose.animation.core.RepeatMode;
 import androidx.compose.foundation.layout.*;
 import androidx.compose.foundation.text.KeyboardOptions;
 import androidx.compose.material.icons.Icons;

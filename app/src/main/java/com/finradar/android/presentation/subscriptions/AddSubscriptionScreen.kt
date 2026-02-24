@@ -1,21 +1,32 @@
 package com.finradar.android.presentation.subscriptions
 
 import android.app.DatePickerDialog
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Label
+import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -62,6 +73,17 @@ fun AddSubscriptionScreen(
     var categoryMenuExpanded by remember { mutableStateOf(false) }
     var nameError by remember { mutableStateOf(false) }
     var amountError by remember { mutableStateOf(false) }
+
+    val categoryMap = remember {
+        mapOf(
+            "netflix" to "streaming", "disney" to "streaming", "prime" to "streaming", "hbo" to "streaming", "youtube" to "streaming",
+            "spotify" to "music", "apple music" to "music", "deezer" to "music", "tidal" to "music",
+            "steam" to "gaming", "xbox" to "gaming", "playstation" to "gaming", "game pass" to "gaming", "nintendo" to "gaming",
+            "adobe" to "software", "office" to "software", "github" to "software", "chatgpt" to "software", "notion" to "software",
+            "icloud" to "cloud", "google one" to "cloud", "dropbox" to "cloud",
+            "gym" to "fitness", "strava" to "fitness"
+        )
+    }
 
     // Pre-fill form in edit mode — normalize legacy Turkish strings to keys
     LaunchedEffect(editTarget) {
@@ -138,17 +160,120 @@ fun AddSubscriptionScreen(
                 .padding(horizontal = 20.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // Header banner
+            // — Stats card / Edit header ——————————————
+            val subs by viewModel.subscriptions.collectAsState()
+            val totalCount = subs.size
+            val totalSpend = subs.sumOf { it.averageAmount }
+
+            val infiniteTransition = rememberInfiniteTransition(label = "glow")
+            val glowAlpha by infiniteTransition.animateFloat(
+                initialValue = 0.15f, targetValue = 0.35f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(2500, easing = FastOutSlowInEasing),
+                    repeatMode = RepeatMode.Reverse
+                ), label = "glowAlpha"
+            )
+
             Box(
-                modifier = Modifier.fillMaxWidth()
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo)))
-                    .padding(28.dp),
-                contentAlignment = Alignment.Center
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(28.dp))
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(if (isEditMode) "✏️" else "➕", fontSize = 36.sp)
-                    Text(screenTitle, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                // Base gradient
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                        .background(
+                            Brush.linearGradient(
+                                colors = if (isEditMode) listOf(Cat2, BrandFrom, BrandMid)
+                                else listOf(BrandFrom, BrandMid, BrandTo),
+                                start = Offset(0f, 0f),
+                                end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                            )
+                        )
+                )
+                // Animated glow orb
+                Box(
+                    modifier = Modifier
+                        .size(180.dp)
+                        .align(Alignment.TopEnd)
+                        .offset(x = 40.dp, y = (-30).dp)
+                        .blur(60.dp)
+                        .background(Color.White.copy(alpha = glowAlpha), CircleShape)
+                )
+
+                if (isEditMode) {
+                    // Edit mode: icon + title
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 28.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(18.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier.size(56.dp).clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.18f)),
+                            contentAlignment = Alignment.Center
+                        ) { Text("✏️", fontSize = 26.sp) }
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(screenTitle, color = Color.White, fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp, letterSpacing = (-0.5).sp)
+                            Text(stringResource(R.string.subs_edit),
+                                color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
+                        }
+                    }
+                } else {
+                    // Add mode: stats overview
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp, vertical = 24.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Active count
+                        Column(horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                "$totalCount",
+                                color = Color.White,
+                                fontWeight = FontWeight.Black,
+                                fontSize = 32.sp,
+                                letterSpacing = (-1).sp
+                            )
+                            Text(
+                                stringResource(R.string.stats_active_count),
+                                color = Color.White.copy(alpha = 0.75f),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        // Divider
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .height(44.dp)
+                                .background(Color.White.copy(alpha = 0.25f))
+                        )
+                        // Monthly spend
+                        Column(horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                "₺${String.format("%.0f", totalSpend)}",
+                                color = Color.White,
+                                fontWeight = FontWeight.Black,
+                                fontSize = 32.sp,
+                                letterSpacing = (-1).sp
+                            )
+                            Text(
+                                stringResource(R.string.stats_monthly_spend),
+                                color = Color.White.copy(alpha = 0.75f),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
                 }
             }
 
@@ -157,8 +282,17 @@ fun AddSubscriptionScreen(
                 Text(nameLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it; nameError = false },
+                    onValueChange = { newValue ->
+                        name = newValue
+                        nameError = false
+                        // Smart category suggestion
+                        val lower = newValue.lowercase()
+                        categoryMap.entries.firstOrNull { lower.contains(it.key) }?.let {
+                            selectedCategory = it.value
+                        }
+                    },
                     placeholder = { Text(nameHint, color = TextLow) },
+                    leadingIcon = { Icon(Icons.Outlined.Label, null, tint = TextMed, modifier = Modifier.size(20.dp)) },
                     isError = nameError,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
@@ -174,6 +308,7 @@ fun AddSubscriptionScreen(
                     value = amountText,
                     onValueChange = { amountText = it.replace(',', '.'); amountError = false },
                     placeholder = { Text("0.00", color = TextLow) },
+                    leadingIcon = { Icon(Icons.Outlined.Payments, null, tint = TextMed, modifier = Modifier.size(20.dp)) },
                     isError = amountError,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -252,6 +387,28 @@ fun AddSubscriptionScreen(
                             )
                         }
                     }
+                }
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            // Impact Preview
+            val newAmount = amountText.toDoubleOrNull() ?: 0.0
+            if (newAmount > 0) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(BrandFrom.copy(alpha = 0.08f))
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = "Yeni Aylık Toplam: ₺${String.format("%.0f", totalSpend + newAmount)} (+₺${String.format("%.0f", newAmount)})",
+                        color = BrandFrom,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
             }
 

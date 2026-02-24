@@ -32,7 +32,17 @@ class PaymentReminderWorker @AssistedInject constructor(
 
             val withDate = subscriptions.filter { it.nextPaymentDate > 0 }
             withDate.forEach { sub ->
-                val daysUntil = TimeUnit.MILLISECONDS.toDays(sub.nextPaymentDate - today)
+                // ── Auto-rollover: if the payment date has passed, advance it by 30 days
+                //    until it is in the future (handles missed cycles gracefully)
+                var nextDate = sub.nextPaymentDate
+                while (nextDate < today - TimeUnit.DAYS.toMillis(1)) {
+                    nextDate += TimeUnit.DAYS.toMillis(30)
+                }
+                if (nextDate != sub.nextPaymentDate) {
+                    subscriptionRepository.updateNextPaymentDate(sub.id, nextDate)
+                }
+
+                val daysUntil = TimeUnit.MILLISECONDS.toDays(nextDate - today)
 
                 if (daysUntil in 0..reminderDays) {
                     // Unique check: don't send if already sent today

@@ -1,20 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.finradar.android.app-mergeDebugResources-74:/values-v16/values-v16.xml",
+            "outputFile": "com.finradar.android.app-mergeDebugResources-80:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\e5bed60f465b4fe3e6c4dc4277917e4f\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "65",
-                        "endOffsets": "116"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\60e181aca01e166f94910e09b561e6ee\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\e66e3249133a1ce521100eb0fe983430\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -22,14 +12,6 @@
                         "endLines": "5",
                         "endColumns": "12",
                         "endOffsets": "223"
-                    },
-                    "to": {
-                        "startLines": "3",
-                        "startColumns": "4",
-                        "startOffsets": "121",
-                        "endLines": "6",
-                        "endColumns": "12",
-                        "endOffsets": "289"
                     }
                 }
             ]

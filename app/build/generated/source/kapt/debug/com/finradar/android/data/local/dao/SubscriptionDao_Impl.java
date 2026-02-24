@@ -41,6 +41,8 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
 
   private final SharedSQLiteStatement __preparedStmtOfSoftDeleteSubscription;
 
+  private final SharedSQLiteStatement __preparedStmtOfUpdateNextPaymentDate;
+
   public SubscriptionDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfSubscriptionEntity = new EntityInsertionAdapter<SubscriptionEntity>(__db) {
@@ -108,6 +110,14 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
         return _query;
       }
     };
+    this.__preparedStmtOfUpdateNextPaymentDate = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "UPDATE subscriptions SET nextPaymentDate = ? WHERE id = ?";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -169,6 +179,34 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
           }
         } finally {
           __preparedStmtOfSoftDeleteSubscription.release(_stmt);
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object updateNextPaymentDate(final long id, final long newDate,
+      final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfUpdateNextPaymentDate.acquire();
+        int _argIndex = 1;
+        _stmt.bindLong(_argIndex, newDate);
+        _argIndex = 2;
+        _stmt.bindLong(_argIndex, id);
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfUpdateNextPaymentDate.release(_stmt);
         }
       }
     }, $completion);

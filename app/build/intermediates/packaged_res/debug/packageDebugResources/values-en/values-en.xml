@@ -60,6 +60,8 @@
     <string name="settings_tagline">Manage your subscriptions smartly</string>
     <string name="settings_title">Settings</string>
     <string name="settings_version">Version</string>
+    <string name="stats_active_count">Active Subscriptions</string>
+    <string name="stats_monthly_spend">Monthly Spend</string>
     <string name="subs_cancel">Cancel</string>
     <string name="subs_delete">Delete</string>
     <string name="subs_delete_confirm">Are you sure you want to delete "%s"?</string>

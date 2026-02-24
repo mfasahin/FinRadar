@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     
     // Material Components (for XML theme)
     implementation(libs.material)
@@ -86,6 +87,11 @@ dependencies {
     implementation(libs.workmanager.ktx)
     implementation(libs.hilt.work)
     kapt(libs.hilt.work.compiler)
+    
+    // Security
+    implementation(libs.sqlcipher)
+    implementation(libs.sqlite.ktx)
+    implementation(libs.security.crypto)
 
 
     testImplementation(libs.junit)

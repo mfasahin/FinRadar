@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.finradar.android.app-mergeDebugResources-74:/values-zh/values-zh.xml",
+            "outputFile": "com.finradar.android.app-mergeDebugResources-80:/values-zh/values-zh.xml",
             "map": [
                 {
                     "source": "C:\\Users\\fatih\\AndroidStudioProjects\\FinRadar\\app\\src\\main\\res\\values-zh\\strings.xml",

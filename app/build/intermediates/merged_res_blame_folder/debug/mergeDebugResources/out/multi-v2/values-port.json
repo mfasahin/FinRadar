@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.finradar.android.app-mergeDebugResources-74:/values-port/values-port.xml",
+            "outputFile": "com.finradar.android.app-mergeDebugResources-80:/values-port/values-port.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\60e181aca01e166f94910e09b561e6ee\\transformed\\appcompat-1.6.1\\res\\values-port\\values-port.xml",
+                    "source": "C:\\Users\\fatih\\.gradle\\caches\\transforms-4\\e66e3249133a1ce521100eb0fe983430\\transformed\\appcompat-1.6.1\\res\\values-port\\values-port.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

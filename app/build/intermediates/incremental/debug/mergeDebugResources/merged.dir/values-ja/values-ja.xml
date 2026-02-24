@@ -130,6 +130,7 @@
     <string msgid="7617233117134790350" name="m3c_dialog">"ダイアログ"</string>
     <string msgid="3177828188723359358" name="m3c_dropdown_menu_collapsed">"閉じています"</string>
     <string msgid="2360841780724299882" name="m3c_dropdown_menu_expanded">"開いています"</string>
+    <string msgid="8687821690726149911" name="m3c_dropdown_menu_toggle">"プルダウン メニューを切り替えます"</string>
     <string msgid="6152806324422087846" name="m3c_search_bar_search">"検索"</string>
     <string msgid="6152755701819882931" name="m3c_snackbar_dismiss">"閉じる"</string>
     <string msgid="7655536806087401899" name="m3c_suggestions_available">"検索候補は次のとおりです"</string>
@@ -212,8 +213,6 @@
     <string name="notif_reminder_title">%s 支払いリマインダー</string>
     <string name="notif_reminder_today">今日が支払日です！金額：%s</string>
     <string name="notif_reminder_tomorrow">明日が支払日です！金額：%s</string>
-    <string msgid="875452955155264703" name="off">"オフ"</string>
-    <string msgid="8655164131929253426" name="on">"オン"</string>
     <string name="password_toggle_content_description">パスワードを表示</string>
     <string msgid="5941395253238309765" name="range_end">"範囲の末尾"</string>
     <string msgid="7097486360902471446" name="range_start">"範囲の先頭"</string>
@@ -235,6 +234,9 @@
     <string name="settings_tagline">サブスクをスマートに管理</string>
     <string name="settings_title">設定</string>
     <string name="settings_version">バージョン</string>
+    <string msgid="4139871816613051306" name="state_empty">"なし"</string>
+    <string msgid="5834637030682409883" name="state_off">"OFF"</string>
+    <string msgid="1490883874751719580" name="state_on">"ON"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string name="subs_cancel">キャンセル</string>
     <string name="subs_delete">削除</string>

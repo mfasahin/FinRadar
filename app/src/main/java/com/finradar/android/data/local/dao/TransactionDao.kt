@@ -17,4 +17,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions WHERE merchantName = :merchantName ORDER BY date DESC")
     suspend fun getTransactionsByMerchant(merchantName: String): List<TransactionEntity>
+
+    @Query("SELECT EXISTS(SELECT 1 FROM transactions WHERE originalMessage = :message AND date = :date)")
+    suspend fun isTransactionDuplicate(message: String, date: Long): Boolean
 }

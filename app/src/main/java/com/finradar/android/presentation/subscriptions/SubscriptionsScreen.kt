@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +41,10 @@ fun SubscriptionsScreen(
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
     val subscriptions by viewModel.subscriptions.collectAsState(initial = emptyList())
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
     var deleteCandidate by remember { mutableStateOf<Subscription?>(null) }
     var searchQuery by remember { mutableStateOf("") }
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     val filtered = remember(subscriptions, searchQuery) {
         if (searchQuery.isBlank()) subscriptions
@@ -49,6 +52,12 @@ fun SubscriptionsScreen(
             it.name.contains(searchQuery, ignoreCase = true) ||
             it.category.orEmpty().contains(searchQuery, ignoreCase = true)
         }
+    }
+
+    val smsPermissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) viewModel.refresh()
     }
 
     deleteCandidate?.let { sub ->
@@ -120,21 +129,37 @@ fun SubscriptionsScreen(
             }
         }
     ) { padding ->
-        when {
-            subscriptions.isEmpty() -> EmptyListState(padding)
-            filtered.isEmpty()      -> NoResultsState(padding, searchQuery)
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp)
-                ) {
-                    items(filtered, key = { it.id }) { sub ->
-                        SubscriptionDetailCard(
-                            subscription = sub,
-                            onEdit   = { onNavigateToEdit(sub.id) },
-                            onDelete = { deleteCandidate = sub }
-                        )
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = {
+                val hasPerm = androidx.core.content.ContextCompat.checkSelfPermission(
+                    context, android.Manifest.permission.READ_SMS
+                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+
+                if (hasPerm) {
+                    viewModel.refresh()
+                } else {
+                    smsPermissionLauncher.launch(android.Manifest.permission.READ_SMS)
+                }
+            },
+            modifier = Modifier.fillMaxSize().padding(padding)
+        ) {
+            when {
+                subscriptions.isEmpty() -> EmptyListState(PaddingValues(0.dp))
+                filtered.isEmpty()      -> NoResultsState(PaddingValues(0.dp), searchQuery)
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp)
+                    ) {
+                        items(filtered, key = { it.id }) { sub ->
+                            SubscriptionDetailCard(
+                                subscription = sub,
+                                onEdit   = { onNavigateToEdit(sub.id) },
+                                onDelete = { deleteCandidate = sub }
+                            )
+                        }
                     }
                 }
             }
@@ -198,7 +223,12 @@ fun SubscriptionDetailCard(
     }
 
     val perMonth    = stringResource(R.string.subs_per_month)
-    val lastDate    = stringResource(R.string.subs_last_date, dateFormat.format(Date(subscription.lastPaymentDate)))
+    // Show next payment date if set, otherwise show last payment date
+    val dateLabel = if (subscription.nextPaymentDate > 0) {
+        stringResource(R.string.subs_next_payment, dateFormat.format(Date(subscription.nextPaymentDate)))
+    } else {
+        stringResource(R.string.subs_last_date, dateFormat.format(Date(subscription.lastPaymentDate)))
+    }
     val editLabel   = stringResource(R.string.subs_edit)
     val deleteLabel = stringResource(R.string.subs_delete)
 
@@ -222,7 +252,7 @@ fun SubscriptionDetailCard(
             Text(subscription.name, color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(localizedCategory(subscription.category), color = TextMed, fontSize = 12.sp)
-            Text(lastDate, color = TextLow, fontSize = 11.sp)
+            Text(dateLabel, color = TextLow, fontSize = 11.sp)
             if (nextPayLabel != null) {
                 Text(nextPayLabel, color = nextPayColor, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
             }

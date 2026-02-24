@@ -134,6 +134,7 @@
     <string msgid="7617233117134790350" name="m3c_dialog">"مربّع حوار"</string>
     <string msgid="3177828188723359358" name="m3c_dropdown_menu_collapsed">"مصغَّرة"</string>
     <string msgid="2360841780724299882" name="m3c_dropdown_menu_expanded">"موسَّعة"</string>
+    <string msgid="8687821690726149911" name="m3c_dropdown_menu_toggle">"توسيع القائمة المنسدلة أو تصغيرها"</string>
     <string msgid="6152806324422087846" name="m3c_search_bar_search">"شريط بحث"</string>
     <string msgid="6152755701819882931" name="m3c_snackbar_dismiss">"إغلاق"</string>
     <string msgid="7655536806087401899" name="m3c_suggestions_available">"إليك الاقتراحات"</string>
@@ -216,8 +217,6 @@
     <string name="notif_reminder_title">تذكير دفع: %s</string>
     <string name="notif_reminder_today">موعد الدفع اليوم! المبلغ: %s</string>
     <string name="notif_reminder_tomorrow">موعد الدفع غداً! المبلغ: %s</string>
-    <string msgid="875452955155264703" name="off">"غير مفعّل"</string>
-    <string msgid="8655164131929253426" name="on">"مفعّل"</string>
     <string name="password_toggle_content_description">عرض كلمة المرور</string>
     <string msgid="5941395253238309765" name="range_end">"نهاية النطاق"</string>
     <string msgid="7097486360902471446" name="range_start">"بداية النطاق"</string>
@@ -239,6 +238,9 @@
     <string name="settings_tagline">أدّر اشتراكاتك بذكاء</string>
     <string name="settings_title">الإعدادات</string>
     <string name="settings_version">الإصدار</string>
+    <string msgid="4139871816613051306" name="state_empty">"حقل فارغ"</string>
+    <string msgid="5834637030682409883" name="state_off">"غير مفعَّل"</string>
+    <string msgid="1490883874751719580" name="state_on">"مفعَّل"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string name="subs_cancel">إلغاء</string>
     <string name="subs_delete">حذف</string>

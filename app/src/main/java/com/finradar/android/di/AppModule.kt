@@ -15,11 +15,14 @@ import com.finradar.android.domain.repository.SubscriptionRepository
 import com.finradar.android.domain.repository.TransactionRepository
 import com.finradar.android.domain.usecase.PriceHikeDetector
 import com.finradar.android.domain.usecase.SubscriptionDetector
+import com.finradar.android.util.SecurityUtils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 import javax.inject.Singleton
 
 @Module
@@ -29,11 +32,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        SQLiteDatabase.loadLibs(context)
+        val passphrase = SecurityUtils.getDatabasePassphrase(context)
+        val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase.toCharArray()))
+
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
         )
+            .openHelperFactory(factory)
             .addMigrations(AppDatabase.MIGRATION_3_4)
             .build()
     }

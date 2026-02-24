@@ -33,6 +33,7 @@ import com.finradar.android.domain.repository.SubscriptionRepository;
 import com.finradar.android.domain.repository.TransactionRepository;
 import com.finradar.android.domain.usecase.PriceHikeDetector;
 import com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase;
+import com.finradar.android.domain.usecase.ScanSmsHistoryUseCase;
 import com.finradar.android.domain.usecase.SubscriptionDetector;
 import com.finradar.android.presentation.alerts.AlertsViewModel;
 import com.finradar.android.presentation.alerts.AlertsViewModel_HiltModules_KeyModule_ProvideFactory;
@@ -449,6 +450,14 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     }
 
+    private ProcessIncomingSmsUseCase processIncomingSmsUseCase() {
+      return new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
+    }
+
+    private ScanSmsHistoryUseCase scanSmsHistoryUseCase() {
+      return new ScanSmsHistoryUseCase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), processIncomingSmsUseCase(), singletonCImpl.provideTransactionRepositoryProvider.get());
+    }
+
     @SuppressWarnings("unchecked")
     private void initialize(final SavedStateHandle savedStateHandleParam,
         final ViewModelLifecycle viewModelLifecycleParam) {
@@ -499,7 +508,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
           return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get());
 
           case 3: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
-          return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get());
+          return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get(), viewModelCImpl.scanSmsHistoryUseCase());
 
           default: throw new AssertionError(id);
         }

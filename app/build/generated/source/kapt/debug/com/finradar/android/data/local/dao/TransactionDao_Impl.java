@@ -11,8 +11,10 @@ import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
 import com.finradar.android.data.local.entity.TransactionEntity;
+import java.lang.Boolean;
 import java.lang.Class;
 import java.lang.Exception;
+import java.lang.Integer;
 import java.lang.Long;
 import java.lang.Object;
 import java.lang.Override;
@@ -217,6 +219,47 @@ public final class TransactionDao_Impl implements TransactionDao {
             }
             _item = new TransactionEntity(_tmpId,_tmpDate,_tmpAmount,_tmpSource,_tmpMerchantName,_tmpCategory,_tmpOriginalMessage);
             _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object isTransactionDuplicate(final String message, final long date,
+      final Continuation<? super Boolean> $completion) {
+    final String _sql = "SELECT EXISTS(SELECT 1 FROM transactions WHERE originalMessage = ? AND date = ?)";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
+    int _argIndex = 1;
+    if (message == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, message);
+    }
+    _argIndex = 2;
+    _statement.bindLong(_argIndex, date);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<Boolean>() {
+      @Override
+      @NonNull
+      public Boolean call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final Boolean _result;
+          if (_cursor.moveToFirst()) {
+            final Integer _tmp;
+            if (_cursor.isNull(0)) {
+              _tmp = null;
+            } else {
+              _tmp = _cursor.getInt(0);
+            }
+            _result = _tmp == null ? null : _tmp != 0;
+          } else {
+            _result = null;
           }
           return _result;
         } finally {

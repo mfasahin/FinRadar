@@ -19,6 +19,9 @@ interface SubscriptionDao {
     @Query("UPDATE subscriptions SET isActive = 0 WHERE id = :id")
     suspend fun softDeleteSubscription(id: Long)
 
+    @Query("UPDATE subscriptions SET nextPaymentDate = :newDate WHERE id = :id")
+    suspend fun updateNextPaymentDate(id: Long, newDate: Long)
+
     @Query("SELECT * FROM subscriptions WHERE isActive = 1 ORDER BY averageAmount DESC")
     fun getActiveSubscriptions(): Flow<List<SubscriptionEntity>>
 

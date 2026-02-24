@@ -9,7 +9,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 data class DashboardUiState(
@@ -22,14 +25,32 @@ data class DashboardUiState(
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    subscriptionRepository: SubscriptionRepository,
+    private val subscriptionRepository: SubscriptionRepository,
     alertRepository: AlertRepository
 ) : ViewModel() {
+
+    init {
+        // On every launch, advance any expired payment dates so the UI is always current
+        viewModelScope.launch {
+            val today = System.currentTimeMillis()
+            val subs = subscriptionRepository.getActiveSubscriptions().first()
+            subs.filter { it.nextPaymentDate > 0 }.forEach { sub ->
+                var nextDate = sub.nextPaymentDate
+                while (nextDate < today - TimeUnit.DAYS.toMillis(1)) {
+                    nextDate += TimeUnit.DAYS.toMillis(30)
+                }
+                if (nextDate != sub.nextPaymentDate) {
+                    subscriptionRepository.updateNextPaymentDate(sub.id, nextDate)
+                }
+            }
+        }
+    }
 
     val uiState: StateFlow<DashboardUiState> = combine(
         subscriptionRepository.getActiveSubscriptions(),
         alertRepository.getUnreadAlertCount()
     ) { subscriptions, alertCount ->
+        val today = System.currentTimeMillis()
         DashboardUiState(
             totalMonthlySpend  = subscriptions.sumOf { it.averageAmount },
             totalActiveCount   = subscriptions.size,

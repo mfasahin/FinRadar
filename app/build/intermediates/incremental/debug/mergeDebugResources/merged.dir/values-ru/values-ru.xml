@@ -132,6 +132,7 @@
     <string msgid="7617233117134790350" name="m3c_dialog">"Диалоговое окно"</string>
     <string msgid="3177828188723359358" name="m3c_dropdown_menu_collapsed">"Свернуто"</string>
     <string msgid="2360841780724299882" name="m3c_dropdown_menu_expanded">"Развернуто"</string>
+    <string msgid="8687821690726149911" name="m3c_dropdown_menu_toggle">"Показать или скрыть раскрывающееся меню"</string>
     <string msgid="6152806324422087846" name="m3c_search_bar_search">"Строка поиска"</string>
     <string msgid="6152755701819882931" name="m3c_snackbar_dismiss">"Закрыть"</string>
     <string msgid="7655536806087401899" name="m3c_suggestions_available">"Подсказки показаны ниже"</string>
@@ -214,8 +215,6 @@
     <string name="notif_reminder_title">Напоминание: %s</string>
     <string name="notif_reminder_today">Оплата сегодня! Сумма: %s</string>
     <string name="notif_reminder_tomorrow">Оплата завтра! Сумма: %s</string>
-    <string msgid="875452955155264703" name="off">"Отключено"</string>
-    <string msgid="8655164131929253426" name="on">"Включено"</string>
     <string name="password_toggle_content_description">Показать пароль</string>
     <string msgid="5941395253238309765" name="range_end">"Конец диапазона"</string>
     <string msgid="7097486360902471446" name="range_start">"Начало диапазона"</string>
@@ -237,6 +236,9 @@
     <string name="settings_tagline">Управляйте подписками умно</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_version">Версия</string>
+    <string msgid="4139871816613051306" name="state_empty">"Пусто"</string>
+    <string msgid="5834637030682409883" name="state_off">"Отключено"</string>
+    <string msgid="1490883874751719580" name="state_on">"Включено"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">">999"</string>
     <string name="subs_cancel">Отмена</string>
     <string name="subs_delete">Удалить</string>

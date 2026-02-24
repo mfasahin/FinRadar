@@ -63,6 +63,8 @@ string settings_reminder_title
 string settings_tagline
 string settings_title
 string settings_version
+string stats_active_count
+string stats_monthly_spend
 string subs_cancel
 string subs_delete
 string subs_delete_confirm

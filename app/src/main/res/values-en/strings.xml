@@ -95,4 +95,8 @@
     <string name="cat_education">Education</string>
     <string name="cat_news">News</string>
     <string name="cat_general">General</string>
+
+    <!-- Stats card -->
+    <string name="stats_active_count">Active Subscriptions</string>
+    <string name="stats_monthly_spend">Monthly Spend</string>
 </resources>

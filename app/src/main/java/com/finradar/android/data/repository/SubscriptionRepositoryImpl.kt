@@ -20,6 +20,10 @@ class SubscriptionRepositoryImpl @Inject constructor(
         dao.updateSubscription(subscription.toEntity())
     }
 
+    override suspend fun updateNextPaymentDate(id: Long, newDate: Long) {
+        dao.updateNextPaymentDate(id, newDate)
+    }
+
     override suspend fun deleteSubscription(id: Long) {
         dao.softDeleteSubscription(id)
     }

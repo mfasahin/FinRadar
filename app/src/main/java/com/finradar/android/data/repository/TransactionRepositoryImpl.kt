@@ -53,4 +53,8 @@ class TransactionRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun isTransactionDuplicate(message: String, date: Long): Boolean {
+        return dao.isTransactionDuplicate(message, date)
+    }
 }

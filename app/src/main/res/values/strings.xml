@@ -97,4 +97,8 @@
     <string name="cat_education">Eğitim</string>
     <string name="cat_news">Haberler</string>
     <string name="cat_general">Genel</string>
+
+    <!-- Stats card -->
+    <string name="stats_active_count">Aktif Abonelik</string>
+    <string name="stats_monthly_spend">Aylık Harcama</string>
 </resources>
