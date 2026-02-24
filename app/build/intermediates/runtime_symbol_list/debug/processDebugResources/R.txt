@@ -3944,6 +3944,7 @@ int string notif_reminder_days 0x7f0e0110
 int string notif_reminder_title 0x7f0e0111
 int string notif_reminder_today 0x7f0e0112
 int string notif_reminder_tomorrow 0x7f0e0113
+int string onboarding_continue_manual 0x7f0e0159
 int string onboarding_feature_1_desc 0x7f0e014f
 int string onboarding_feature_1_title 0x7f0e0150
 int string onboarding_feature_2_desc 0x7f0e0151

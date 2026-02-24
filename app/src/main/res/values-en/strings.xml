@@ -112,6 +112,7 @@
     <string name="onboarding_feature_3_desc">No data is sent to any server. Everything stays on your device.</string>
 
     <string name="onboarding_start_button">Grant Notification Permission &amp; Start</string>
+    <string name="onboarding_continue_manual">Continue Manually</string>
 
     <string name="settings_privacy_policy">Privacy Policy</string>
 </resources>

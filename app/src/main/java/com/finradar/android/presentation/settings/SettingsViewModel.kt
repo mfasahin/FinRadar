@@ -37,11 +37,16 @@ class SettingsViewModel @Inject constructor(
     }
 
     // ── Onboarding ────────────────────────────────────────────────────────
-    val isOnboardingCompleted: StateFlow<Boolean> = prefsRepo.isOnboardingCompleted
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+    // ── Onboarding ────────────────────────────────────────────────────────
+    val isOnboardingCompleted: StateFlow<Boolean?> = prefsRepo.isOnboardingCompleted
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null) // null = loading
 
     fun setOnboardingCompleted() {
         viewModelScope.launch { prefsRepo.setOnboardingCompleted(true) }
+    }
+
+    fun isPermissionGranted(): Boolean {
+        return com.finradar.android.notification.NotificationHelper.isNotificationListenerEnabled(prefsRepo.context)
     }
 
     /**

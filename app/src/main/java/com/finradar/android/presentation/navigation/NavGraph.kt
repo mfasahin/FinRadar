@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -69,7 +70,23 @@ fun FinRadarNavGraph(
     val currentDest = navBackStackEntry?.destination
     
     val onboardingCompleted by viewModel.isOnboardingCompleted.collectAsState()
-    val startDest = if (onboardingCompleted) Screen.Dashboard.route else Screen.Onboarding.route
+    
+    // 1. Loading state skip (prevents flicker)
+    if (onboardingCompleted == null) {
+        Box(modifier = Modifier.fillMaxSize().background(BgDeep), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(color = BrandFrom)
+        }
+        return
+    }
+
+    // 2. Auto-skip if permission already granted (even if flag is false)
+    val startDest = remember(onboardingCompleted) {
+        if (onboardingCompleted == true || viewModel.isPermissionGranted()) {
+            Screen.Dashboard.route
+        } else {
+            Screen.Onboarding.route
+        }
+    }
 
     // Helper to navigate to bottom tabs consistently
     val navigateToTab: (String) -> Unit = { route ->

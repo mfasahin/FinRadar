@@ -131,6 +131,22 @@ fun OnboardingScreen(
                 )
             }
 
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedButton(
+                onClick = onPermissionsGranted, // We use the same callback as it marks completed and navigates
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, BrandFrom),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = BrandFrom)
+            ) {
+                Text(
+                    stringResource(R.string.onboarding_continue_manual),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp
+                )
+            }
+
             Spacer(Modifier.height(36.dp))
         }
     }

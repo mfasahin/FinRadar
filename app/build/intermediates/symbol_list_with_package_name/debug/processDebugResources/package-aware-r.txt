@@ -3945,6 +3945,7 @@ string notif_reminder_days
 string notif_reminder_title
 string notif_reminder_today
 string notif_reminder_tomorrow
+string onboarding_continue_manual
 string onboarding_feature_1_desc
 string onboarding_feature_1_title
 string onboarding_feature_2_desc

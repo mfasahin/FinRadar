@@ -31,6 +31,15 @@ object NotificationHelper {
         }
     }
 
+    fun isNotificationListenerEnabled(context: Context): Boolean {
+        val packageName = context.packageName
+        val flat = android.provider.Settings.Secure.getString(
+            context.contentResolver,
+            "enabled_notification_listeners"
+        )
+        return flat?.contains(packageName) == true
+    }
+
     fun sendPaymentReminder(
         context: Context,
         subscriptionId: Long,

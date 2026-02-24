@@ -115,4 +115,5 @@
 
     <string name="settings_privacy_policy">Gizlilik Politikası</string>
     <string name="onboarding_start_button">Bildirim İzni Ver &amp; Başla</string>
+    <string name="onboarding_continue_manual">Manuel Olarak Devam Et</string>
 </resources>
