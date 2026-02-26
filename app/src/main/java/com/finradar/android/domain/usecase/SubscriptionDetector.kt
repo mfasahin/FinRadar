@@ -10,27 +10,48 @@ class SubscriptionDetector @Inject constructor(
     private val transactionRepository: TransactionRepository
 ) {
     private val whitelist = setOf(
-        "netflix", "spotify", "youtube premium", "aws", "adobe", "apple", "microsoft 365", "exxen", "blutv"
+        "netflix", "spotify", "youtube premium", "aws", "adobe", "apple", "microsoft 365", "exxen", "blutv", "google storage", "icloud"
     )
 
+    private val keywords = mapOf(
+        "abonelik" to 40,
+        "yenilendi" to 30,
+        "tekrarlı" to 30,
+        "aidat" to 25,
+        "periyodik" to 20,
+        "talimatı" to 15,
+        "üye" to 10
+    )
+
+    private val THRESHOLD = 50
+
     suspend fun detectSubscription(transaction: Transaction): Subscription? {
-        // 1. Check Whitelist
+        var score = 0
+
+        // 1. Check Whitelist (Instant Match)
         if (whitelist.any { transaction.merchantName.contains(it, ignoreCase = true) }) {
-            return createSubscriptionFromTransaction(transaction)
+            score += 100
         }
 
-        // 2. Check Recursive Payment (Same merchant, amount ±2%, roughly monthly)
-        // This is a simplified check for MVP: Check if there is a past transaction from same merchant with similar amount
-        // ideally checking for ~30 days, but just finding ONE similar pattern is a strong indicator for MVP
+        // 2. Keyword Analysis
+        val content = transaction.originalMessage.lowercase()
+        keywords.forEach { (keyword, points) ->
+            if (content.contains(keyword)) {
+                score += points
+            }
+        }
+
+        // 3. History Check
         val history = transactionRepository.getTransactionsByMerchant(transaction.merchantName)
-        
-        // Filter out the current transaction if it's already saved (though usually this runs before or after saving)
-        // Assuming this runs after saving, we check for *other* transactions
         val similarTransactions = history.filter { pastTx ->
             pastTx.id != transaction.id && isAmountSimilar(transaction.amount, pastTx.amount)
         }
-
+        
         if (similarTransactions.isNotEmpty()) {
+            score += 30
+        }
+
+        if (score >= THRESHOLD) {
             return createSubscriptionFromTransaction(transaction)
         }
 
