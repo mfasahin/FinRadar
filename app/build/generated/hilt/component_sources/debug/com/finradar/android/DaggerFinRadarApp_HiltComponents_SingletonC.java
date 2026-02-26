@@ -438,6 +438,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private Provider<SettingsViewModel> settingsViewModelProvider;
 
+    private Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider;
+
     private Provider<SubscriptionsViewModel> subscriptionsViewModelProvider;
 
     private ViewModelCImpl(SingletonCImpl singletonCImpl,
@@ -450,12 +452,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     }
 
-    private ProcessIncomingSmsUseCase processIncomingSmsUseCase() {
-      return new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
-    }
-
     private ScanSmsHistoryUseCase scanSmsHistoryUseCase() {
-      return new ScanSmsHistoryUseCase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), processIncomingSmsUseCase(), singletonCImpl.provideTransactionRepositoryProvider.get());
+      return new ScanSmsHistoryUseCase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), processIncomingSmsUseCaseProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get());
     }
 
     @SuppressWarnings("unchecked")
@@ -464,6 +462,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       this.alertsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
       this.dashboardViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
       this.settingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
+      this.processIncomingSmsUseCaseProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
       this.subscriptionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
     }
 
@@ -509,6 +508,9 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
           case 3: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
           return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get(), viewModelCImpl.scanSmsHistoryUseCase());
+
+          case 4: // com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase 
+          return (T) new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -578,14 +580,18 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private final ServiceCImpl serviceCImpl = this;
 
+    private Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider;
+
     private ServiceCImpl(SingletonCImpl singletonCImpl, Service serviceParam) {
       this.singletonCImpl = singletonCImpl;
 
+      initialize(serviceParam);
 
     }
 
-    private ProcessIncomingSmsUseCase processIncomingSmsUseCase() {
-      return new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
+    @SuppressWarnings("unchecked")
+    private void initialize(final Service serviceParam) {
+      this.processIncomingSmsUseCaseProvider = new SwitchingProvider<>(singletonCImpl, serviceCImpl, 0);
     }
 
     @Override
@@ -597,8 +603,33 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
     @CanIgnoreReturnValue
     private NotificationListenerService injectNotificationListenerService2(
         NotificationListenerService instance) {
-      NotificationListenerService_MembersInjector.injectProcessIncomingSmsUseCase(instance, processIncomingSmsUseCase());
+      NotificationListenerService_MembersInjector.injectProcessIncomingSmsUseCase(instance, DoubleCheck.lazy(processIncomingSmsUseCaseProvider));
       return instance;
+    }
+
+    private static final class SwitchingProvider<T> implements Provider<T> {
+      private final SingletonCImpl singletonCImpl;
+
+      private final ServiceCImpl serviceCImpl;
+
+      private final int id;
+
+      SwitchingProvider(SingletonCImpl singletonCImpl, ServiceCImpl serviceCImpl, int id) {
+        this.singletonCImpl = singletonCImpl;
+        this.serviceCImpl = serviceCImpl;
+        this.id = id;
+      }
+
+      @SuppressWarnings("unchecked")
+      @Override
+      public T get() {
+        switch (id) {
+          case 0: // com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase 
+          return (T) new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
+
+          default: throw new AssertionError(id);
+        }
+      }
     }
   }
 

@@ -1,8 +1,10 @@
 package com.finradar.android.service;
 
 import com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase;
+import dagger.Lazy;
 import dagger.MembersInjector;
 import dagger.internal.DaggerGenerated;
+import dagger.internal.DoubleCheck;
 import dagger.internal.InjectedFieldSignature;
 import dagger.internal.QualifierMetadata;
 import javax.annotation.processing.Generated;
@@ -35,12 +37,12 @@ public final class NotificationListenerService_MembersInjector implements Member
 
   @Override
   public void injectMembers(NotificationListenerService instance) {
-    injectProcessIncomingSmsUseCase(instance, processIncomingSmsUseCaseProvider.get());
+    injectProcessIncomingSmsUseCase(instance, DoubleCheck.lazy(processIncomingSmsUseCaseProvider));
   }
 
   @InjectedFieldSignature("com.finradar.android.service.NotificationListenerService.processIncomingSmsUseCase")
   public static void injectProcessIncomingSmsUseCase(NotificationListenerService instance,
-      ProcessIncomingSmsUseCase processIncomingSmsUseCase) {
+      Lazy<ProcessIncomingSmsUseCase> processIncomingSmsUseCase) {
     instance.processIncomingSmsUseCase = processIncomingSmsUseCase;
   }
 }

@@ -15,7 +15,7 @@ import javax.inject.Inject
 class NotificationListenerService : NotificationListenerService() {
 
     @Inject
-    lateinit var processIncomingSmsUseCase: com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase
+    lateinit var processIncomingSmsUseCase: dagger.Lazy<com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase>
 
     // Coroutine scope for database operations
     private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -37,7 +37,7 @@ class NotificationListenerService : NotificationListenerService() {
             Log.d("FinRadar", "Notification: $packageName - $title - $text")
 
             serviceScope.launch {
-                processIncomingSmsUseCase(title, text, notification.postTime)
+                processIncomingSmsUseCase.get()(title, text, notification.postTime)
             }
         }
     }
