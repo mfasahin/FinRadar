@@ -12,5 +12,6 @@ data class TransactionEntity(
     val source: String, // SMS or Notification
     val merchantName: String,
     val category: String? = null,
+    val currency: String = "TRY",
     val originalMessage: String
 )

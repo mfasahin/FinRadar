@@ -19,6 +19,7 @@ class TransactionRepositoryImpl @Inject constructor(
             source = transaction.source,
             merchantName = transaction.merchantName,
             category = transaction.category,
+            currency = transaction.currency,
             originalMessage = transaction.originalMessage
         )
         dao.insertTransaction(entity)
@@ -34,6 +35,7 @@ class TransactionRepositoryImpl @Inject constructor(
                     source = entity.source,
                     merchantName = entity.merchantName,
                     category = entity.category,
+                    currency = entity.currency,
                     originalMessage = entity.originalMessage
                 )
             }
@@ -49,6 +51,7 @@ class TransactionRepositoryImpl @Inject constructor(
                 source = entity.source,
                 merchantName = entity.merchantName,
                 category = entity.category,
+                currency = entity.currency,
                 originalMessage = entity.originalMessage
             )
         }

@@ -6,7 +6,7 @@ import com.finradar.android.data.local.AppDatabase
 import com.finradar.android.data.local.dao.AlertDao
 import com.finradar.android.data.local.dao.SubscriptionDao
 import com.finradar.android.data.local.dao.TransactionDao
-import com.finradar.android.data.parser.SmsParser
+import com.finradar.android.data.parser.NotificationParser
 import com.finradar.android.data.repository.AlertRepositoryImpl
 import com.finradar.android.data.repository.SubscriptionRepositoryImpl
 import com.finradar.android.data.repository.TransactionRepositoryImpl
@@ -44,7 +44,7 @@ object AppModule {
             AppDatabase.DATABASE_NAME
         )
             .openHelperFactory(factory)
-            .addMigrations(AppDatabase.MIGRATION_3_4, AppDatabase.MIGRATION_4_5)
+            .addMigrations(AppDatabase.MIGRATION_3_4, AppDatabase.MIGRATION_4_5, AppDatabase.MIGRATION_5_6)
             .build()
     }
 
@@ -86,7 +86,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSmsParser(): SmsParser = SmsParser()
+    fun provideNotificationParser(): NotificationParser = NotificationParser()
 
     @Provides
     @Singleton

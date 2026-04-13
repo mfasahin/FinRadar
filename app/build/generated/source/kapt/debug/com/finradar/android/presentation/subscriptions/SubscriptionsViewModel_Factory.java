@@ -1,7 +1,6 @@
 package com.finradar.android.presentation.subscriptions;
 
 import com.finradar.android.domain.repository.SubscriptionRepository;
-import com.finradar.android.domain.usecase.ScanSmsHistoryUseCase;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -25,28 +24,22 @@ import javax.inject.Provider;
 public final class SubscriptionsViewModel_Factory implements Factory<SubscriptionsViewModel> {
   private final Provider<SubscriptionRepository> subscriptionRepositoryProvider;
 
-  private final Provider<ScanSmsHistoryUseCase> scanSmsHistoryUseCaseProvider;
-
   public SubscriptionsViewModel_Factory(
-      Provider<SubscriptionRepository> subscriptionRepositoryProvider,
-      Provider<ScanSmsHistoryUseCase> scanSmsHistoryUseCaseProvider) {
+      Provider<SubscriptionRepository> subscriptionRepositoryProvider) {
     this.subscriptionRepositoryProvider = subscriptionRepositoryProvider;
-    this.scanSmsHistoryUseCaseProvider = scanSmsHistoryUseCaseProvider;
   }
 
   @Override
   public SubscriptionsViewModel get() {
-    return newInstance(subscriptionRepositoryProvider.get(), scanSmsHistoryUseCaseProvider.get());
+    return newInstance(subscriptionRepositoryProvider.get());
   }
 
   public static SubscriptionsViewModel_Factory create(
-      Provider<SubscriptionRepository> subscriptionRepositoryProvider,
-      Provider<ScanSmsHistoryUseCase> scanSmsHistoryUseCaseProvider) {
-    return new SubscriptionsViewModel_Factory(subscriptionRepositoryProvider, scanSmsHistoryUseCaseProvider);
+      Provider<SubscriptionRepository> subscriptionRepositoryProvider) {
+    return new SubscriptionsViewModel_Factory(subscriptionRepositoryProvider);
   }
 
-  public static SubscriptionsViewModel newInstance(SubscriptionRepository subscriptionRepository,
-      ScanSmsHistoryUseCase scanSmsHistoryUseCase) {
-    return new SubscriptionsViewModel(subscriptionRepository, scanSmsHistoryUseCase);
+  public static SubscriptionsViewModel newInstance(SubscriptionRepository subscriptionRepository) {
+    return new SubscriptionsViewModel(subscriptionRepository);
   }
 }

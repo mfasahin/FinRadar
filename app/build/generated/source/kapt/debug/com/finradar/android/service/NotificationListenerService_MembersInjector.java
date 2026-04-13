@@ -1,6 +1,6 @@
 package com.finradar.android.service;
 
-import com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase;
+import com.finradar.android.domain.usecase.ProcessNotificationUseCase;
 import dagger.Lazy;
 import dagger.MembersInjector;
 import dagger.internal.DaggerGenerated;
@@ -23,26 +23,26 @@ import javax.inject.Provider;
     "KotlinInternalInJava"
 })
 public final class NotificationListenerService_MembersInjector implements MembersInjector<NotificationListenerService> {
-  private final Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider;
+  private final Provider<ProcessNotificationUseCase> processNotificationUseCaseProvider;
 
   public NotificationListenerService_MembersInjector(
-      Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider) {
-    this.processIncomingSmsUseCaseProvider = processIncomingSmsUseCaseProvider;
+      Provider<ProcessNotificationUseCase> processNotificationUseCaseProvider) {
+    this.processNotificationUseCaseProvider = processNotificationUseCaseProvider;
   }
 
   public static MembersInjector<NotificationListenerService> create(
-      Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider) {
-    return new NotificationListenerService_MembersInjector(processIncomingSmsUseCaseProvider);
+      Provider<ProcessNotificationUseCase> processNotificationUseCaseProvider) {
+    return new NotificationListenerService_MembersInjector(processNotificationUseCaseProvider);
   }
 
   @Override
   public void injectMembers(NotificationListenerService instance) {
-    injectProcessIncomingSmsUseCase(instance, DoubleCheck.lazy(processIncomingSmsUseCaseProvider));
+    injectProcessNotificationUseCase(instance, DoubleCheck.lazy(processNotificationUseCaseProvider));
   }
 
-  @InjectedFieldSignature("com.finradar.android.service.NotificationListenerService.processIncomingSmsUseCase")
-  public static void injectProcessIncomingSmsUseCase(NotificationListenerService instance,
-      Lazy<ProcessIncomingSmsUseCase> processIncomingSmsUseCase) {
-    instance.processIncomingSmsUseCase = processIncomingSmsUseCase;
+  @InjectedFieldSignature("com.finradar.android.service.NotificationListenerService.processNotificationUseCase")
+  public static void injectProcessNotificationUseCase(NotificationListenerService instance,
+      Lazy<ProcessNotificationUseCase> processNotificationUseCase) {
+    instance.processNotificationUseCase = processNotificationUseCase;
   }
 }

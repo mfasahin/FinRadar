@@ -13,7 +13,7 @@ import com.finradar.android.data.local.entity.TransactionEntity
 
 @Database(
     entities = [TransactionEntity::class, SubscriptionEntity::class, AlertEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -36,6 +36,14 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL(
                     "ALTER TABLE subscriptions ADD COLUMN currency TEXT NOT NULL DEFAULT 'TRY'"
+                )
+            }
+        }
+
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE transactions ADD COLUMN currency TEXT NOT NULL DEFAULT 'TRY'"
                 )
             }
         }

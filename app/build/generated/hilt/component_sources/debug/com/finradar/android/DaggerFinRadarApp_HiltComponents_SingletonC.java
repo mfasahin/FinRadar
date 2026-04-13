@@ -16,14 +16,14 @@ import com.finradar.android.data.local.AppDatabase;
 import com.finradar.android.data.local.dao.AlertDao;
 import com.finradar.android.data.local.dao.SubscriptionDao;
 import com.finradar.android.data.local.dao.TransactionDao;
-import com.finradar.android.data.parser.SmsParser;
+import com.finradar.android.data.parser.NotificationParser;
 import com.finradar.android.data.preferences.UserPreferencesRepository;
 import com.finradar.android.di.AppModule_ProvideAlertDaoFactory;
 import com.finradar.android.di.AppModule_ProvideAlertRepositoryFactory;
 import com.finradar.android.di.AppModule_ProvideAppDatabaseFactory;
+import com.finradar.android.di.AppModule_ProvideNotificationParserFactory;
 import com.finradar.android.di.AppModule_ProvidePendingSubscriptionRepositoryFactory;
 import com.finradar.android.di.AppModule_ProvidePriceHikeDetectorFactory;
-import com.finradar.android.di.AppModule_ProvideSmsParserFactory;
 import com.finradar.android.di.AppModule_ProvideSubscriptionDaoFactory;
 import com.finradar.android.di.AppModule_ProvideSubscriptionDetectorFactory;
 import com.finradar.android.di.AppModule_ProvideSubscriptionRepositoryFactory;
@@ -34,8 +34,7 @@ import com.finradar.android.domain.repository.PendingSubscriptionRepository;
 import com.finradar.android.domain.repository.SubscriptionRepository;
 import com.finradar.android.domain.repository.TransactionRepository;
 import com.finradar.android.domain.usecase.PriceHikeDetector;
-import com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase;
-import com.finradar.android.domain.usecase.ScanSmsHistoryUseCase;
+import com.finradar.android.domain.usecase.ProcessNotificationUseCase;
 import com.finradar.android.domain.usecase.SubscriptionDetector;
 import com.finradar.android.presentation.alerts.AlertsViewModel;
 import com.finradar.android.presentation.alerts.AlertsViewModel_HiltModules_KeyModule_ProvideFactory;
@@ -444,8 +443,6 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private Provider<SettingsViewModel> settingsViewModelProvider;
 
-    private Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider;
-
     private Provider<SubscriptionsViewModel> subscriptionsViewModelProvider;
 
     private ViewModelCImpl(SingletonCImpl singletonCImpl,
@@ -458,10 +455,6 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     }
 
-    private ScanSmsHistoryUseCase scanSmsHistoryUseCase() {
-      return new ScanSmsHistoryUseCase(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), processIncomingSmsUseCaseProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get());
-    }
-
     @SuppressWarnings("unchecked")
     private void initialize(final SavedStateHandle savedStateHandleParam,
         final ViewModelLifecycle viewModelLifecycleParam) {
@@ -469,7 +462,6 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       this.dashboardViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
       this.pendingSubscriptionViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
       this.settingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
-      this.processIncomingSmsUseCaseProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
       this.subscriptionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
     }
 
@@ -517,10 +509,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
           return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get());
 
           case 4: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
-          return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get(), viewModelCImpl.scanSmsHistoryUseCase());
-
-          case 5: // com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase 
-          return (T) new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
+          return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -590,7 +579,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private final ServiceCImpl serviceCImpl = this;
 
-    private Provider<ProcessIncomingSmsUseCase> processIncomingSmsUseCaseProvider;
+    private Provider<ProcessNotificationUseCase> processNotificationUseCaseProvider;
 
     private ServiceCImpl(SingletonCImpl singletonCImpl, Service serviceParam) {
       this.singletonCImpl = singletonCImpl;
@@ -601,7 +590,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     @SuppressWarnings("unchecked")
     private void initialize(final Service serviceParam) {
-      this.processIncomingSmsUseCaseProvider = new SwitchingProvider<>(singletonCImpl, serviceCImpl, 0);
+      this.processNotificationUseCaseProvider = new SwitchingProvider<>(singletonCImpl, serviceCImpl, 0);
     }
 
     @Override
@@ -613,7 +602,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
     @CanIgnoreReturnValue
     private NotificationListenerService injectNotificationListenerService2(
         NotificationListenerService instance) {
-      NotificationListenerService_MembersInjector.injectProcessIncomingSmsUseCase(instance, DoubleCheck.lazy(processIncomingSmsUseCaseProvider));
+      NotificationListenerService_MembersInjector.injectProcessNotificationUseCase(instance, DoubleCheck.lazy(processNotificationUseCaseProvider));
       return instance;
     }
 
@@ -634,8 +623,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.finradar.android.domain.usecase.ProcessIncomingSmsUseCase 
-          return (T) new ProcessIncomingSmsUseCase(singletonCImpl.provideSmsParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
+          case 0: // com.finradar.android.domain.usecase.ProcessNotificationUseCase 
+          return (T) new ProcessNotificationUseCase(singletonCImpl.provideNotificationParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -664,7 +653,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private Provider<PendingSubscriptionRepository> providePendingSubscriptionRepositoryProvider;
 
-    private Provider<SmsParser> provideSmsParserProvider;
+    private Provider<NotificationParser> provideNotificationParserProvider;
 
     private Provider<TransactionDao> provideTransactionDaoProvider;
 
@@ -699,7 +688,7 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       this.provideAlertRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<AlertRepository>(singletonCImpl, 5));
       this.paymentReminderWorker_AssistedFactoryProvider = SingleCheck.provider(new SwitchingProvider<PaymentReminderWorker_AssistedFactory>(singletonCImpl, 0));
       this.providePendingSubscriptionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<PendingSubscriptionRepository>(singletonCImpl, 7));
-      this.provideSmsParserProvider = DoubleCheck.provider(new SwitchingProvider<SmsParser>(singletonCImpl, 8));
+      this.provideNotificationParserProvider = DoubleCheck.provider(new SwitchingProvider<NotificationParser>(singletonCImpl, 8));
       this.provideTransactionDaoProvider = DoubleCheck.provider(new SwitchingProvider<TransactionDao>(singletonCImpl, 10));
       this.provideTransactionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<TransactionRepository>(singletonCImpl, 9));
       this.provideSubscriptionDetectorProvider = DoubleCheck.provider(new SwitchingProvider<SubscriptionDetector>(singletonCImpl, 11));
@@ -780,8 +769,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
           case 7: // com.finradar.android.domain.repository.PendingSubscriptionRepository 
           return (T) AppModule_ProvidePendingSubscriptionRepositoryFactory.providePendingSubscriptionRepository(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
-          case 8: // com.finradar.android.data.parser.SmsParser 
-          return (T) AppModule_ProvideSmsParserFactory.provideSmsParser();
+          case 8: // com.finradar.android.data.parser.NotificationParser 
+          return (T) AppModule_ProvideNotificationParserFactory.provideNotificationParser();
 
           case 9: // com.finradar.android.domain.repository.TransactionRepository 
           return (T) AppModule_ProvideTransactionRepositoryFactory.provideTransactionRepository(singletonCImpl.provideTransactionDaoProvider.get());

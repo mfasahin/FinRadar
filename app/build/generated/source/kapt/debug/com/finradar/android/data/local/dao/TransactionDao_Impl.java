@@ -41,7 +41,7 @@ public final class TransactionDao_Impl implements TransactionDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `transactions` (`id`,`date`,`amount`,`source`,`merchantName`,`category`,`originalMessage`) VALUES (nullif(?, 0),?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `transactions` (`id`,`date`,`amount`,`source`,`merchantName`,`category`,`currency`,`originalMessage`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -65,10 +65,15 @@ public final class TransactionDao_Impl implements TransactionDao {
         } else {
           statement.bindString(6, entity.getCategory());
         }
-        if (entity.getOriginalMessage() == null) {
+        if (entity.getCurrency() == null) {
           statement.bindNull(7);
         } else {
-          statement.bindString(7, entity.getOriginalMessage());
+          statement.bindString(7, entity.getCurrency());
+        }
+        if (entity.getOriginalMessage() == null) {
+          statement.bindNull(8);
+        } else {
+          statement.bindString(8, entity.getOriginalMessage());
         }
       }
     };
@@ -109,6 +114,7 @@ public final class TransactionDao_Impl implements TransactionDao {
           final int _cursorIndexOfSource = CursorUtil.getColumnIndexOrThrow(_cursor, "source");
           final int _cursorIndexOfMerchantName = CursorUtil.getColumnIndexOrThrow(_cursor, "merchantName");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfCurrency = CursorUtil.getColumnIndexOrThrow(_cursor, "currency");
           final int _cursorIndexOfOriginalMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "originalMessage");
           final List<TransactionEntity> _result = new ArrayList<TransactionEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
@@ -137,13 +143,19 @@ public final class TransactionDao_Impl implements TransactionDao {
             } else {
               _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
             }
+            final String _tmpCurrency;
+            if (_cursor.isNull(_cursorIndexOfCurrency)) {
+              _tmpCurrency = null;
+            } else {
+              _tmpCurrency = _cursor.getString(_cursorIndexOfCurrency);
+            }
             final String _tmpOriginalMessage;
             if (_cursor.isNull(_cursorIndexOfOriginalMessage)) {
               _tmpOriginalMessage = null;
             } else {
               _tmpOriginalMessage = _cursor.getString(_cursorIndexOfOriginalMessage);
             }
-            _item = new TransactionEntity(_tmpId,_tmpDate,_tmpAmount,_tmpSource,_tmpMerchantName,_tmpCategory,_tmpOriginalMessage);
+            _item = new TransactionEntity(_tmpId,_tmpDate,_tmpAmount,_tmpSource,_tmpMerchantName,_tmpCategory,_tmpCurrency,_tmpOriginalMessage);
             _result.add(_item);
           }
           return _result;
@@ -183,6 +195,7 @@ public final class TransactionDao_Impl implements TransactionDao {
           final int _cursorIndexOfSource = CursorUtil.getColumnIndexOrThrow(_cursor, "source");
           final int _cursorIndexOfMerchantName = CursorUtil.getColumnIndexOrThrow(_cursor, "merchantName");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfCurrency = CursorUtil.getColumnIndexOrThrow(_cursor, "currency");
           final int _cursorIndexOfOriginalMessage = CursorUtil.getColumnIndexOrThrow(_cursor, "originalMessage");
           final List<TransactionEntity> _result = new ArrayList<TransactionEntity>(_cursor.getCount());
           while (_cursor.moveToNext()) {
@@ -211,13 +224,19 @@ public final class TransactionDao_Impl implements TransactionDao {
             } else {
               _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
             }
+            final String _tmpCurrency;
+            if (_cursor.isNull(_cursorIndexOfCurrency)) {
+              _tmpCurrency = null;
+            } else {
+              _tmpCurrency = _cursor.getString(_cursorIndexOfCurrency);
+            }
             final String _tmpOriginalMessage;
             if (_cursor.isNull(_cursorIndexOfOriginalMessage)) {
               _tmpOriginalMessage = null;
             } else {
               _tmpOriginalMessage = _cursor.getString(_cursorIndexOfOriginalMessage);
             }
-            _item = new TransactionEntity(_tmpId,_tmpDate,_tmpAmount,_tmpSource,_tmpMerchantName,_tmpCategory,_tmpOriginalMessage);
+            _item = new TransactionEntity(_tmpId,_tmpDate,_tmpAmount,_tmpSource,_tmpMerchantName,_tmpCategory,_tmpCurrency,_tmpOriginalMessage);
             _result.add(_item);
           }
           return _result;

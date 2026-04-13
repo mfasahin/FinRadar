@@ -15,32 +15,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubscriptionsViewModel @Inject constructor(
-    private val subscriptionRepository: SubscriptionRepository,
-    private val scanSmsHistoryUseCase: com.finradar.android.domain.usecase.ScanSmsHistoryUseCase
+    private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
 
     val subscriptions: StateFlow<List<Subscription>> = subscriptionRepository
         .getActiveSubscriptions()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
-
     private val _editTarget = MutableStateFlow<Subscription?>(null)
     val editTarget: StateFlow<Subscription?> = _editTarget.asStateFlow()
-
-    fun refresh() {
-        viewModelScope.launch {
-            _isRefreshing.value = true
-            try {
-                scanSmsHistoryUseCase()
-            } catch (e: Exception) {
-                // Log error
-            } finally {
-                _isRefreshing.value = false
-            }
-        }
-    }
 
     fun addSubscription(name: String, amount: Double, currency: String, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {

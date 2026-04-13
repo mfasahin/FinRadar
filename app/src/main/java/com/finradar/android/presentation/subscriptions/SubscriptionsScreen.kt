@@ -1,6 +1,7 @@
 package com.finradar.android.presentation.subscriptions
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,7 +12,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.*
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,10 +41,10 @@ fun SubscriptionsScreen(
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
     val subscriptions by viewModel.subscriptions.collectAsState(initial = emptyList())
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    
+    val context = androidx.compose.ui.platform.LocalContext.current
     var deleteCandidate by remember { mutableStateOf<Subscription?>(null) }
     var searchQuery by remember { mutableStateOf("") }
-    val context = androidx.compose.ui.platform.LocalContext.current
 
     val filtered = remember(subscriptions, searchQuery) {
         if (searchQuery.isBlank()) subscriptions
@@ -54,10 +54,8 @@ fun SubscriptionsScreen(
         }
     }
 
-    val smsPermissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
-        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) viewModel.refresh()
+    val hasNotificationPermission = remember { 
+        androidx.core.app.NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName) 
     }
 
     deleteCandidate?.let { sub ->
@@ -129,21 +127,29 @@ fun SubscriptionsScreen(
             }
         }
     ) { padding ->
-        PullToRefreshBox(
-            isRefreshing = isRefreshing,
-            onRefresh = {
-                val hasPerm = androidx.core.content.ContextCompat.checkSelfPermission(
-                    context, android.Manifest.permission.READ_SMS
-                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-
-                if (hasPerm) {
-                    viewModel.refresh()
-                } else {
-                    smsPermissionLauncher.launch(android.Manifest.permission.READ_SMS)
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+            if (!hasNotificationPermission) {
+                // Banner for notification permission
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(BrandFrom.copy(alpha = 0.15f))
+                    .clickable {
+                        context.startActivity(android.content.Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+                    }
+                    .padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("🔔", fontSize = 24.sp)
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            "Otomatik abonelik yakalamak için Bildirim İzni verin.",
+                            color = BrandFrom, fontWeight = FontWeight.SemiBold, fontSize = 13.sp
+                        )
+                    }
                 }
-            },
-            modifier = Modifier.fillMaxSize().padding(padding)
-        ) {
+            }
+
             when {
                 subscriptions.isEmpty() -> EmptyListState(PaddingValues(0.dp))
                 filtered.isEmpty()      -> NoResultsState(PaddingValues(0.dp), searchQuery)
