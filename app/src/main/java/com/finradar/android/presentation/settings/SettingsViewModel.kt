@@ -3,6 +3,8 @@ package com.finradar.android.presentation.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finradar.android.data.preferences.UserPreferencesRepository
+import com.finradar.android.domain.model.Subscription
+import com.finradar.android.domain.repository.PendingSubscriptionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val prefsRepo: UserPreferencesRepository
+    private val prefsRepo: UserPreferencesRepository,
+    private val pendingSubscriptionRepository: PendingSubscriptionRepository
 ) : ViewModel() {
 
     val isDarkTheme: StateFlow<Boolean> = prefsRepo.isDarkTheme
@@ -39,7 +42,7 @@ class SettingsViewModel @Inject constructor(
     // ── Onboarding ────────────────────────────────────────────────────────
     // ── Onboarding ────────────────────────────────────────────────────────
     val isOnboardingCompleted: StateFlow<Boolean?> = prefsRepo.isOnboardingCompleted
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null) // null = loading
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null) // null = loading; Eagerly = read DataStore immediately
 
     fun setOnboardingCompleted() {
         viewModelScope.launch { prefsRepo.setOnboardingCompleted(true) }
@@ -55,5 +58,21 @@ class SettingsViewModel @Inject constructor(
      */
     suspend fun setLanguageAndWait(code: String) {
         prefsRepo.setLanguageCode(code)
+    }
+
+    /** Emülatör/test: Bekleyen abonelik diyaloğunu göstermek için sahte bir abonelik ekler. */
+    fun triggerTestPendingSubscriptionDialog() {
+        viewModelScope.launch {
+            pendingSubscriptionRepository.setPendingSubscription(
+                Subscription(
+                    name = "Netflix Test",
+                    averageAmount = 49.99,
+                    lastPaymentDate = System.currentTimeMillis(),
+                    nextPaymentDate = 0L,
+                    category = "Yayın Hizmeti",
+                    isActive = true
+                )
+            )
+        }
     }
 }

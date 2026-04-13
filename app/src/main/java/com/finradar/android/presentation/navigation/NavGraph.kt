@@ -45,6 +45,7 @@ import com.finradar.android.presentation.subscriptions.AddSubscriptionScreen
 import com.finradar.android.presentation.subscriptions.SubscriptionsScreen
 import com.finradar.android.ui.theme.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.delay
 
 data class BottomNavItem(
     val screen: Screen,
@@ -71,17 +72,32 @@ fun FinRadarNavGraph(
     
     val onboardingCompleted by viewModel.isOnboardingCompleted.collectAsState()
     
-    // 1. Loading state skip (prevents flicker)
-    if (onboardingCompleted == null) {
-        Box(modifier = Modifier.fillMaxSize().background(BgDeep), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = BrandFrom)
+    // Timeout: if DataStore never emits, show content after 2s to avoid black screen
+    var loadingTimeout by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        delay(2000)
+        loadingTimeout = true
+    }
+    val showContent = (onboardingCompleted != null) || loadingTimeout
+    
+    // 1. Loading state
+    if (!showContent) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
         return
     }
+    
+    val resolvedOnboarding = onboardingCompleted ?: false
 
     // 2. Auto-skip if permission already granted (even if flag is false)
-    val startDest = remember(onboardingCompleted) {
-        if (onboardingCompleted == true || viewModel.isPermissionGranted()) {
+    val startDest = remember(resolvedOnboarding) {
+        if (resolvedOnboarding == true || viewModel.isPermissionGranted()) {
             Screen.Dashboard.route
         } else {
             Screen.Onboarding.route

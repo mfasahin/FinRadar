@@ -3960,6 +3960,10 @@ string path_password_eye
 string path_password_eye_mask_strike_through
 string path_password_eye_mask_visible
 string path_password_strike_through
+string pending_sub_dismiss
+string pending_sub_message
+string pending_sub_save
+string pending_sub_title
 string range_end
 string range_start
 string search_menu_title
@@ -3982,6 +3986,7 @@ string settings_reminder_days
 string settings_reminder_desc
 string settings_reminder_title
 string settings_tagline
+string settings_test_pending_dialog
 string settings_title
 string settings_version
 string side_sheet_accessibility_pane_title

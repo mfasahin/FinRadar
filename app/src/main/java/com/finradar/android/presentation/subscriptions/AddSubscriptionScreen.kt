@@ -67,9 +67,13 @@ fun AddSubscriptionScreen(
 
     var name by remember { mutableStateOf("") }
     var amountText by remember { mutableStateOf("") }
-    // selectedCategory holds a stable key ("general", "streaming", ...)
     var selectedCategory by remember { mutableStateOf("general") }
     var nextPaymentDate by remember { mutableStateOf(0L) }   // 0 = not set
+
+    val currencyLabels = listOf("TRY" to "₺ (TRY)", "USD" to "$ (USD)", "EUR" to "€ (EUR)", "GBP" to "£ (GBP)")
+    var selectedCurrency by remember { mutableStateOf("TRY") }
+    var currencyMenuExpanded by remember { mutableStateOf(false) }
+
     var categoryMenuExpanded by remember { mutableStateOf(false) }
     var nameError by remember { mutableStateOf(false) }
     var amountError by remember { mutableStateOf(false) }
@@ -90,6 +94,7 @@ fun AddSubscriptionScreen(
         editTarget?.let { sub ->
             name            = sub.name
             amountText      = sub.averageAmount.toString()
+            selectedCurrency = sub.currency
             selectedCategory = CategoryMapper.toKey(sub.category)
             nextPaymentDate = sub.nextPaymentDate
         }
@@ -163,7 +168,9 @@ fun AddSubscriptionScreen(
             // — Stats card / Edit header ——————————————
             val subs by viewModel.subscriptions.collectAsState()
             val totalCount = subs.size
-            val totalSpend = subs.sumOf { it.averageAmount }
+            // Use selectedCurrency for total spend preview, fallback to TRY
+            val totalSpend = subs.filter { it.currency == selectedCurrency }.sumOf { it.averageAmount }
+            val currencySymbol = currencyLabels.firstOrNull { it.first == selectedCurrency }?.second?.take(1) ?: "₺"
 
             val infiniteTransition = rememberInfiniteTransition(label = "glow")
             val glowAlpha by infiniteTransition.animateFloat(
@@ -260,7 +267,7 @@ fun AddSubscriptionScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text(
-                                "₺${String.format("%.0f", totalSpend)}",
+                                "$currencySymbol${String.format("%.0f", totalSpend)}",
                                 color = Color.White,
                                 fontWeight = FontWeight.Black,
                                 fontSize = 32.sp,
@@ -301,21 +308,58 @@ fun AddSubscriptionScreen(
                 )
             }
 
-            // Amount
+            // Amount with Currency Dropdown
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(amountLbl, color = TextMed, fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp)
-                OutlinedTextField(
-                    value = amountText,
-                    onValueChange = { amountText = it.replace(',', '.'); amountError = false },
-                    placeholder = { Text("0.00", color = TextLow) },
-                    leadingIcon = { Icon(Icons.Outlined.Payments, null, tint = TextMed, modifier = Modifier.size(20.dp)) },
-                    isError = amountError,
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = fieldColors
-                )
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Currency Dropdown
+                    ExposedDropdownMenuBox(
+                        expanded = currencyMenuExpanded,
+                        onExpandedChange = { currencyMenuExpanded = !currencyMenuExpanded },
+                        modifier = Modifier.weight(4f)
+                    ) {
+                        Box {
+                            OutlinedTextField(
+                                value = currencyLabels.firstOrNull { it.first == selectedCurrency }?.second ?: selectedCurrency,
+                                onValueChange = {},
+                                readOnly = true,
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = currencyMenuExpanded) },
+                                modifier = Modifier.fillMaxWidth().menuAnchor(),
+                                shape = RoundedCornerShape(14.dp),
+                                colors = fieldColors
+                            )
+                            Box(modifier = Modifier.matchParentSize().clickable { currencyMenuExpanded = true })
+                        }
+                        ExposedDropdownMenu(
+                            expanded = currencyMenuExpanded,
+                            onDismissRequest = { currencyMenuExpanded = false },
+                            modifier = Modifier.background(BgCard)
+                        ) {
+                            currencyLabels.forEach { (key, label) ->
+                                DropdownMenuItem(
+                                    text = { Text(label, color = TextHigh) },
+                                    onClick = { selectedCurrency = key; currencyMenuExpanded = false }
+                                )
+                            }
+                        }
+                    }
+
+                    // Amount Text Field
+                    OutlinedTextField(
+                        value = amountText,
+                        onValueChange = { amountText = it.replace(',', '.'); amountError = false },
+                        placeholder = { Text("0.00", color = TextLow) },
+                        isError = amountError,
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        modifier = Modifier.weight(6f),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = fieldColors
+                    )
+                }
             }
 
             // Next payment date picker
@@ -366,15 +410,18 @@ fun AddSubscriptionScreen(
                     expanded = categoryMenuExpanded,
                     onExpandedChange = { categoryMenuExpanded = !categoryMenuExpanded }
                 ) {
-                    OutlinedTextField(
-                        value = displayLabel,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryMenuExpanded) },
-                        modifier = Modifier.fillMaxWidth().menuAnchor(),
-                        shape = RoundedCornerShape(14.dp),
-                        colors = fieldColors
-                    )
+                    Box {
+                        OutlinedTextField(
+                            value = displayLabel,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryMenuExpanded) },
+                            modifier = Modifier.fillMaxWidth().menuAnchor(),
+                            shape = RoundedCornerShape(14.dp),
+                            colors = fieldColors
+                        )
+                        Box(modifier = Modifier.matchParentSize().clickable { categoryMenuExpanded = true })
+                    }
                     ExposedDropdownMenu(
                         expanded = categoryMenuExpanded,
                         onDismissRequest = { categoryMenuExpanded = false },
@@ -403,7 +450,7 @@ fun AddSubscriptionScreen(
                         .padding(12.dp)
                 ) {
                     Text(
-                        text = "Yeni Aylık Toplam: ₺${String.format("%.0f", totalSpend + newAmount)} (+₺${String.format("%.0f", newAmount)})",
+                        text = "Yeni Aylık Toplam: $currencySymbol${String.format("%.0f", totalSpend + newAmount)} (+$currencySymbol${String.format("%.0f", newAmount)})",
                         color = BrandFrom,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
@@ -421,8 +468,8 @@ fun AddSubscriptionScreen(
                     nameError   = name.trim().isEmpty()
                     amountError = amt == null || amt <= 0.0
                     if (!nameError && !amountError) {
-                        if (isEditMode) viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCategory, nextPaymentDate)
-                        else            viewModel.addSubscription(name.trim(), amt!!, selectedCategory, nextPaymentDate)
+                        if (isEditMode) viewModel.updateSubscription(subscriptionId!!, name.trim(), amt!!, selectedCurrency, selectedCategory, nextPaymentDate)
+                        else            viewModel.addSubscription(name.trim(), amt!!, selectedCurrency, selectedCategory, nextPaymentDate)
                         onNavigateBack()
                     }
                 },

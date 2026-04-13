@@ -2,6 +2,7 @@ package com.finradar.android.domain.usecase;
 
 import com.finradar.android.data.parser.SmsParser;
 import com.finradar.android.domain.repository.AlertRepository;
+import com.finradar.android.domain.repository.PendingSubscriptionRepository;
 import com.finradar.android.domain.repository.SubscriptionRepository;
 import com.finradar.android.domain.repository.TransactionRepository;
 import dagger.internal.DaggerGenerated;
@@ -31,6 +32,8 @@ public final class ProcessIncomingSmsUseCase_Factory implements Factory<ProcessI
 
   private final Provider<SubscriptionRepository> subscriptionRepositoryProvider;
 
+  private final Provider<PendingSubscriptionRepository> pendingSubscriptionRepositoryProvider;
+
   private final Provider<AlertRepository> alertRepositoryProvider;
 
   private final Provider<SubscriptionDetector> subscriptionDetectorProvider;
@@ -40,12 +43,14 @@ public final class ProcessIncomingSmsUseCase_Factory implements Factory<ProcessI
   public ProcessIncomingSmsUseCase_Factory(Provider<SmsParser> smsParserProvider,
       Provider<TransactionRepository> transactionRepositoryProvider,
       Provider<SubscriptionRepository> subscriptionRepositoryProvider,
+      Provider<PendingSubscriptionRepository> pendingSubscriptionRepositoryProvider,
       Provider<AlertRepository> alertRepositoryProvider,
       Provider<SubscriptionDetector> subscriptionDetectorProvider,
       Provider<PriceHikeDetector> priceHikeDetectorProvider) {
     this.smsParserProvider = smsParserProvider;
     this.transactionRepositoryProvider = transactionRepositoryProvider;
     this.subscriptionRepositoryProvider = subscriptionRepositoryProvider;
+    this.pendingSubscriptionRepositoryProvider = pendingSubscriptionRepositoryProvider;
     this.alertRepositoryProvider = alertRepositoryProvider;
     this.subscriptionDetectorProvider = subscriptionDetectorProvider;
     this.priceHikeDetectorProvider = priceHikeDetectorProvider;
@@ -53,22 +58,23 @@ public final class ProcessIncomingSmsUseCase_Factory implements Factory<ProcessI
 
   @Override
   public ProcessIncomingSmsUseCase get() {
-    return newInstance(smsParserProvider.get(), transactionRepositoryProvider.get(), subscriptionRepositoryProvider.get(), alertRepositoryProvider.get(), subscriptionDetectorProvider.get(), priceHikeDetectorProvider.get());
+    return newInstance(smsParserProvider.get(), transactionRepositoryProvider.get(), subscriptionRepositoryProvider.get(), pendingSubscriptionRepositoryProvider.get(), alertRepositoryProvider.get(), subscriptionDetectorProvider.get(), priceHikeDetectorProvider.get());
   }
 
   public static ProcessIncomingSmsUseCase_Factory create(Provider<SmsParser> smsParserProvider,
       Provider<TransactionRepository> transactionRepositoryProvider,
       Provider<SubscriptionRepository> subscriptionRepositoryProvider,
+      Provider<PendingSubscriptionRepository> pendingSubscriptionRepositoryProvider,
       Provider<AlertRepository> alertRepositoryProvider,
       Provider<SubscriptionDetector> subscriptionDetectorProvider,
       Provider<PriceHikeDetector> priceHikeDetectorProvider) {
-    return new ProcessIncomingSmsUseCase_Factory(smsParserProvider, transactionRepositoryProvider, subscriptionRepositoryProvider, alertRepositoryProvider, subscriptionDetectorProvider, priceHikeDetectorProvider);
+    return new ProcessIncomingSmsUseCase_Factory(smsParserProvider, transactionRepositoryProvider, subscriptionRepositoryProvider, pendingSubscriptionRepositoryProvider, alertRepositoryProvider, subscriptionDetectorProvider, priceHikeDetectorProvider);
   }
 
   public static ProcessIncomingSmsUseCase newInstance(SmsParser smsParser,
       TransactionRepository transactionRepository, SubscriptionRepository subscriptionRepository,
-      AlertRepository alertRepository, SubscriptionDetector subscriptionDetector,
-      PriceHikeDetector priceHikeDetector) {
-    return new ProcessIncomingSmsUseCase(smsParser, transactionRepository, subscriptionRepository, alertRepository, subscriptionDetector, priceHikeDetector);
+      PendingSubscriptionRepository pendingSubscriptionRepository, AlertRepository alertRepository,
+      SubscriptionDetector subscriptionDetector, PriceHikeDetector priceHikeDetector) {
+    return new ProcessIncomingSmsUseCase(smsParser, transactionRepository, subscriptionRepository, pendingSubscriptionRepository, alertRepository, subscriptionDetector, priceHikeDetector);
   }
 }

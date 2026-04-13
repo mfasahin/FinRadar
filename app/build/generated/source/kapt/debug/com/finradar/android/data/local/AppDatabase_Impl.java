@@ -41,14 +41,14 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(4) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(5) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `transactions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` INTEGER NOT NULL, `amount` REAL NOT NULL, `source` TEXT NOT NULL, `merchantName` TEXT NOT NULL, `category` TEXT, `originalMessage` TEXT NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `subscriptions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `averageAmount` REAL NOT NULL, `lastPaymentDate` INTEGER NOT NULL, `nextPaymentDate` INTEGER NOT NULL, `category` TEXT, `isActive` INTEGER NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `subscriptions` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `averageAmount` REAL NOT NULL, `lastPaymentDate` INTEGER NOT NULL, `nextPaymentDate` INTEGER NOT NULL, `category` TEXT, `currency` TEXT NOT NULL, `isActive` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `alerts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `subscriptionId` INTEGER NOT NULL, `subscriptionName` TEXT NOT NULL, `oldAmount` REAL NOT NULL, `newAmount` REAL NOT NULL, `percentageChange` REAL NOT NULL, `isRead` INTEGER NOT NULL, `date` INTEGER NOT NULL, `type` TEXT NOT NULL DEFAULT 'PRICE_CHANGE')");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc6d92496c4a85399aef5c6703c1bb5a')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '433029d2af9114f7e8fcf235191647b4')");
       }
 
       @Override
@@ -116,13 +116,14 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoTransactions + "\n"
                   + " Found:\n" + _existingTransactions);
         }
-        final HashMap<String, TableInfo.Column> _columnsSubscriptions = new HashMap<String, TableInfo.Column>(7);
+        final HashMap<String, TableInfo.Column> _columnsSubscriptions = new HashMap<String, TableInfo.Column>(8);
         _columnsSubscriptions.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSubscriptions.put("name", new TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSubscriptions.put("averageAmount", new TableInfo.Column("averageAmount", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSubscriptions.put("lastPaymentDate", new TableInfo.Column("lastPaymentDate", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSubscriptions.put("nextPaymentDate", new TableInfo.Column("nextPaymentDate", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSubscriptions.put("category", new TableInfo.Column("category", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSubscriptions.put("currency", new TableInfo.Column("currency", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSubscriptions.put("isActive", new TableInfo.Column("isActive", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysSubscriptions = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesSubscriptions = new HashSet<TableInfo.Index>(0);
@@ -154,7 +155,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "cc6d92496c4a85399aef5c6703c1bb5a", "40a69f58fea4b1f18515ab618fef76a2");
+    }, "433029d2af9114f7e8fcf235191647b4", "c04e1cb82f559038582327e4348b8385");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

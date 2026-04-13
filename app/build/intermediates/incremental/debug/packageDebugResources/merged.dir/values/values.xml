@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:ns1="http://schemas.android.com/tools">
     <string name="add_amount_label">Aylık Tutar (₺)</string>
     <string name="add_category_label">Kategori</string>
     <string name="add_name_hint">Netflix, Spotify, vb.</string>
@@ -57,6 +57,10 @@
     <string name="onboarding_privacy_disclaimer">🔐  Tüm veriler yalnızca cihazınızda işlenir, hiçbir yere gönderilmez.</string>
     <string name="onboarding_start_button">Bildirim İzni Ver &amp; Başla</string>
     <string name="onboarding_view_privacy_policy">Gizlilik Politikasını Görüntüle</string>
+    <string name="pending_sub_dismiss">İptal</string>
+    <string name="pending_sub_message">"%s" — %s TL/ay\nBu aboneliği kaydetmek ister misiniz?</string>
+    <string name="pending_sub_save">Kaydet</string>
+    <string name="pending_sub_title">Abonelik tespit edildi</string>
     <string name="settings_app">UYGULAMA</string>
     <string name="settings_app_language">Uygulama Dili</string>
     <string name="settings_app_name_label">Uygulama Adı</string>
@@ -72,6 +76,7 @@
     <string name="settings_reminder_desc">%d gün önceden bildirim al</string>
     <string name="settings_reminder_title">Ödeme Hatırlatıcısı</string>
     <string name="settings_tagline">Aboneliklerinizi akıllıca yönetin</string>
+    <string name="settings_test_pending_dialog">Abonelik diyaloğunu test et</string>
     <string name="settings_title">Ayarlar</string>
     <string name="settings_version">Sürüm</string>
     <string name="stats_active_count">Aktif Abonelik</string>
@@ -94,5 +99,12 @@
     <string name="subs_per_month">/ ay</string>
     <string name="subs_search_hint">Abonelik ara…</string>
     <string name="subs_title">Abonelikler</string>
-    <style name="Theme.FinRadar" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+    <style name="Theme.FinRadar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="android:windowBackground">@android:color/white</item>
+        
+        <item name="android:windowSplashScreenBackground" ns1:targetApi="31">@android:color/white</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>

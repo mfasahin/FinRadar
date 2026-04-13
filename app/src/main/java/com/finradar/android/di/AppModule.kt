@@ -10,7 +10,9 @@ import com.finradar.android.data.parser.SmsParser
 import com.finradar.android.data.repository.AlertRepositoryImpl
 import com.finradar.android.data.repository.SubscriptionRepositoryImpl
 import com.finradar.android.data.repository.TransactionRepositoryImpl
+import com.finradar.android.data.preferences.PendingSubscriptionRepositoryImpl
 import com.finradar.android.domain.repository.AlertRepository
+import com.finradar.android.domain.repository.PendingSubscriptionRepository
 import com.finradar.android.domain.repository.SubscriptionRepository
 import com.finradar.android.domain.repository.TransactionRepository
 import com.finradar.android.domain.usecase.PriceHikeDetector
@@ -42,7 +44,7 @@ object AppModule {
             AppDatabase.DATABASE_NAME
         )
             .openHelperFactory(factory)
-            .addMigrations(AppDatabase.MIGRATION_3_4)
+            .addMigrations(AppDatabase.MIGRATION_3_4, AppDatabase.MIGRATION_4_5)
             .build()
     }
 
@@ -74,6 +76,12 @@ object AppModule {
     @Singleton
     fun provideAlertRepository(dao: AlertDao): AlertRepository {
         return AlertRepositoryImpl(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun providePendingSubscriptionRepository(@ApplicationContext context: Context): PendingSubscriptionRepository {
+        return PendingSubscriptionRepositoryImpl(context)
     }
 
     @Provides

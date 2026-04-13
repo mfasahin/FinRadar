@@ -42,7 +42,7 @@ class SubscriptionsViewModel @Inject constructor(
         }
     }
 
-    fun addSubscription(name: String, amount: Double, category: String, nextPaymentDate: Long) {
+    fun addSubscription(name: String, amount: Double, currency: String, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {
             // If user set a next payment date, derive last payment as 30 days prior
             val lastPay = if (nextPaymentDate > 0) {
@@ -57,6 +57,7 @@ class SubscriptionsViewModel @Inject constructor(
                     lastPaymentDate = lastPay,
                     nextPaymentDate = nextPaymentDate,
                     category        = category.ifBlank { "general" },
+                    currency        = currency,
                     isActive        = true
                 )
             )
@@ -69,7 +70,7 @@ class SubscriptionsViewModel @Inject constructor(
         }
     }
 
-    fun updateSubscription(id: Long, name: String, amount: Double, category: String, nextPaymentDate: Long) {
+    fun updateSubscription(id: Long, name: String, amount: Double, currency: String, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {
             // Preserve the original lastPaymentDate — only update fields the user actually changed
             val original = subscriptionRepository.getSubscriptionById(id)
@@ -81,6 +82,7 @@ class SubscriptionsViewModel @Inject constructor(
                     lastPaymentDate = original?.lastPaymentDate ?: System.currentTimeMillis(),
                     nextPaymentDate = nextPaymentDate,
                     category        = category.ifBlank { "general" },
+                    currency        = currency,
                     isActive        = true
                 )
             )

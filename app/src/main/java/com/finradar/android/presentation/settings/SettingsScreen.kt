@@ -241,6 +241,18 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable { viewModel.triggerTestPendingSubscriptionDialog() }
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(stringResource(R.string.settings_test_pending_dialog), color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text("›", color = TextMed, fontSize = 18.sp)
+                    }
+                    HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .clickable { onNavigateToPrivacy() }
                             .padding(vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,

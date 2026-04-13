@@ -48,6 +48,7 @@ class SubscriptionRepositoryImpl @Inject constructor(
         lastPaymentDate = lastPaymentDate,
         nextPaymentDate = nextPaymentDate,
         category = category,
+        currency = currency,
         isActive = isActive
     )
 
@@ -58,6 +59,7 @@ class SubscriptionRepositoryImpl @Inject constructor(
         lastPaymentDate = lastPaymentDate,
         nextPaymentDate = nextPaymentDate,
         category = category,
+        currency = currency,
         isActive = isActive
     )
 }

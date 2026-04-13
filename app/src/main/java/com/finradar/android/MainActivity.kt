@@ -19,6 +19,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.work.*
 import com.finradar.android.notification.NotificationHelper
 import com.finradar.android.presentation.navigation.FinRadarNavGraph
+import com.finradar.android.presentation.pending.PendingSubscriptionDialog
+import com.finradar.android.presentation.pending.PendingSubscriptionViewModel
 import com.finradar.android.presentation.settings.SettingsViewModel
 import com.finradar.android.ui.theme.FinRadarTheme
 import com.finradar.android.worker.PaymentReminderWorker
@@ -42,6 +44,7 @@ interface PrefsEntryPoint {
 class MainActivity : ComponentActivity() {
 
     private val settingsViewModel: SettingsViewModel by viewModels()
+    private val pendingSubscriptionViewModel: PendingSubscriptionViewModel by viewModels()
 
     override fun attachBaseContext(newBase: Context) {
         // Read language synchronously from SharedPreferences (mirrors DataStore selection)
@@ -57,31 +60,46 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Create notification channel & request permission on Android 13+
-        NotificationHelper.createChannel(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED
-        ) {
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) {}.launch(Manifest.permission.POST_NOTIFICATIONS)
+        try {
+            // Create notification channel & request permission on Android 13+
+            NotificationHelper.createChannel(this)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED
+            ) {
+                registerForActivityResult(ActivityResultContracts.RequestPermission()) {}.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+
+            // Schedule daily payment reminder worker (safely)
+            try {
+                val workRequest = PeriodicWorkRequestBuilder<PaymentReminderWorker>(1, TimeUnit.DAYS)
+                    .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
+                    .build()
+                WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                    "payment_reminders",
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    workRequest
+                )
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "Failed to schedule worker", e)
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "Error in onCreate setup", e)
         }
 
-        // Schedule daily payment reminder worker
-        val workRequest = PeriodicWorkRequestBuilder<PaymentReminderWorker>(1, TimeUnit.DAYS)
-            .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
-            .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "payment_reminders",
-            ExistingPeriodicWorkPolicy.KEEP,
-            workRequest
-        )
-
         setContent {
-            val isDark by settingsViewModel.isDarkTheme.collectAsState()
+            val isDark by settingsViewModel.isDarkTheme.collectAsState(initial = false)
+            val pendingSubscription by pendingSubscriptionViewModel.pendingSubscription.collectAsState()
 
             FinRadarTheme(isDark = isDark) {
                 val navController = rememberNavController()
                 FinRadarNavGraph(navController = navController)
+
+                PendingSubscriptionDialog(
+                    subscription = pendingSubscription,
+                    onConfirm = { pendingSubscriptionViewModel.confirmSave() },
+                    onDismiss = { pendingSubscriptionViewModel.dismiss() }
+                )
             }
         }
     }

@@ -114,5 +114,12 @@
     <string name="onboarding_start_button">Grant Notification Permission &amp; Start</string>
     <string name="onboarding_continue_manual">Continue Manually</string>
 
+    <!-- Pending subscription (SMS detected) -->
+    <string name="pending_sub_title">Subscription detected</string>
+    <string name="pending_sub_message">"%s" — %s TL/mo\nDo you want to save this subscription?</string>
+    <string name="pending_sub_save">Save</string>
+    <string name="pending_sub_dismiss">Cancel</string>
+    <string name="settings_test_pending_dialog">Test subscription dialog</string>
+
     <string name="settings_privacy_policy">Privacy Policy</string>
 </resources>

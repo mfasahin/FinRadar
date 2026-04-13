@@ -116,4 +116,11 @@
     <string name="settings_privacy_policy">Gizlilik Politikası</string>
     <string name="onboarding_start_button">Bildirim İzni Ver &amp; Başla</string>
     <string name="onboarding_continue_manual">Manuel Olarak Devam Et</string>
+
+    <!-- Pending subscription (SMS detected) -->
+    <string name="pending_sub_title">Abonelik tespit edildi</string>
+    <string name="pending_sub_message">"%s" — %s TL/ay\nBu aboneliği kaydetmek ister misiniz?</string>
+    <string name="pending_sub_save">Kaydet</string>
+    <string name="pending_sub_dismiss">İptal</string>
+    <string name="settings_test_pending_dialog">Abonelik diyaloğunu test et</string>
 </resources>

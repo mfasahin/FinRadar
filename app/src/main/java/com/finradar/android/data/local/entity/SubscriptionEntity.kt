@@ -12,5 +12,6 @@ data class SubscriptionEntity(
     val lastPaymentDate: Long,
     val nextPaymentDate: Long = 0L,
     val category: String? = null,
+    val currency: String = "TRY",
     val isActive: Boolean = true
 )

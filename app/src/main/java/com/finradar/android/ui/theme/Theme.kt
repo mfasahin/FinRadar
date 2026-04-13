@@ -7,7 +7,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -72,15 +71,11 @@ fun FinRadarTheme(
     TextLow   = if (isDark) DarkTextLow   else LightTextLow
 
     val colorScheme = if (isDark) DarkColors else LightColors
-    val isLight = !isDark
-
     val view = LocalView.current
     if (!view.isInEditMode) {
+        val isLight = !isDark
         SideEffect {
             val window = (view.context as Activity).window
-            val bgColor = if (isDark) DarkBgDeep else LightBgDeep
-            window.statusBarColor = bgColor.toArgb()
-            window.navigationBarColor = bgColor.toArgb()
             WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars     = isLight
                 isAppearanceLightNavigationBars = isLight

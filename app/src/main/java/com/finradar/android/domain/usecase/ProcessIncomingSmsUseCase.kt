@@ -2,6 +2,7 @@ package com.finradar.android.domain.usecase
 
 import com.finradar.android.data.parser.SmsParser
 import com.finradar.android.domain.repository.AlertRepository
+import com.finradar.android.domain.repository.PendingSubscriptionRepository
 import com.finradar.android.domain.repository.SubscriptionRepository
 import com.finradar.android.domain.repository.TransactionRepository
 import javax.inject.Inject
@@ -10,6 +11,7 @@ class ProcessIncomingSmsUseCase @Inject constructor(
     private val smsParser: SmsParser,
     private val transactionRepository: TransactionRepository,
     private val subscriptionRepository: SubscriptionRepository,
+    private val pendingSubscriptionRepository: PendingSubscriptionRepository,
     private val alertRepository: AlertRepository,
     private val subscriptionDetector: SubscriptionDetector,
     private val priceHikeDetector: PriceHikeDetector
@@ -26,8 +28,8 @@ class ProcessIncomingSmsUseCase @Inject constructor(
             val existingSubscription = subscriptionRepository.getSubscriptionByName(potentialSubscription.name)
             
             if (existingSubscription == null) {
-                // New Subscription!
-                subscriptionRepository.saveSubscription(potentialSubscription)
+                // New subscription: ask user before saving (store as pending, UI will show dialog)
+                pendingSubscriptionRepository.setPendingSubscription(potentialSubscription)
             } else {
                 // Existing Subscription - Check for Price Hike
                 val alert = priceHikeDetector.checkPriceHike(transaction, existingSubscription)

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 data class DashboardUiState(
-    val totalMonthlySpend: Double = 0.0,
+    val totalSpendByCurrency: Map<String, Double> = emptyMap(),
     val totalActiveCount: Int = 0,
     val topSubscriptions: List<Subscription> = emptyList(),
     val upcomingPayments: List<Subscription> = emptyList(),
@@ -52,7 +52,7 @@ class DashboardViewModel @Inject constructor(
     ) { subscriptions, alertCount ->
         val today = System.currentTimeMillis()
         DashboardUiState(
-            totalMonthlySpend  = subscriptions.sumOf { it.averageAmount },
+            totalSpendByCurrency = subscriptions.groupBy { it.currency }.mapValues { (_, subs) -> subs.sumOf { it.averageAmount } },
             totalActiveCount   = subscriptions.size,
             topSubscriptions   = subscriptions.sortedByDescending { it.averageAmount }.take(3),
             upcomingPayments   = subscriptions

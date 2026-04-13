@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier;
 import androidx.core.content.ContextCompat;
 import androidx.work.*;
 import com.finradar.android.notification.NotificationHelper;
+import com.finradar.android.presentation.pending.PendingSubscriptionViewModel;
 import com.finradar.android.presentation.settings.SettingsViewModel;
 import com.finradar.android.worker.PaymentReminderWorker;
 import dagger.hilt.android.AndroidEntryPoint;

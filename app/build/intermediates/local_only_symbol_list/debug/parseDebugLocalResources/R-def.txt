@@ -57,6 +57,10 @@ string onboarding_feature_3_title
 string onboarding_privacy_disclaimer
 string onboarding_start_button
 string onboarding_view_privacy_policy
+string pending_sub_dismiss
+string pending_sub_message
+string pending_sub_save
+string pending_sub_title
 string settings_app
 string settings_app_language
 string settings_app_name_label
@@ -72,6 +76,7 @@ string settings_reminder_days
 string settings_reminder_desc
 string settings_reminder_title
 string settings_tagline
+string settings_test_pending_dialog
 string settings_title
 string settings_version
 string stats_active_count

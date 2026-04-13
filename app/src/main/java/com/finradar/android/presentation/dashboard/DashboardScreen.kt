@@ -89,7 +89,7 @@ fun DashboardScreen(
             modifier = Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(bottom = 32.dp)
         ) {
-            item { HeroCard(state.totalMonthlySpend, state.totalActiveCount) }
+            item { HeroCard(state.totalSpendByCurrency, state.totalActiveCount) }
 
             item {
                 Spacer(Modifier.height(32.dp))
@@ -167,11 +167,13 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun HeroCard(totalSpend: Double, activeCount: Int) {
+private fun HeroCard(totalSpendByCurrency: Map<String, Double>, activeCount: Int) {
     val activeLabel = stringResource(R.string.dashboard_active)
     val avgLabel    = stringResource(R.string.dashboard_avg_per_sub)
     val totalLabel  = stringResource(R.string.dashboard_monthly_total)
-    val avgAmount   = if (activeCount > 0) totalSpend / activeCount else 0.0
+    
+    // Fallback to TRY if no active subscriptions
+    val totals = if (totalSpendByCurrency.isEmpty()) mapOf("TRY" to 0.0) else totalSpendByCurrency
 
     Box(modifier = Modifier.fillMaxWidth().height(236.dp)) {
         Box(modifier = Modifier.size(260.dp).offset(x = (-40).dp, y = (-20).dp)
@@ -199,8 +201,12 @@ private fun HeroCard(totalSpend: Double, activeCount: Int) {
                 Text(totalLabel, color = Color.White.copy(alpha = 0.85f), fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold, letterSpacing = 0.8.sp)
 
-                Text(formatAmount(totalSpend), color = Color.White, fontSize = 38.sp,
-                    fontWeight = FontWeight.Black, letterSpacing = (-1.5).sp, lineHeight = 42.sp)
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    totals.forEach { (currency, amount) ->
+                        Text(formatAmountCurrency(amount, currency), color = Color.White, fontSize = if (totals.size > 2) 20.sp else 32.sp,
+                            fontWeight = FontWeight.Black, letterSpacing = (-1.0).sp, lineHeight = 36.sp)
+                    }
+                }
 
                 Box(modifier = Modifier.fillMaxWidth().height(1.dp)
                     .background(Color.White.copy(alpha = 0.2f)))
@@ -224,7 +230,10 @@ private fun HeroCard(totalSpend: Double, activeCount: Int) {
                         .background(Color.White.copy(alpha = 0.3f)))
                     // Average per subscription
                     Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(formatAmount(avgAmount), color = Color.White, fontSize = 14.sp,
+                        val mainCurrencyAmount = totals.entries.firstOrNull()?.value ?: 0.0
+                        val mainCurrency = totals.keys.firstOrNull() ?: "TRY"
+                        val avgAmount = if (activeCount > 0) mainCurrencyAmount / activeCount else 0.0
+                        Text(formatAmountCurrency(avgAmount, mainCurrency), color = Color.White, fontSize = 14.sp,
                             fontWeight = FontWeight.Black, letterSpacing = (-0.3).sp)
                         Text(avgLabel, color = Color.White.copy(alpha = 0.7f),
                             fontSize = 11.sp, fontWeight = FontWeight.Medium)
@@ -260,7 +269,7 @@ fun PremiumSubscriptionRow(subscription: Subscription) {
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(localizedCategory(subscription.category), color = TextMed, fontSize = 12.sp)
             }
-            Text(formatAmount(subscription.averageAmount), color = accent,
+            Text(formatAmountCurrency(subscription.averageAmount, subscription.currency), color = accent,
                 fontWeight = FontWeight.Black, fontSize = 16.sp, letterSpacing = (-0.5).sp)
         }
     }
@@ -288,7 +297,6 @@ fun UpcomingPaymentRow(subscription: Subscription) {
     val today    = System.currentTimeMillis()
     val daysUntil = TimeUnit.MILLISECONDS.toDays(subscription.nextPaymentDate - today)
     val dateStr  = SimpleDateFormat("dd MMM", Locale.getDefault()).format(Date(subscription.nextPaymentDate))
-    val amountFmt = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
 
     val (badgeColor, badgeText) = when {
         daysUntil <= 0L -> AccentRed    to stringResource(R.string.subs_due_today)
@@ -326,12 +334,19 @@ fun UpcomingPaymentRow(subscription: Subscription) {
             }
             // Amount
             Text(
-                amountFmt.format(subscription.averageAmount),
+                formatAmountCurrency(subscription.averageAmount, subscription.currency),
                 color = accent, fontWeight = FontWeight.Black, fontSize = 15.sp, letterSpacing = (-0.5).sp
             )
         }
     }
 }
 
-private fun formatAmount(amount: Double) =
-    NumberFormat.getCurrencyInstance(Locale("tr", "TR")).format(amount)
+private fun formatAmountCurrency(amount: Double, currencyCode: String): String {
+    val symbol = when(currencyCode) {
+        "USD" -> "$"
+        "EUR" -> "€"
+        "GBP" -> "£"
+        else -> "₺"
+    }
+    return "$symbol${String.format("%.2f", amount)}"
+}

@@ -7,5 +7,6 @@ data class Subscription(
     val lastPaymentDate: Long,
     val nextPaymentDate: Long = 0L,   // 0 = not set
     val category: String? = null,
+    val currency: String = "TRY",
     val isActive: Boolean = true
 )

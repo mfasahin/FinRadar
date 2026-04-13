@@ -1,6 +1,7 @@
 package com.finradar.android.presentation.settings;
 
 import com.finradar.android.data.preferences.UserPreferencesRepository;
+import com.finradar.android.domain.repository.PendingSubscriptionRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -24,21 +25,27 @@ import javax.inject.Provider;
 public final class SettingsViewModel_Factory implements Factory<SettingsViewModel> {
   private final Provider<UserPreferencesRepository> prefsRepoProvider;
 
-  public SettingsViewModel_Factory(Provider<UserPreferencesRepository> prefsRepoProvider) {
+  private final Provider<PendingSubscriptionRepository> pendingSubscriptionRepositoryProvider;
+
+  public SettingsViewModel_Factory(Provider<UserPreferencesRepository> prefsRepoProvider,
+      Provider<PendingSubscriptionRepository> pendingSubscriptionRepositoryProvider) {
     this.prefsRepoProvider = prefsRepoProvider;
+    this.pendingSubscriptionRepositoryProvider = pendingSubscriptionRepositoryProvider;
   }
 
   @Override
   public SettingsViewModel get() {
-    return newInstance(prefsRepoProvider.get());
+    return newInstance(prefsRepoProvider.get(), pendingSubscriptionRepositoryProvider.get());
   }
 
   public static SettingsViewModel_Factory create(
-      Provider<UserPreferencesRepository> prefsRepoProvider) {
-    return new SettingsViewModel_Factory(prefsRepoProvider);
+      Provider<UserPreferencesRepository> prefsRepoProvider,
+      Provider<PendingSubscriptionRepository> pendingSubscriptionRepositoryProvider) {
+    return new SettingsViewModel_Factory(prefsRepoProvider, pendingSubscriptionRepositoryProvider);
   }
 
-  public static SettingsViewModel newInstance(UserPreferencesRepository prefsRepo) {
-    return new SettingsViewModel(prefsRepo);
+  public static SettingsViewModel newInstance(UserPreferencesRepository prefsRepo,
+      PendingSubscriptionRepository pendingSubscriptionRepository) {
+    return new SettingsViewModel(prefsRepo, pendingSubscriptionRepository);
   }
 }

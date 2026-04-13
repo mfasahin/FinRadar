@@ -54,6 +54,10 @@
     <string name="onboarding_privacy_disclaimer">🔐  All data is processed strictly on your device and never sent to any server.</string>
     <string name="onboarding_start_button">Grant Notification Permission &amp; Start</string>
     <string name="onboarding_view_privacy_policy">View Privacy Policy</string>
+    <string name="pending_sub_dismiss">Cancel</string>
+    <string name="pending_sub_message">"%s" — %s TL/mo\nDo you want to save this subscription?</string>
+    <string name="pending_sub_save">Save</string>
+    <string name="pending_sub_title">Subscription detected</string>
     <string name="settings_app">APPLICATION</string>
     <string name="settings_app_language">App Language</string>
     <string name="settings_app_name_label">App Name</string>
@@ -69,6 +73,7 @@
     <string name="settings_reminder_desc">Notify %d days before payment</string>
     <string name="settings_reminder_title">Payment Reminder</string>
     <string name="settings_tagline">Manage your subscriptions smartly</string>
+    <string name="settings_test_pending_dialog">Test subscription dialog</string>
     <string name="settings_title">Settings</string>
     <string name="settings_version">Version</string>
     <string name="stats_active_count">Active Subscriptions</string>

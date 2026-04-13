@@ -198,7 +198,6 @@ fun SubscriptionDetailCard(
 ) {
     val locale      = Locale.getDefault()
     val dateFormat  = SimpleDateFormat("dd MMM yyyy", locale)
-    val amountFmt   = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
     val colorIdx    = (subscription.name.hashCode() % CategoryColors.size).let { if (it < 0) it + CategoryColors.size else it }
     val accent      = CategoryColors[colorIdx]
     var menuExpanded by remember { mutableStateOf(false) }
@@ -259,7 +258,8 @@ fun SubscriptionDetailCard(
         }
         // Amount column
         Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 4.dp)) {
-            Text(amountFmt.format(subscription.averageAmount), color = accent,
+            val symbol = when (subscription.currency) { "USD" -> "$"; "EUR" -> "€"; "GBP" -> "£"; else -> "₺" }
+            Text("$symbol${String.format("%.2f", subscription.averageAmount)}", color = accent,
                 fontWeight = FontWeight.Black, fontSize = 16.sp, letterSpacing = (-0.5).sp)
             Text(perMonth, color = TextMed, fontSize = 11.sp)
         }
