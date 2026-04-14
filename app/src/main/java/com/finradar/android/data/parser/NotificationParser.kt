@@ -15,7 +15,8 @@ class NotificationParser {
 
     fun parseNotification(packageName: String, title: String, text: String, timestamp: Long): Transaction? {
         // We only care about bank or finance notifications
-        val textUpper = text.uppercase(Locale.getDefault())
+        // Handle Turkish I/İ problem by standardizing string before checking
+        val textUpper = text.replace("i", "I").replace("İ", "I").replace("ı", "I").uppercase(Locale.ENGLISH)
 
         // 1. Is it a spending or payment notification? 
         // Checking for words closely related to withdrawal / payment / card spending in TR

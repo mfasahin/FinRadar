@@ -70,6 +70,16 @@ class MainActivity : ComponentActivity() {
                 registerForActivityResult(ActivityResultContracts.RequestPermission()) {}.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
 
+            // Force Rebind NotificationService (Crucial for Xiaomi/HyperOS)
+            try {
+                if (NotificationHelper.isNotificationListenerEnabled(this)) {
+                    val componentName = android.content.ComponentName(this, com.finradar.android.service.NotificationListenerService::class.java)
+                    android.service.notification.NotificationListenerService.requestRebind(componentName)
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "Failed to rebind service", e)
+            }
+
             // Schedule daily payment reminder worker (safely)
             try {
                 val workRequest = PeriodicWorkRequestBuilder<PaymentReminderWorker>(1, TimeUnit.DAYS)

@@ -15,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val prefsRepo: UserPreferencesRepository,
-    private val pendingSubscriptionRepository: PendingSubscriptionRepository
+    private val pendingSubscriptionRepository: PendingSubscriptionRepository,
+    private val processNotificationUseCase: com.finradar.android.domain.usecase.ProcessNotificationUseCase
 ) : ViewModel() {
 
     val isDarkTheme: StateFlow<Boolean> = prefsRepo.isDarkTheme
@@ -60,18 +61,18 @@ class SettingsViewModel @Inject constructor(
         prefsRepo.setLanguageCode(code)
     }
 
-    /** Emülatör/test: Bekleyen abonelik diyaloğunu göstermek için sahte bir abonelik ekler. */
-    fun triggerTestPendingSubscriptionDialog() {
+    fun triggerMockNotification() {
+        val ctx = prefsRepo.context
+        com.finradar.android.notification.NotificationHelper.sendMockBankNotification(ctx)
+    }
+
+    fun triggerManualLogicTest() {
         viewModelScope.launch {
-            pendingSubscriptionRepository.setPendingSubscription(
-                Subscription(
-                    name = "Netflix Test",
-                    averageAmount = 49.99,
-                    lastPaymentDate = System.currentTimeMillis(),
-                    nextPaymentDate = 0L,
-                    category = "Yayın Hizmeti",
-                    isActive = true
-                )
+            processNotificationUseCase.invoke(
+                packageName = "com.test",
+                title = "Test Bank",
+                text = "Kredi kartınızdan EXXEN aboneliği için 139.90 TL harcama yapılmıştır.",
+                timestamp = System.currentTimeMillis()
             )
         }
     }

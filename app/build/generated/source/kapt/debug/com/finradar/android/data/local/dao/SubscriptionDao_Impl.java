@@ -359,7 +359,7 @@ public final class SubscriptionDao_Impl implements SubscriptionDao {
   @Override
   public Object getSubscriptionByName(final String name,
       final Continuation<? super SubscriptionEntity> $completion) {
-    final String _sql = "SELECT * FROM subscriptions WHERE name = ? LIMIT 1";
+    final String _sql = "SELECT * FROM subscriptions WHERE name = ? AND isActive = 1 LIMIT 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     if (name == null) {

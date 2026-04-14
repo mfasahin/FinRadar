@@ -81,4 +81,16 @@ object NotificationHelper {
             android.util.Log.e("NotificationHelper", "failed to send notification", e)
         }
     }
+
+    fun sendMockBankNotification(context: Context) {
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Garanti BBVA")
+            .setContentText("Kredi kartınızdan Netflix aboneliği için 199.90 TL harcama yapılmıştır.")
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setAutoCancel(true)
+            .build()
+        nm.notify(9999, notification)
+    }
 }

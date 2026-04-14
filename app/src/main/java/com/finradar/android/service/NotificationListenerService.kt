@@ -23,21 +23,32 @@ class NotificationListenerService : NotificationListenerService() {
     override fun onListenerConnected() {
         super.onListenerConnected()
         Log.d("NotificationListener", "Service connected")
+        android.os.Handler(android.os.Looper.getMainLooper()).post {
+            android.widget.Toast.makeText(this@NotificationListenerService, "Okuyucu Bağlandı (Aktif)!", android.widget.Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
         sbn?.let { notification ->
             val extras = notification.notification.extras
-            val title = extras.getString("android.title") ?: ""
-            val text = extras.getString("android.text") ?: ""
+            val title = extras.getCharSequence("android.title")?.toString() ?: ""
+            val text = extras.getCharSequence("android.text")?.toString() ?: ""
             val packageName = notification.packageName
             
             // Log for debugging
             Log.d("FinRadar", "Notification: $packageName - $title - $text")
 
+            android.os.Handler(android.os.Looper.getMainLooper()).post {
+                android.widget.Toast.makeText(this@NotificationListenerService, "Test: [$title] yakalandı!", android.widget.Toast.LENGTH_SHORT).show()
+            }
+
             serviceScope.launch {
-                processNotificationUseCase.get()(packageName, title, text, notification.postTime)
+                try {
+                    processNotificationUseCase.get()(packageName, title, text, notification.postTime)
+                } catch (e: Exception) {
+                    Log.e("FinRadar", "Hata", e)
+                }
             }
         }
     }

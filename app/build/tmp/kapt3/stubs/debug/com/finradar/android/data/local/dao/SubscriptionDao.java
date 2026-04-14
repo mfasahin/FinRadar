@@ -43,7 +43,7 @@ public abstract interface SubscriptionDao {
     public abstract java.lang.Object getSubscriptionById(long id, @org.jetbrains.annotations.NotNull()
     kotlin.coroutines.Continuation<? super com.finradar.android.data.local.entity.SubscriptionEntity> $completion);
     
-    @androidx.room.Query(value = "SELECT * FROM subscriptions WHERE name = :name LIMIT 1")
+    @androidx.room.Query(value = "SELECT * FROM subscriptions WHERE name = :name AND isActive = 1 LIMIT 1")
     @org.jetbrains.annotations.Nullable()
     public abstract java.lang.Object getSubscriptionByName(@org.jetbrains.annotations.NotNull()
     java.lang.String name, @org.jetbrains.annotations.NotNull()

@@ -3,6 +3,8 @@ package com.finradar.android.presentation.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -128,7 +130,8 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 20.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Spacer(Modifier.height(4.dp))
@@ -241,12 +244,24 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { viewModel.triggerTestPendingSubscriptionDialog() }
+                            .clickable { viewModel.triggerMockNotification() }
                             .padding(vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(stringResource(R.string.settings_test_pending_dialog), color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text("›", color = TextMed, fontSize = 18.sp)
+                    }
+                    HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { viewModel.triggerManualLogicTest() }
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Sistemi Zorla Test Et (Hata Tespiti)", color = com.finradar.android.ui.theme.AccentRed, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                         Text("›", color = TextMed, fontSize = 18.sp)
                     }
                     HorizontalDivider(color = BgStroke, thickness = 0.5.dp)

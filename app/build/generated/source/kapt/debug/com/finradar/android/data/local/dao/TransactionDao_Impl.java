@@ -81,7 +81,7 @@ public final class TransactionDao_Impl implements TransactionDao {
 
   @Override
   public Object insertTransaction(final TransactionEntity transaction,
-      final Continuation<? super Long> $completion) {
+      final Continuation<? super Long> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -95,7 +95,7 @@ public final class TransactionDao_Impl implements TransactionDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
@@ -173,7 +173,7 @@ public final class TransactionDao_Impl implements TransactionDao {
 
   @Override
   public Object getTransactionsByMerchant(final String merchantName,
-      final Continuation<? super List<TransactionEntity>> $completion) {
+      final Continuation<? super List<TransactionEntity>> arg1) {
     final String _sql = "SELECT * FROM transactions WHERE merchantName = ? ORDER BY date DESC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
@@ -245,12 +245,12 @@ public final class TransactionDao_Impl implements TransactionDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object isTransactionDuplicate(final String message, final long date,
-      final Continuation<? super Boolean> $completion) {
+      final Continuation<? super Boolean> arg2) {
     final String _sql = "SELECT EXISTS(SELECT 1 FROM transactions WHERE originalMessage = ? AND date = ?)";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
     int _argIndex = 1;
@@ -286,7 +286,7 @@ public final class TransactionDao_Impl implements TransactionDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @NonNull

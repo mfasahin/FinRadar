@@ -5,22 +5,24 @@ import com.finradar.android.domain.model.Transaction
 import com.finradar.android.domain.repository.TransactionRepository
 import javax.inject.Inject
 import kotlin.math.abs
+import java.util.Locale
 
 class SubscriptionDetector @Inject constructor(
     private val transactionRepository: TransactionRepository
 ) {
     private val whitelist = setOf(
-        "netflix", "spotify", "youtube premium", "aws", "adobe", "apple", "microsoft 365", "exxen", "blutv", "google storage", "icloud"
+        "NETFLIX", "SPOTIFY", "YOUTUBE", "AWS", "ADOBE", "APPLE", "MICROSOFT", "EXXEN", "BLUTV", "GOOGLE", "ICLOUD"
     )
 
     private val keywords = mapOf(
-        "abonelik" to 40,
-        "yenilendi" to 30,
-        "tekrarlı" to 30,
-        "aidat" to 25,
-        "periyodik" to 20,
-        "talimatı" to 15,
-        "üye" to 10
+        "ABONEL" to 40, // abonelik, aboneliği vs.
+        "YENILE" to 30, // yenilendi, yenileme vs.
+        "TEKRARLI" to 30,
+        "AIDAT" to 25,
+        "PERIYODIK" to 20,
+        "TALIMAT" to 15,
+        "ÜYE" to 10,
+        "UYE" to 10
     )
 
     private val THRESHOLD = 50
@@ -29,12 +31,13 @@ class SubscriptionDetector @Inject constructor(
         var score = 0
 
         // 1. Check Whitelist (Instant Match)
-        if (whitelist.any { transaction.merchantName.contains(it, ignoreCase = true) }) {
+        val normalizedMerchant = transaction.merchantName.replace("i", "I").replace("İ", "I").replace("ı", "I").uppercase(Locale.ENGLISH)
+        if (whitelist.any { normalizedMerchant.contains(it) }) {
             score += 100
         }
 
         // 2. Keyword Analysis
-        val content = transaction.originalMessage.lowercase()
+        val content = transaction.originalMessage.replace("i", "I").replace("İ", "I").replace("ı", "I").uppercase(Locale.ENGLISH)
         keywords.forEach { (keyword, points) ->
             if (content.contains(keyword)) {
                 score += points

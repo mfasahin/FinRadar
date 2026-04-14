@@ -91,7 +91,7 @@ public final class AlertDao_Impl implements AlertDao {
   }
 
   @Override
-  public Object insertAlert(final AlertEntity alert, final Continuation<? super Long> $completion) {
+  public Object insertAlert(final AlertEntity alert, final Continuation<? super Long> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Long>() {
       @Override
       @NonNull
@@ -105,11 +105,11 @@ public final class AlertDao_Impl implements AlertDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteAlert(final long id, final Continuation<? super Unit> $completion) {
+  public Object deleteAlert(final long id, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -130,11 +130,11 @@ public final class AlertDao_Impl implements AlertDao {
           __preparedStmtOfDeleteAlert.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object clearAllAlerts(final Continuation<? super Unit> $completion) {
+  public Object clearAllAlerts(final Continuation<? super Unit> arg0) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -153,7 +153,7 @@ public final class AlertDao_Impl implements AlertDao {
           __preparedStmtOfClearAllAlerts.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @Override
@@ -259,7 +259,7 @@ public final class AlertDao_Impl implements AlertDao {
 
   @Override
   public Object countRemindersSince(final long subId, final long since,
-      final Continuation<? super Integer> $completion) {
+      final Continuation<? super Integer> arg2) {
     final String _sql = "SELECT COUNT(*) FROM alerts WHERE subscriptionId = ? AND type = 'PAYMENT_REMINDER' AND date >= ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
     int _argIndex = 1;
@@ -291,7 +291,7 @@ public final class AlertDao_Impl implements AlertDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @NonNull

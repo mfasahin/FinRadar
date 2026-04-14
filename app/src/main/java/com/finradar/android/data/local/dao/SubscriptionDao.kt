@@ -28,6 +28,6 @@ interface SubscriptionDao {
     @Query("SELECT * FROM subscriptions WHERE id = :id LIMIT 1")
     suspend fun getSubscriptionById(id: Long): SubscriptionEntity?
 
-    @Query("SELECT * FROM subscriptions WHERE name = :name LIMIT 1")
+    @Query("SELECT * FROM subscriptions WHERE name = :name AND isActive = 1 LIMIT 1")
     suspend fun getSubscriptionByName(name: String): SubscriptionEntity?
 }
