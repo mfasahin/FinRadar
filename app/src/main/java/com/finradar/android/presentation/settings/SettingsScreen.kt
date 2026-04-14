@@ -240,30 +240,7 @@ fun SettingsScreen(
                     InfoRow(label = stringResource(R.string.settings_app_name_label), value = "FinRadar")
                     HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
                     InfoRow(label = stringResource(R.string.settings_version), value = "1.0.0")
-                    HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { viewModel.triggerMockNotification() }
-                            .padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(stringResource(R.string.settings_test_pending_dialog), color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                        Text("›", color = TextMed, fontSize = 18.sp)
-                    }
-                    HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { viewModel.triggerManualLogicTest() }
-                            .padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("Sistemi Zorla Test Et (Hata Tespiti)", color = com.finradar.android.ui.theme.AccentRed, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
-                        Text("›", color = TextMed, fontSize = 18.sp)
-                    }
+
                     HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
                     Row(
                         modifier = Modifier
@@ -279,22 +256,7 @@ fun SettingsScreen(
                 }
             }
 
-            Spacer(Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Brush.linearGradient(listOf(BrandFrom, BrandMid)))
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("💙", fontSize = 28.sp)
-                    Text("FinRadar", color = Color.White, fontWeight = FontWeight.Black, fontSize = 18.sp)
-                    Text(stringResource(R.string.settings_tagline), color = Color.White.copy(alpha = 0.75f), fontSize = 12.sp)
-                }
-            }
-            Spacer(Modifier.height(16.dp))
+
         }
     }
 }

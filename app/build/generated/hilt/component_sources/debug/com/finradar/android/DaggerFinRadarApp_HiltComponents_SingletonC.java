@@ -441,8 +441,6 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
 
     private Provider<PendingSubscriptionViewModel> pendingSubscriptionViewModelProvider;
 
-    private Provider<ProcessNotificationUseCase> processNotificationUseCaseProvider;
-
     private Provider<SettingsViewModel> settingsViewModelProvider;
 
     private Provider<SubscriptionsViewModel> subscriptionsViewModelProvider;
@@ -463,9 +461,8 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
       this.alertsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 0);
       this.dashboardViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 1);
       this.pendingSubscriptionViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 2);
-      this.processNotificationUseCaseProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
       this.settingsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 3);
-      this.subscriptionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 5);
+      this.subscriptionsViewModelProvider = new SwitchingProvider<>(singletonCImpl, activityRetainedCImpl, viewModelCImpl, 4);
     }
 
     @Override
@@ -509,12 +506,9 @@ public final class DaggerFinRadarApp_HiltComponents_SingletonC {
           return (T) new PendingSubscriptionViewModel(singletonCImpl.providePendingSubscriptionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get());
 
           case 3: // com.finradar.android.presentation.settings.SettingsViewModel 
-          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get(), viewModelCImpl.processNotificationUseCaseProvider.get());
+          return (T) new SettingsViewModel(singletonCImpl.userPreferencesRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get());
 
-          case 4: // com.finradar.android.domain.usecase.ProcessNotificationUseCase 
-          return (T) new ProcessNotificationUseCase(singletonCImpl.provideNotificationParserProvider.get(), singletonCImpl.provideTransactionRepositoryProvider.get(), singletonCImpl.provideSubscriptionRepositoryProvider.get(), singletonCImpl.providePendingSubscriptionRepositoryProvider.get(), singletonCImpl.provideAlertRepositoryProvider.get(), singletonCImpl.provideSubscriptionDetectorProvider.get(), singletonCImpl.providePriceHikeDetectorProvider.get());
-
-          case 5: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
+          case 4: // com.finradar.android.presentation.subscriptions.SubscriptionsViewModel 
           return (T) new SubscriptionsViewModel(singletonCImpl.provideSubscriptionRepositoryProvider.get());
 
           default: throw new AssertionError(id);

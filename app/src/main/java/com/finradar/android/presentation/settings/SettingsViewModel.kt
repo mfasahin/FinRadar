@@ -15,8 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val prefsRepo: UserPreferencesRepository,
-    private val pendingSubscriptionRepository: PendingSubscriptionRepository,
-    private val processNotificationUseCase: com.finradar.android.domain.usecase.ProcessNotificationUseCase
+    private val pendingSubscriptionRepository: PendingSubscriptionRepository
 ) : ViewModel() {
 
     val isDarkTheme: StateFlow<Boolean> = prefsRepo.isDarkTheme
@@ -61,19 +60,4 @@ class SettingsViewModel @Inject constructor(
         prefsRepo.setLanguageCode(code)
     }
 
-    fun triggerMockNotification() {
-        val ctx = prefsRepo.context
-        com.finradar.android.notification.NotificationHelper.sendMockBankNotification(ctx)
-    }
-
-    fun triggerManualLogicTest() {
-        viewModelScope.launch {
-            processNotificationUseCase.invoke(
-                packageName = "com.test",
-                title = "Test Bank",
-                text = "Kredi kartınızdan EXXEN aboneliği için 139.90 TL harcama yapılmıştır.",
-                timestamp = System.currentTimeMillis()
-            )
-        }
-    }
 }
