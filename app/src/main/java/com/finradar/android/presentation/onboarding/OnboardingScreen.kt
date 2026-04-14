@@ -10,9 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,15 +51,13 @@ fun OnboardingScreen(
             Spacer(Modifier.height(72.dp))
 
             // Logo
-            Box(
+            Image(
+                painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = "Logo",
                 modifier = Modifier
-                    .size(88.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(Brush.linearGradient(listOf(BrandFrom, BrandMid, BrandTo))),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("📡", fontSize = 38.sp)
-            }
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(26.dp))
+            )
 
             Spacer(Modifier.height(20.dp))
 

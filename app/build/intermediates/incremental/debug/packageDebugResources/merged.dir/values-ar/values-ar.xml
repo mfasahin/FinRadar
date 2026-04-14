@@ -1,89 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="add_amount_label">المبلغ الشهري (₺)</string>
-    <string name="add_category_label">الفئة</string>
-    <string name="add_name_hint">نتفليكس، سبوتيفاي، إلخ.</string>
-    <string name="add_name_label">اسم الاشتراك</string>
-    <string name="add_next_payment_hint">اختر تاريخًا</string>
-    <string name="add_next_payment_label">تاريخ الدفعة التالية</string>
-    <string name="add_next_payment_not_set">غير محدد</string>
-    <string name="add_save">حفظ</string>
-    <string name="add_title">إضافة اشتراك</string>
-    <string name="add_update">تحديث</string>
-    <string name="alerts_empty_body">ستتلقى إشعاراً تلقائياً\nعند تغيير الأسعار.</string>
-    <string name="alerts_empty_title">لا توجد تنبيهات</string>
-    <string name="alerts_title">التنبيهات</string>
-    <string name="app_name">FinRadar</string>
-    <string name="cat_cloud">تخزين سحابي</string>
-    <string name="cat_education">تعليم</string>
-    <string name="cat_fitness">لياقة بدنية</string>
-    <string name="cat_gaming">ألعاب</string>
-    <string name="cat_general">عام</string>
-    <string name="cat_music">موسيقى</string>
-    <string name="cat_news">أخبار</string>
-    <string name="cat_software">برمجيات</string>
-    <string name="cat_streaming">بث مباشر</string>
-    <string name="dashboard_active">نشط</string>
-    <string name="dashboard_avg_per_sub">متوسط/اشتراك</string>
-    <string name="dashboard_empty">لا توجد اشتراكات بعد.\nفعّل إشعارات البنك.</string>
-    <string name="dashboard_monthly">شهري</string>
-    <string name="dashboard_monthly_total">الإجمالي هذا الشهر</string>
-    <string name="dashboard_no_upcoming">لا توجد مدفوعات قادمة</string>
-    <string name="dashboard_see_all">عرض الكل</string>
-    <string name="dashboard_title">الرئيسية</string>
-    <string name="dashboard_top_subs">الأغلى تكلفة</string>
-    <string name="dashboard_upcoming">المدفوعات القادمة</string>
-    <string name="edit_title">تعديل الاشتراك</string>
-    <string name="nav_alerts">التنبيهات</string>
-    <string name="nav_home">الرئيسية</string>
-    <string name="nav_settings">الإعدادات</string>
-    <string name="nav_subscriptions">الاشتراكات</string>
-    <string name="notif_reminder_days">الدفع خلال %d أيام! المبلغ: %s</string>
-    <string name="notif_reminder_title">تذكير دفع: %s</string>
-    <string name="notif_reminder_today">موعد الدفع اليوم! المبلغ: %s</string>
-    <string name="notif_reminder_tomorrow">موعد الدفع غداً! المبلغ: %s</string>
-    <string name="onboarding_feature_1_desc">يفحص اشتراكاتك تلقائيًا عن طريق قراءة إشعارات البنك.</string>
-    <string name="onboarding_feature_1_title">كشف تلقائي</string>
-    <string name="onboarding_feature_2_desc">احصل على إشعار فور زيادة سعر اشتراكك.</string>
-    <string name="onboarding_feature_2_title">تنبيهات الزيادة</string>
-    <string name="onboarding_feature_3_desc">لا يتم إرسال أي بيانات إلى أي خادم. كل شيء يبقى على جهازك.</string>
-    <string name="onboarding_feature_3_title">خصوصية كاملة</string>
-    <string name="onboarding_privacy_disclaimer">🔐 تتم معalajat جميع البيانات حصريًا على جهازك ولا يتم إرسالها أبدًا إلى أي خادم.</string>
-    <string name="onboarding_start_button">منح إذن الإشعارات والبدء</string>
-    <string name="onboarding_view_privacy_policy">عرض سياسة الخصوصية</string>
-    <string name="settings_app">التطبيق</string>
-    <string name="settings_app_language">لغة التطبيق</string>
-    <string name="settings_app_name_label">اسم التطبيق</string>
-    <string name="settings_appearance">المظهر</string>
-    <string name="settings_dark_mode">الوضع الداكن</string>
-    <string name="settings_dark_mode_off">التبديل إلى الوضع الداكن</string>
-    <string name="settings_dark_mode_on">التبديل إلى الوضع الفاتح</string>
-    <string name="settings_language_region">اللغة والمنطقة</string>
-    <string name="settings_notifications">الإشعارات</string>
-    <string name="settings_pick_language">اختر اللغة</string>
-    <string name="settings_privacy_policy">سياسة الخصوصية</string>
-    <string name="settings_reminder_days">%d أيام</string>
-    <string name="settings_reminder_desc">إشعار قبل %d أيام من الدفع</string>
-    <string name="settings_reminder_title">تذكير الدفع</string>
-    <string name="settings_tagline">أدّر اشتراكاتك بذكاء</string>
-    <string name="settings_title">الإعدادات</string>
-    <string name="settings_version">الإصدار</string>
-    <string name="subs_cancel">إلغاء</string>
-    <string name="subs_delete">حذف</string>
-    <string name="subs_delete_confirm">هل تريد حذف \"%s\"؟</string>
-    <string name="subs_delete_ok">حذف</string>
-    <string name="subs_delete_title">حذف الاشتراك</string>
-    <string name="subs_due_days">خلال %d يوم</string>
-    <string name="subs_due_today">الدفع اليوم!</string>
-    <string name="subs_edit">تعديل</string>
-    <string name="subs_empty_body">أضف يدوياً عبر + أو\nفعّل إشعارات الرسائل.</string>
-    <string name="subs_empty_title">لا توجد اشتراكات</string>
-    <string name="subs_general">عام</string>
-    <string name="subs_last_date">آخر: %s</string>
-    <string name="subs_next_payment">التالي: %s</string>
-    <string name="subs_no_results">لا توجد نتائج</string>
-    <string name="subs_overdue">متأخر %d يوم</string>
-    <string name="subs_per_month">/ شهر</string>
-    <string name="subs_search_hint">ابحث عن اشتراك…</string>
-    <string name="subs_title">الاشتراكات</string>
-</resources>

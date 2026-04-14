@@ -1,5 +1,10 @@
 R_DEF: Internal format may change without notice
 local
+drawable app_logo
+drawable ic_launcher_background
+mipmap ic_launcher
+mipmap ic_launcher_foreground
+mipmap ic_launcher_round
 string add_amount_label
 string add_category_label
 string add_name_hint
