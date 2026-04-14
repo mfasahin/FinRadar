@@ -23,9 +23,6 @@ class NotificationListenerService : NotificationListenerService() {
     override fun onListenerConnected() {
         super.onListenerConnected()
         Log.d("NotificationListener", "Service connected")
-        android.os.Handler(android.os.Looper.getMainLooper()).post {
-            android.widget.Toast.makeText(this@NotificationListenerService, "Okuyucu Bağlandı (Aktif)!", android.widget.Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -38,10 +35,6 @@ class NotificationListenerService : NotificationListenerService() {
             
             // Log for debugging
             Log.d("FinRadar", "Notification: $packageName - $title - $text")
-
-            android.os.Handler(android.os.Looper.getMainLooper()).post {
-                android.widget.Toast.makeText(this@NotificationListenerService, "Test: [$title] yakalandı!", android.widget.Toast.LENGTH_SHORT).show()
-            }
 
             serviceScope.launch {
                 try {
