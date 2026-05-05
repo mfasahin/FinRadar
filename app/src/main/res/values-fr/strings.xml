@@ -37,7 +37,7 @@
     <string name="add_update">Mettre à jour</string>
     <string name="alerts_title">Alertes</string>
     <string name="alerts_empty_title">Aucune alerte</string>
-    <string name="alerts_empty_body">Vous serez notifié automatiquement\nquand les prix changent.</string>
+    <string name="alerts_empty_body">Les paiements d\'abonnements à venir\nseront répertoriés ici.</string>
     <string name="settings_title">Paramètres</string>
     <string name="settings_appearance">APPARENCE</string>
     <string name="settings_dark_mode">Mode sombre</string>

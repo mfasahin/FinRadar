@@ -92,51 +92,10 @@ fun AlertsScreen(viewModel: AlertsViewModel = hiltViewModel()) {
 @Composable
 fun AlertItemWrapper(alert: Alert, onDelete: () -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()) {
-        if (alert.type == AlertType.PAYMENT_REMINDER) {
-            ReminderAlertCard(alert, onDelete)
-        } else {
-            PriceChangeAlertCard(alert, onDelete)
-        }
+        ReminderAlertCard(alert, onDelete)
     }
 }
 
-@Composable
-fun PriceChangeAlertCard(alert: Alert, onDelete: () -> Unit) {
-    val locale       = Locale.getDefault()
-    val dateFormat   = SimpleDateFormat("dd MMM yyyy", locale)
-    val amountFormat = NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
-
-    Row(
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(BgDeep),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(modifier = Modifier.width(4.dp).height(80.dp)
-            .background(Brush.verticalGradient(listOf(AccentRed, AccentRed.copy(alpha = 0.4f))),
-                shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)))
-        Spacer(Modifier.width(14.dp))
-        Box(modifier = Modifier.size(44.dp).clip(RoundedCornerShape(13.dp)).background(AccentRed.copy(alpha = 0.10f)),
-            contentAlignment = Alignment.Center) {
-            Icon(Icons.Outlined.Warning, contentDescription = null, tint = AccentRed, modifier = Modifier.size(20.dp))
-        }
-        Spacer(Modifier.width(12.dp))
-        Column(modifier = Modifier.weight(1f).padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text(alert.subscriptionName.ifBlank { "Subscription #${alert.subscriptionId}" },
-                color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text("${amountFormat.format(alert.oldAmount)}  →  ${amountFormat.format(alert.newAmount)}",
-                color = TextMed, fontSize = 13.sp)
-            Text(dateFormat.format(Date(alert.date)), color = TextLow, fontSize = 11.sp)
-        }
-        
-        IconButton(onClick = onDelete, modifier = Modifier.padding(end = 4.dp)) {
-            Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.alerts_delete), tint = TextLow.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
-        }
-
-        Box(modifier = Modifier.padding(end = 16.dp).clip(RoundedCornerShape(10.dp))
-            .background(AccentRed.copy(alpha = 0.10f)).padding(horizontal = 10.dp, vertical = 6.dp)) {
-            Text("+%.0f%%".format(alert.percentageChange), color = AccentRed, fontWeight = FontWeight.Black, fontSize = 14.sp)
-        }
-    }
-}
 
 @Composable
 fun ReminderAlertCard(alert: Alert, onDelete: () -> Unit) {

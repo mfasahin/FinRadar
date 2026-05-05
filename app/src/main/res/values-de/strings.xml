@@ -37,7 +37,7 @@
     <string name="add_update">Aktualisieren</string>
     <string name="alerts_title">Benachrichtigungen</string>
     <string name="alerts_empty_title">Keine Benachrichtigungen</string>
-    <string name="alerts_empty_body">Sie werden automatisch benachrichtigt,\nwenn sich Preise ändern.</string>
+    <string name="alerts_empty_body">Anstehende Abonnementzahlungen\nwerden hier aufgeführt.</string>
     <string name="settings_title">Einstellungen</string>
     <string name="settings_appearance">ERSCHEINUNGSBILD</string>
     <string name="settings_dark_mode">Dunkelmodus</string>

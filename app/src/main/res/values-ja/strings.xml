@@ -37,7 +37,7 @@
     <string name="add_update">更新</string>
     <string name="alerts_title">通知</string>
     <string name="alerts_empty_title">通知なし</string>
-    <string name="alerts_empty_body">価格が変更されると自動的に\n通知されます。</string>
+    <string name="alerts_empty_body">今後のサブスクリプションの支払いが\nここに表示されます。</string>
     <string name="settings_title">設定</string>
     <string name="settings_appearance">外観</string>
     <string name="settings_dark_mode">ダークモード</string>

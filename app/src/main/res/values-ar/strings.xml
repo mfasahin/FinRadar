@@ -37,7 +37,7 @@
     <string name="add_update">تحديث</string>
     <string name="alerts_title">التنبيهات</string>
     <string name="alerts_empty_title">لا توجد تنبيهات</string>
-    <string name="alerts_empty_body">ستتلقى إشعاراً تلقائياً\nعند تغيير الأسعار.</string>
+    <string name="alerts_empty_body">سيتم إدراج مدفوعات الاشتراكات\nالقادمة هنا.</string>
     <string name="settings_title">الإعدادات</string>
     <string name="settings_appearance">المظهر</string>
     <string name="settings_dark_mode">الوضع الداكن</string>

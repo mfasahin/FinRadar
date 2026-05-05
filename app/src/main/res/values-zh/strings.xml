@@ -37,7 +37,7 @@
     <string name="add_update">更新</string>
     <string name="alerts_title">提醒</string>
     <string name="alerts_empty_title">暂无提醒</string>
-    <string name="alerts_empty_body">价格变动时将自动通知您。</string>
+    <string name="alerts_empty_body">即将到期的订阅付款将在此处列出。</string>
     <string name="settings_title">设置</string>
     <string name="settings_appearance">外观</string>
     <string name="settings_dark_mode">深色模式</string>
