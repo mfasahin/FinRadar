@@ -15,6 +15,12 @@ class AlertsViewModel @Inject constructor(
 ) : ViewModel() {
     val alerts: Flow<List<Alert>> = alertRepository.getAllAlerts()
 
+    init {
+        viewModelScope.launch {
+            alertRepository.markAllAsRead()
+        }
+    }
+
     fun deleteAlert(id: Long) {
         viewModelScope.launch {
             alertRepository.deleteAlert(id)

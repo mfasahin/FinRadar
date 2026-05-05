@@ -10,4 +10,5 @@ interface AlertRepository {
     suspend fun hasReminderBeenSentToday(subscriptionId: Long): Boolean
     suspend fun deleteAlert(id: Long)
     suspend fun clearAllAlerts()
+    suspend fun markAllAsRead()
 }

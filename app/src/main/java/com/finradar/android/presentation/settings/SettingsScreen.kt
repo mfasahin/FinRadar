@@ -53,6 +53,14 @@ fun SettingsScreen(
     val scope     = rememberCoroutineScope()
     val currentLang = supportedLanguages.find { it.code == langCode } ?: supportedLanguages.first()
 
+    val versionName = remember(context) {
+        try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "1.1.1"
+        } catch (e: Exception) {
+            "1.1.1"
+        }
+    }
+
     if (showLangSheet) {
         ModalBottomSheet(
             onDismissRequest = { showLangSheet = false },
@@ -241,7 +249,7 @@ fun SettingsScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     InfoRow(label = stringResource(R.string.settings_app_name_label), value = "FinRadar")
                     HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
-                    InfoRow(label = stringResource(R.string.settings_version), value = "1.0.0")
+                    InfoRow(label = stringResource(R.string.settings_version), value = versionName)
 
                     HorizontalDivider(color = BgStroke, thickness = 0.5.dp)
                     Row(
@@ -275,7 +283,7 @@ fun SettingsScreen(
                 )
                 Text("FinRadar", color = TextHigh, fontWeight = FontWeight.Black, fontSize = 18.sp)
                 Text(stringResource(R.string.settings_tagline), color = TextMed, fontSize = 12.sp)
-                Text("v1.0.0", color = TextLow, fontSize = 11.sp)
+                Text("v$versionName", color = TextLow, fontSize = 11.sp)
             }
             Spacer(Modifier.height(16.dp))
         }

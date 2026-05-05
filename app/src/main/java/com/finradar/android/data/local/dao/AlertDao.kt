@@ -24,6 +24,9 @@ interface AlertDao {
     @Query("DELETE FROM alerts")
     suspend fun clearAllAlerts()
 
+    @Query("UPDATE alerts SET isRead = 1 WHERE isRead = 0")
+    suspend fun markAllAsRead()
+
     @Query("SELECT COUNT(*) FROM alerts WHERE subscriptionId = :subId AND type = 'PAYMENT_REMINDER' AND date >= :since")
     suspend fun countRemindersSince(subId: Long, since: Long): Int
 }

@@ -66,4 +66,8 @@ class AlertRepositoryImpl @Inject constructor(
     override suspend fun clearAllAlerts() {
         dao.clearAllAlerts()
     }
+
+    override suspend fun markAllAsRead() {
+        dao.markAllAsRead()
+    }
 }
