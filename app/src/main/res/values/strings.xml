@@ -30,7 +30,7 @@
     <string name="subs_edit">Düzenle</string>
     <string name="subs_delete">Sil</string>
     <string name="subs_delete_title">Aboneliği Sil</string>
-    <string name="subs_delete_confirm">"%s" aboneliğini silmek istediğinize emin misiniz?</string>
+    <string name="subs_delete_confirm">\"%s\" aboneliğini silmek istediğinize emin misiniz?</string>
     <string name="subs_delete_ok">Sil</string>
     <string name="subs_cancel">İptal</string>
 
@@ -109,7 +109,7 @@
     <string name="onboarding_feature_1_title">Kolay Yönetim</string>
     <string name="onboarding_feature_1_desc">Aboneliklerinizi kolayca ekleyin, düzenleyin ve takip edin.</string>
     <string name="onboarding_feature_2_title">Ödeme Hatırlatıcıları</string>
-    <string name="onboarding_feature_2_desc">Ödeme tarihi yaklaştığında öğlen 12:00'de otomatik bildirim alın.</string>
+    <string name="onboarding_feature_2_desc">Ödeme tarihi yaklaştığında öğlen 12:00\'de otomatik bildirim alın.</string>
     <string name="onboarding_feature_3_title">Tamamen Gizli</string>
     <string name="onboarding_feature_3_desc">Hiçbir veri sunucuya gönderilmez. Her şey cihazınızda.</string>
 
