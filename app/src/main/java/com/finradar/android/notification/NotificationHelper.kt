@@ -31,15 +31,6 @@ object NotificationHelper {
         }
     }
 
-    fun isNotificationListenerEnabled(context: Context): Boolean {
-        val packageName = context.packageName
-        val flat = android.provider.Settings.Secure.getString(
-            context.contentResolver,
-            "enabled_notification_listeners"
-        )
-        return flat?.contains(packageName) == true
-    }
-
     fun sendPaymentReminder(
         context: Context,
         subscriptionId: Long,
@@ -67,7 +58,7 @@ object NotificationHelper {
             )
 
             val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // System default icon for safety
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(body))

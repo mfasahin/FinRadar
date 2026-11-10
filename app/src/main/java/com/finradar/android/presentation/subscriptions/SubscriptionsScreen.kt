@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.*
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,10 +40,8 @@ fun SubscriptionsScreen(
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
     val subscriptions by viewModel.subscriptions.collectAsState(initial = emptyList())
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
     var deleteCandidate by remember { mutableStateOf<Subscription?>(null) }
     var searchQuery by remember { mutableStateOf("") }
-    val context = androidx.compose.ui.platform.LocalContext.current
 
     val filtered = remember(subscriptions, searchQuery) {
         if (searchQuery.isBlank()) subscriptions
@@ -52,12 +49,6 @@ fun SubscriptionsScreen(
             it.name.contains(searchQuery, ignoreCase = true) ||
             it.category.orEmpty().contains(searchQuery, ignoreCase = true)
         }
-    }
-
-    val smsPermissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
-        androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) viewModel.refresh()
     }
 
     deleteCandidate?.let { sub ->
@@ -129,27 +120,19 @@ fun SubscriptionsScreen(
             }
         }
     ) { padding ->
-        PullToRefreshBox(
-            isRefreshing = isRefreshing,
-            onRefresh = {
-                val hasPerm = androidx.core.content.ContextCompat.checkSelfPermission(
-                    context, android.Manifest.permission.READ_SMS
-                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-
-                if (hasPerm) {
-                    viewModel.refresh()
-                } else {
-                    smsPermissionLauncher.launch(android.Manifest.permission.READ_SMS)
-                }
-            },
-            modifier = Modifier.fillMaxSize().padding(padding)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
             when {
-                subscriptions.isEmpty() -> EmptyListState(PaddingValues(0.dp))
-                filtered.isEmpty()      -> NoResultsState(PaddingValues(0.dp), searchQuery)
+                subscriptions.isEmpty() -> EmptyListState()
+                filtered.isEmpty()      -> NoResultsState(searchQuery)
                 else -> {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp)
                     ) {
@@ -168,8 +151,8 @@ fun SubscriptionsScreen(
 }
 
 @Composable
-private fun EmptyListState(padding: PaddingValues) {
-    Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+private fun EmptyListState() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("📋", fontSize = 48.sp)
             Text(stringResource(R.string.subs_empty_title), color = TextHigh, fontWeight = FontWeight.Bold, fontSize = 20.sp)
@@ -179,8 +162,8 @@ private fun EmptyListState(padding: PaddingValues) {
 }
 
 @Composable
-private fun NoResultsState(padding: PaddingValues, query: String) {
-    Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+private fun NoResultsState(query: String) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("🔍", fontSize = 40.sp)
             Text(stringResource(R.string.subs_no_results), color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
@@ -203,7 +186,6 @@ fun SubscriptionDetailCard(
     val accent      = CategoryColors[colorIdx]
     var menuExpanded by remember { mutableStateOf(false) }
 
-    // Next-payment countdown
     val today       = System.currentTimeMillis()
     val daysUntil   = if (subscription.nextPaymentDate > 0) {
         TimeUnit.MILLISECONDS.toDays(subscription.nextPaymentDate - today)
@@ -223,7 +205,6 @@ fun SubscriptionDetailCard(
     }
 
     val perMonth    = stringResource(R.string.subs_per_month)
-    // Show next payment date if set, otherwise show last payment date
     val dateLabel = if (subscription.nextPaymentDate > 0) {
         stringResource(R.string.subs_next_payment, dateFormat.format(Date(subscription.nextPaymentDate)))
     } else {
@@ -236,18 +217,15 @@ fun SubscriptionDetailCard(
         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(BgCard),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Left accent bar
         Box(modifier = Modifier.width(4.dp).height(if (daysUntil != null) 92.dp else 76.dp)
             .background(Brush.verticalGradient(listOf(accent, accent.copy(alpha = 0.4f))),
                 shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)))
         Spacer(Modifier.width(14.dp))
-        // Avatar
         Box(modifier = Modifier.size(44.dp).clip(RoundedCornerShape(13.dp)).background(accent.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center) {
             Text(subscription.name.take(1).uppercase(), color = accent, fontWeight = FontWeight.Black, fontSize = 18.sp)
         }
         Spacer(Modifier.width(12.dp))
-        // Name + category + dates
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(subscription.name, color = TextHigh, fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
                 maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -257,13 +235,11 @@ fun SubscriptionDetailCard(
                 Text(nextPayLabel, color = nextPayColor, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
             }
         }
-        // Amount column
         Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 4.dp)) {
             Text(amountFmt.format(subscription.averageAmount), color = accent,
                 fontWeight = FontWeight.Black, fontSize = 16.sp, letterSpacing = (-0.5).sp)
             Text(perMonth, color = TextMed, fontSize = 11.sp)
         }
-        // Kebab menu
         Box {
             IconButton(onClick = { menuExpanded = true }) {
                 Text("⋮", color = TextMed, fontSize = 20.sp, fontWeight = FontWeight.Bold)

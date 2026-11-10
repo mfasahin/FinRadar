@@ -16,13 +16,13 @@
     <string name="dashboard_active">Aktif</string>
     <string name="dashboard_top_subs">En Pahalı Abonelikler</string>
     <string name="dashboard_see_all">Tümünü Gör</string>
-    <string name="dashboard_empty">Henüz abonelik yok.\nBanka bildirimlerini etkinleştirin.</string>
+    <string name="dashboard_empty">Henüz abonelik yok.\n+ butonu ile abonelik ekleyin.</string>
 
     <!-- Subscriptions -->
     <string name="subs_title">Abonelikler</string>
     <string name="subs_search_hint">Abonelik ara…</string>
     <string name="subs_empty_title">Abonelik Yok</string>
-    <string name="subs_empty_body">SMS bildirimleri veya + butonu ile\nmanuel olarak ekleyebilirsiniz.</string>
+    <string name="subs_empty_body">Sağ alttaki + butonu ile\nmanuel olarak abonelik ekleyebilirsiniz.</string>
     <string name="subs_no_results">Sonuç bulunamadı</string>
     <string name="subs_per_month">/ ay</string>
     <string name="subs_general">Genel</string>
@@ -106,14 +106,14 @@
     <string name="onboarding_view_privacy_policy">Gizlilik Politikasını Görüntüle</string>
 
     <!-- Onboarding Features -->
-    <string name="onboarding_feature_1_title">Otomatik Tespit</string>
-    <string name="onboarding_feature_1_desc">Banka bildirimlerini okuyarak aboneliklerinizi otomatik tarar.</string>
-    <string name="onboarding_feature_2_title">Zam Uyarıları</string>
-    <string name="onboarding_feature_2_desc">Aboneliğinize zam geldiğinde anında bildirim alın.</string>
+    <string name="onboarding_feature_1_title">Kolay Yönetim</string>
+    <string name="onboarding_feature_1_desc">Aboneliklerinizi kolayca ekleyin, düzenleyin ve takip edin.</string>
+    <string name="onboarding_feature_2_title">Ödeme Hatırlatıcıları</string>
+    <string name="onboarding_feature_2_desc">Ödeme tarihi yaklaştığında öğlen 12:00'de otomatik bildirim alın.</string>
     <string name="onboarding_feature_3_title">Tamamen Gizli</string>
     <string name="onboarding_feature_3_desc">Hiçbir veri sunucuya gönderilmez. Her şey cihazınızda.</string>
 
     <string name="settings_privacy_policy">Gizlilik Politikası</string>
-    <string name="onboarding_start_button">Bildirim İzni Ver &amp; Başla</string>
-    <string name="onboarding_continue_manual">Manuel Olarak Devam Et</string>
+    <string name="onboarding_start_button">Başla</string>
+    <string name="onboarding_continue_manual">Atla</string>
 </resources>

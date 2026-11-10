@@ -15,36 +15,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SubscriptionsViewModel @Inject constructor(
-    private val subscriptionRepository: SubscriptionRepository,
-    private val scanSmsHistoryUseCase: com.finradar.android.domain.usecase.ScanSmsHistoryUseCase
+    private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
 
     val subscriptions: StateFlow<List<Subscription>> = subscriptionRepository
         .getActiveSubscriptions()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
-
     private val _editTarget = MutableStateFlow<Subscription?>(null)
     val editTarget: StateFlow<Subscription?> = _editTarget.asStateFlow()
 
-    fun refresh() {
-        viewModelScope.launch {
-            _isRefreshing.value = true
-            try {
-                scanSmsHistoryUseCase()
-            } catch (e: Exception) {
-                // Log error
-            } finally {
-                _isRefreshing.value = false
-            }
-        }
-    }
-
     fun addSubscription(name: String, amount: Double, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {
-            // If user set a next payment date, derive last payment as 30 days prior
             val lastPay = if (nextPaymentDate > 0) {
                 nextPaymentDate - java.util.concurrent.TimeUnit.DAYS.toMillis(30)
             } else {
@@ -54,6 +36,8 @@ class SubscriptionsViewModel @Inject constructor(
                 Subscription(
                     name            = name.trim(),
                     averageAmount   = amount,
+                    totalPaidAmount = amount,
+                    paymentCount    = 1,
                     lastPaymentDate = lastPay,
                     nextPaymentDate = nextPaymentDate,
                     category        = category.ifBlank { "general" },
@@ -69,15 +53,32 @@ class SubscriptionsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Abonelik güncelleme:
+     * Tutar değiştiğinde veya yeni ödeme eklendiğinde, ortalama tutar
+     * (toplamÖdenenTutar / ödemeSayısı) formülü ile kesin olarak hesaplanır.
+     */
     fun updateSubscription(id: Long, name: String, amount: Double, category: String, nextPaymentDate: Long) {
         viewModelScope.launch {
-            // Preserve the original lastPaymentDate — only update fields the user actually changed
             val original = subscriptionRepository.getSubscriptionById(id)
+            val isAmountChanged = original != null && original.averageAmount != amount
+
+            // Yeni bir fiyat girildiyse ödeme sayısını artırıp gerçek ortalamayı hesapla
+            val newPaymentCount = if (isAmountChanged) ((original?.paymentCount ?: 1) + 1) else (original?.paymentCount ?: 1)
+            val newTotalPaid = if (isAmountChanged) {
+                ((original?.totalPaidAmount ?: original?.averageAmount ?: amount) + amount)
+            } else {
+                original?.totalPaidAmount ?: amount
+            }
+            val calculatedAverage = if (newPaymentCount > 0) newTotalPaid / newPaymentCount else amount
+
             subscriptionRepository.updateSubscription(
                 Subscription(
                     id              = id,
                     name            = name.trim(),
-                    averageAmount   = amount,
+                    averageAmount   = calculatedAverage,
+                    totalPaidAmount = newTotalPaid,
+                    paymentCount    = newPaymentCount,
                     lastPaymentDate = original?.lastPaymentDate ?: System.currentTimeMillis(),
                     nextPaymentDate = nextPaymentDate,
                     category        = category.ifBlank { "general" },
@@ -85,6 +86,18 @@ class SubscriptionsViewModel @Inject constructor(
                 )
             )
             _editTarget.value = null
+        }
+    }
+
+    /**
+     * Yeni bir ödeme yapıldığında çağrılır:
+     * Toplam tutara ekler, ödeme adedini 1 artırır ve (toplam / adet) ile ortalamayı günceller.
+     */
+    fun recordPayment(id: Long, amount: Double, paymentDate: Long = System.currentTimeMillis()) {
+        viewModelScope.launch {
+            val sub = subscriptionRepository.getSubscriptionById(id) ?: return@launch
+            val updated = sub.withNewPayment(amount, paymentDate)
+            subscriptionRepository.updateSubscription(updated)
         }
     }
 

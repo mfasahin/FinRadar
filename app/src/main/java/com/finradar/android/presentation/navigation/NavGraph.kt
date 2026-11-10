@@ -1,7 +1,5 @@
 package com.finradar.android.presentation.navigation
 
-import android.content.Intent
-import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -65,7 +62,6 @@ fun FinRadarNavGraph(
     navController: NavHostController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDest = navBackStackEntry?.destination
     
@@ -79,9 +75,9 @@ fun FinRadarNavGraph(
         return
     }
 
-    // 2. Auto-skip if permission already granted (even if flag is false)
+    // 2. Onboarding tamamlandıysa direkt Dashboard'a git
     val startDest = remember(onboardingCompleted) {
-        if (onboardingCompleted == true || viewModel.isPermissionGranted()) {
+        if (onboardingCompleted == true) {
             Screen.Dashboard.route
         } else {
             Screen.Onboarding.route
@@ -152,7 +148,6 @@ fun FinRadarNavGraph(
                 OnboardingScreen(
                     onPermissionsGranted = {
                         viewModel.setOnboardingCompleted()
-                        context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
                         navController.navigate(Screen.Dashboard.route) {
                             popUpTo(Screen.Onboarding.route) { inclusive = true }
                         }

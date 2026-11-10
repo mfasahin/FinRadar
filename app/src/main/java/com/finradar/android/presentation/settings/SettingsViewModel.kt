@@ -45,10 +45,6 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { prefsRepo.setOnboardingCompleted(true) }
     }
 
-    fun isPermissionGranted(): Boolean {
-        return com.finradar.android.notification.NotificationHelper.isNotificationListenerEnabled(prefsRepo.context)
-    }
-
     /**
      * Suspend version — caller awaits this before calling activity.recreate(),
      * guaranteeing the synchronous SharedPrefs commit has completed.

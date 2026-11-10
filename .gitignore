@@ -8,3 +8,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Keystore & Signing files (Do not commit to git!)
+*.jks
+*.keystore
+*.key
+release.keystore
