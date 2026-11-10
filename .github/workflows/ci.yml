@@ -21,13 +21,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Gradle bağımlılık önbelleği (derlemeleri ciddi oranda hızlandırır)
+      # Gradle 8.6'yı doğrudan yükler (Wrapper JAR eksik olsa dahi çalışır)
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.6'
 
-      # gradlew dosyasına çalıştırma izni ver
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      # Wrapper eksikse otomatik üret ve izin ver
+      - name: Ensure Gradle Wrapper
+        run: |
+          gradle wrapper
+          chmod +x gradlew
 
       # Debug APK derleme doğrulaması
       - name: Assemble Debug APK
@@ -37,7 +41,7 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest --continue
 
-      # Test sonuçlarını GitHub Actions arayüzüne rapor olarak yükleme
+      # Test sonuçlarını yükleme
       - name: Upload Test Reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -45,4 +49,3 @@ jobs:
           name: test-reports
           path: app/build/reports/tests/testDebugUnitTest/
           if-no-files-found: ignore
-
